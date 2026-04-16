@@ -35,6 +35,8 @@ public class SecurityConfig {
 						.requestMatchers("/h2-console/**").permitAll()
 						// allow authentication path
 						.requestMatchers("/api/auth/**").permitAll()
+						// allow test path
+						.requestMatchers("/api/test/**").permitAll()
 						// other request
 						.anyRequest().authenticated())
 				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class).build();

@@ -93,3 +93,50 @@ TaskTracker.postman_collection.json
 - [ ] 📦 Upload frontend (Angular)  
 - [ ] 🌐 Configure Nginx  
 - [ ] ✅ Test application 
+
+### VPS setup
+...
+sudo apt update
+sudo apt install openjdk-17-jdk nginx -y
+...
+
+### Deploy backend to serser
+...
+scp target/TaskTracker.jar user@server:/home/user/
+nohup java -jar tasktracker.jar > app.log 2>&1 &
+...  
+
+Test:
+...
+curl http://localhost:8080/api/tasks
+or curl http://localhost:8080/api/test
+...
+
+
+### Deploy Frontend to serser
+Build & Copy
+...
+ng build
+scp -r dist/TaskTrackerFrontend/browser user@server:/var/www/TaskTracker
+...
+
+### Config Nginx
+sudo nano /etc/nginx/sites-available/default
+
+Content:
+...
+server {
+    listen 80;
+
+    root /var/www/app;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /api {
+        proxy_pass http://localhost:8080;
+    }
+}
+...
