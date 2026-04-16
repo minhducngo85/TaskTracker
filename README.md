@@ -55,12 +55,18 @@ backend/
 
 ### Frontend Structure
 ```text
-├── core/ # Auth, interceptor
-├── shared/ # Reusable components
-├── features/
-│ ├── task/ # Task module
-│ ├── auth/ # Authentication module
-├── models/ # Interfaces / types
-└── services/ # API services
+src/app/
+ ├── core/
+ │    ├── auth.service.ts
+ │    ├── auth.interceptor.ts
+ ├── features/
+ │    ├── auth/
+ │    │     └── login.component.ts
+ │    ├── task/
+ │          └── task.component.ts
+ ├── models/
+ └── app.routes.ts
 ```
 
+## 🛠 Testing with Postmann
+TaskTracker.postman_collection.json

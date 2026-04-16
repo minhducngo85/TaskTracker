@@ -1,0 +1,28 @@
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>🚀 TaskApp</h2>
+
+    <nav>
+      <a routerLink="/tasks" routerLinkActive="active">📋 Tasks</a>
+      <a routerLink="/login">🔐 Login</a>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main">
+
+    <!-- Header -->
+    <header class="header">
+      <span>Dashboard</span>
+      <button (click)="logout()">Logout</button>
+    </header>
+
+    <!-- Page content -->
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+
+  </div>
+</div>
