@@ -80,7 +80,7 @@ TaskTracker.postman_collection.json
 ![Task List](./screenshots/task-list.png)
 
 ### Create Task
-![Create Task](./screenshots/create-task.png)
+![Create Task](./screenshots/add-task.png)
 
-### Dashboard
-![Dashboard](./screenshots/dashboard.png)
+### Edit
+![Dashboard](./screenshots/edit-task.png)

@@ -57,12 +57,14 @@
   <br />
   <!-- Buttons -->
   <div class="form-actions">
-    <button type="submit" [disabled]="taskForm.invalid">Save</button>
-    <button type="button" (click)="toggleForm()">Cancel</button>
+    <button class="save-btn"  type="submit" [disabled]="taskForm.invalid">Save</button>
+    <span style="padding:5px;"></span>
+    <button class="cancel-btn"  type="button" (click)="toggleForm()">Cancel</button>
   </div>
 </form>
 
 <div class="filter-bar">
+  
   <select [(ngModel)]="filterValue" (change)="applyFilter()">
     <option value="">All</option>
     <option value="TODO">TODO</option>
