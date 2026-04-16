@@ -95,39 +95,40 @@ TaskTracker.postman_collection.json
 - [ ] ✅ Test application 
 
 ### VPS setup
-...
+```
 sudo apt update
 sudo apt install openjdk-17-jdk nginx -y
-...
+```
 
 ### Deploy backend to serser
-...
+```
 scp target/TaskTracker.jar user@server:/home/user/
 nohup java -jar tasktracker.jar > app.log 2>&1 &
-...  
+``` 
 
 Test:
-...
+```
 curl http://localhost:8080/api/tasks
 or curl http://localhost:8080/api/test
-...
+```
 
 
 ### Deploy Frontend to serser
 Build & Copy
-...
-ng build
+```
+ng build --configuration production
 scp -r dist/TaskTrackerFrontend/browser user@server:/var/www/TaskTracker
-...
+```
 
 ### Config Nginx
 sudo nano /etc/nginx/sites-available/default
 
 Content:
-...
+```
 server {
     listen 80;
-
+	server_name 89.165.51.255;
+	
     root /var/www/app;
     index index.html;
 
@@ -135,8 +136,43 @@ server {
         try_files $uri $uri/ /index.html;
     }
 
-    location /api {
-        proxy_pass http://localhost:8080;
+    location /api/ {
+        proxy_pass http://localhost:8080/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
     }
 }
-...
+```
+
+Restart nginx:
+```
+sudo systemctl restart nginx
+```
+
+### Evironment for dev & prodouction
+File: environments/environment.ts for dev branch
+```
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:8080/api'
+};
+```
+
+File: environments/environment.prod.ts for dev branch
+```
+export const environment = {
+  production: false,
+  apiUrl: '/api'
+};
+```
+
+Extend: angular.json
+```
+ "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+```

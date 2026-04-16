@@ -38,15 +38,18 @@
 
 server {
     listen 80;
-
-    root /var/www/TaskTracker;
+	server_name 89.165.51.255;
+	
+    root /var/www/app;
     index index.html;
 
     location / {
         try_files $uri $uri/ /index.html;
     }
 
-    location /api {
-        proxy_pass http://localhost:8080;
+    location /api/ {
+        proxy_pass http://localhost:8080/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
     }
 }
