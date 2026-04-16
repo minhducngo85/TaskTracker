@@ -91,8 +91,8 @@ TaskTracker.postman_collection.json
 - [x] 🖥️ VPS setup  
 - [x] ⚙️ Run backend (Spring Boot)  
 - [x] 📦 Upload frontend (Angular)  
-- [ ] 🌐 Configure Nginx  
-- [ ] ✅ Test application 
+- [x] 🌐 Configure Nginx  
+- [x] ✅ Test application 
 
 ### VPS setup
 ```
