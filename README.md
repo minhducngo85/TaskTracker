@@ -88,9 +88,9 @@ TaskTracker.postman_collection.json
 ## Deployment
 
 ### 🚀 Deployment Steps
-- [ ] 🖥️ VPS setup  
-- [ ] ⚙️ Run backend (Spring Boot)  
-- [ ] 📦 Upload frontend (Angular)  
+- [x] 🖥️ VPS setup  
+- [x] ⚙️ Run backend (Spring Boot)  
+- [x] 📦 Upload frontend (Angular)  
 - [ ] 🌐 Configure Nginx  
 - [ ] ✅ Test application 
 
@@ -149,7 +149,7 @@ Restart nginx:
 sudo systemctl restart nginx
 ```
 
-### Evironment for dev & prodouction
+### Environment for dev & production
 File: environments/environment.ts for dev branch
 ```
 export const environment = {
@@ -168,11 +168,11 @@ export const environment = {
 
 Extend: angular.json
 ```
- "production": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
+"production": {
+    "fileReplacements": [
+        {
+            "replace": "src/environments/environment.ts",
+            "with": "src/environments/environment.prod.ts"
+        }
+    ],
 ```
