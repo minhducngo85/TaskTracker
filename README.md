@@ -3,6 +3,10 @@
 A simple full-stack task management application inspired by Jira.  
 Built with **Spring Boot + Angular**, focusing on clean architecture, JWT authentication, and modern frontend practices.
 
+<p align="center">
+  <img src="./screenshots/dashboard.png" width="800"/>
+</p>
+
 ## ✨ Features
 
 - 🔐 Authentication with JWT
@@ -70,20 +74,6 @@ src/app/
 
 ## 🛠 Testing with Postmann
 TaskTracker.postman_collection.json
-
-## 📸 Screenshots
-
-### Login Page
-![Login](./screenshots/login.png)
-
-### Task List
-![Task List](./screenshots/task-list.png)
-
-### Create Task
-![Create Task](./screenshots/add-task.png)
-
-### Edit
-![Dashboard](./screenshots/edit-task.png)
 
 ## Deployment
 
@@ -176,3 +166,18 @@ Extend: angular.json
         }
     ],
 ```
+
+
+## 📸 Screenshots
+
+### Login Page
+![Login](./screenshots/login.png)
+
+### Task List
+![Task List](./screenshots/task-list.png)
+
+### Create Task
+![Create Task](./screenshots/add-task.png)
+
+### Edit
+![Dashboard](./screenshots/edit-task.png)
