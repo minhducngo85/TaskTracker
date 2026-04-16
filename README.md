@@ -1,3 +1,8 @@
+# 🚀 Task Tracker (Mini Jira)
+
+A simple full-stack task management application inspired by Jira.  
+Built with **Spring Boot + Angular**, focusing on clean architecture, JWT authentication, and modern frontend practices.
+
 Project: Task Tracker (Mini Jira)
 
 1. Features 
