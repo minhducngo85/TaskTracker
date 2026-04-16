@@ -84,3 +84,12 @@ TaskTracker.postman_collection.json
 
 ### Edit
 ![Dashboard](./screenshots/edit-task.png)
+
+## Deployment
+
+### 🚀 Deployment Steps
+- [ ] 🖥️ VPS setup  
+- [ ] ⚙️ Run backend (Spring Boot)  
+- [ ] 📦 Upload frontend (Angular)  
+- [ ] 🌐 Configure Nginx  
+- [ ] ✅ Test application 
