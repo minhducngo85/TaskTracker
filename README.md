@@ -31,7 +31,7 @@ Built with **Spring Boot + Angular**, focusing on clean architecture, JWT authen
 
 ### Frontend (Angular)
 
-- Angular 17+ (16+ compatible)
+- Angular 21
 - RxJS (Observable, switchMap 🔥)
 - Angular Material / Tailwind CSS
 - HttpClient
@@ -42,34 +42,25 @@ Built with **Spring Boot + Angular**, focusing on clean architecture, JWT authen
 ## 🏗 Architecture
 
 ### Backend Structure
+```text
 backend/
-├── controller/ # REST controllers
-├── service/ # Business logic
-├── repository/ # Data access layer
-├── dto/ # Data Transfer Objects
-├── entity/ # JPA entities
-├── security/ # JWT + Spring Security
-└── config/ # App configurations
+├── controller/    # REST controllers
+├── service/       # Business logic
+├── repository/    # Data access layer
+├── dto/           # Data Transfer Objects
+├── entity/        # JPA entities
+├── security/      # JWT + Spring Security
+└── config/        # App configurations
+```
 
-3. Architecture (CV rất thích phần này)
-Backend structure
-
-backend/
- ├── controller/
- ├── service/
- ├── repository/
- ├── dto/
- ├── entity/
- ├── security/
- └── config/
-Frontend structure
-
-frontend/
- ├── core/        (auth, interceptor)
- ├── shared/      (components reusable)
- ├── features/
- │    ├── task/
- │    ├── auth/
- ├── models/
- └── services/
+### Frontend Structure
+```text
+├── core/ # Auth, interceptor
+├── shared/ # Reusable components
+├── features/
+│ ├── task/ # Task module
+│ ├── auth/ # Authentication module
+├── models/ # Interfaces / types
+└── services/ # API services
+```
 
