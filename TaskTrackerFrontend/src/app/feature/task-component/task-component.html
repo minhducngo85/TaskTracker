@@ -20,7 +20,7 @@
     <small *ngIf="title.errors?.['required']">Title is required</small>
     <small *ngIf="title.errors?.['minlength']">Min 3 characters</small>
   </div>
-<br/>
+  <br />
   <!-- Description -->
   <input
     type="text"
@@ -33,8 +33,8 @@
   <div class="error" *ngIf="desc.invalid && desc.touched">
     <small>Description is required</small>
   </div>
-  
-  <br/>
+
+  <br />
   <!-- Status -->
   <select name="status" [(ngModel)]="newTask.status">
     <option value="TODO">TODO</option>
@@ -54,7 +54,7 @@
   <div class="error" *ngIf="assignedTo.invalid && assignedTo.touched">
     <small>AssignedTo is required</small>
   </div>
-<br/>
+  <br />
   <!-- Buttons -->
   <div class="form-actions">
     <button type="submit" [disabled]="taskForm.invalid">Save</button>
@@ -62,6 +62,15 @@
   </div>
 </form>
 
+<div class="filter-bar">
+  <select [(ngModel)]="filterValue" (change)="applyFilter()">
+    <option value="">All</option>
+    <option value="TODO">TODO</option>
+    <option value="IN_PROGRESS">IN_PROGRESS</option>
+    <option value="DONE">DONE</option>
+  </select>
+  <input type="text" [(ngModel)]="searchValue" (change)="applyFilter()" placeholder="Search..." />
+</div>
 <div class="task-grid">
   <div class="task-card" *ngFor="let task of tasks$ | async">
     <h3>
@@ -74,10 +83,31 @@
       {{ task.status }}
     </span>
 
+    <!--Actions-->
     <div class="actions">
-      <button class="delete-btn" (click)="deleteTask(task.id)">
-              🗑 Delete
-      </button>
+      <button class="edit-btn" (click)="startEdit(task)">✏️</button>
+      <button class="delete-btn" (click)="deleteTask(task.id)">🗑</button>
+    </div>
+  </div>
+
+  <!-- EDIT MODAL -->
+  <div class="modal-backdrop" *ngIf="editingTask">
+    <div class="modal">
+      <h2>Edit Task</h2>
+
+      <input [(ngModel)]="editingTask.title" placeholder="Title" />
+      <textarea [(ngModel)]="editingTask.description" placeholder="Description"></textarea>
+
+      <select [(ngModel)]="editingTask.status">
+        <option value="TODO">TODO</option>
+        <option value="IN_PROGRESS">IN_PROGRESS</option>
+        <option value="DONE">DONE</option>
+      </select>
+
+      <div class="modal-actions">
+        <button class="save-btn" (click)="saveEdit()">💾 Save</button>
+        <button class="cancel-btn" (click)="cancelEdit()">Cancel</button>
+      </div>
     </div>
   </div>
 </div>

@@ -6,18 +6,22 @@ import { Injectable } from '@angular/core';
 })
 export class TaskService {
   private api = 'http://localhost:8080/api/tasks';
- 
-  constructor(private http: HttpClient){};
+
+  constructor(private http: HttpClient) {}
 
   getTasks() {
     return this.http.get<any[]>(this.api);
   }
 
-  addTask(task : any) {
+  addTask(task: any) {
     return this.http.post(this.api, task);
   }
 
-  deleteTask(id :number) {
+  deleteTask(id: number) {
     return this.http.delete(`${this.api}/${id}`);
+  }
+
+  updateTask(id: number, task: any) {
+    return this.http.put(`${this.api}/${id}`, task);
   }
 }

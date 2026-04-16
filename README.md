@@ -70,3 +70,17 @@ src/app/
 
 ## 🛠 Testing with Postmann
 TaskTracker.postman_collection.json
+
+## 📸 Screenshots
+
+### Login Page
+![Login](./screenshots/login.png)
+
+### Task List
+![Task List](./screenshots/task-list.png)
+
+### Create Task
+![Create Task](./screenshots/create-task.png)
+
+### Dashboard
+![Dashboard](./screenshots/dashboard.png)

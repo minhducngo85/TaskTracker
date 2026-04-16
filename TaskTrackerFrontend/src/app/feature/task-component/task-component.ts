@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../core/task-service';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-task-component',
@@ -25,7 +25,17 @@ export class TaskComponent {
     status: 'TODO',
   };
 
-  constructor(private taskService: TaskService, private cdr: ChangeDetectorRef) {
+  // filter and search
+  filterValue = '';
+  searchValue = '';
+
+  // task to be edited
+  editingTask: any = null;
+
+  constructor(
+    private taskService: TaskService,
+    private cdr: ChangeDetectorRef,
+  ) {
     this.loadTasks();
   }
 
@@ -61,5 +71,44 @@ export class TaskComponent {
       },
       error: (err: any) => console.error(err),
     });
+  }
+
+  /**
+   *
+   */
+  applyFilter() {
+    this.tasks$ = this.taskService.getTasks().pipe(
+      map((tasks) =>
+        tasks.filter((t) => {
+          return (
+            (!this.filterValue || t.status === this.filterValue) &&
+            (!this.searchValue || t.title.toLowerCase().includes(this.searchValue))
+          );
+        }),
+      ),
+    );
+  }
+
+  /** start edit */
+  startEdit(task: any) {
+    // clone task
+    this.editingTask = {...task};
+  }
+
+  cancelEdit() {
+    this.editingTask = null;
+  }
+
+  saveEdit() {
+    this.taskService.updateTask(this.editingTask.id, this.editingTask).subscribe(
+      {
+        next : () => {
+          this.editingTask = null;
+          this.loadTasks();
+          this.cdr.detectChanges(); // trigger ui update
+        },
+        error: (err : any) => console.error(err)
+      }
+    );
   }
 }
