@@ -1,18 +1,18 @@
 <div class="layout">
-
   <!-- Sidebar -->
   <aside class="sidebar">
     <h2>🚀 Task Tracker App</h2>
 
     <nav>
       <a routerLink="/tasks" routerLinkActive="active">📋 Tasks</a>
+      <!-- 🔥 chỉ admin thấy -->
+      <a *ngIf="auth.isAdmin()" routerLink="/admin"> 🛠️ Admin</a>
       <a routerLink="/login">🔐 Login</a>
     </nav>
   </aside>
 
   <!-- Main content -->
   <div class="main">
-
     <!-- Header -->
     <header class="header">
       <span>Dashboard</span>
@@ -23,6 +23,5 @@
     <div class="content">
       <router-outlet></router-outlet>
     </div>
-
   </div>
 </div>

@@ -27,6 +27,6 @@ public class AuthService {
       if (!user.getPassword().equals(request.getPassword())) {
     	  throw new InvalidCredentialsException("Invalid username or password");
       }
-      return jwtService.generateToken(user.getUsername());
+      return jwtService.generateToken(user);
   }
 }

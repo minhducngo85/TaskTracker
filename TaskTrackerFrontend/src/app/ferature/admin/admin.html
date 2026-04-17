@@ -1,0 +1,39 @@
+ <h2 class="title">👑 Admin Dashboard - User List</h2>
+
+  <!-- Error -->
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+
+  <!-- Empty -->
+  <div *ngIf="!error && users.length === 0" class="empty">
+    No users found.
+  </div>
+
+  <!-- Table -->
+  <table *ngIf="users.length > 0" class="user-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Role</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>
+          <span 
+            class="badge"
+            [ngClass]="{
+              'admin': user.role === 'ADMIN',
+              'user': user.role === 'USER'
+            }">
+            {{ user.role }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>

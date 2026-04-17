@@ -6,6 +6,8 @@ import javax.crypto.SecretKey;
 
 import org.springframework.stereotype.Service;
 
+import com.minhduc.tasktracker.entity.User;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -25,6 +27,10 @@ public class JwtService {
 	private Claims extractAllClaims(String token) {
 		return Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(token).getBody();
 	}
+	
+	public String extractRole(String token) {
+	    return extractAllClaims(token).get("role", String.class);
+	}
 
 	private boolean isTokenExpired(String token) {
 		return extractAllClaims(token).getExpiration().before(new Date());
@@ -39,9 +45,10 @@ public class JwtService {
 	}
 	
 	
-	public String generateToken(String username) {
+	public String generateToken(User user) {
 	    return Jwts.builder()
-	            .setSubject(username)
+	            .setSubject(user.getUsername())
+	            .claim("role", user.getRole().name()) // 🔥 thêm role
 	            .setIssuedAt(new Date())
 	            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1h
 	            .signWith(getKey())

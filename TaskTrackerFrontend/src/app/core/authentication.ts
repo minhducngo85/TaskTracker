@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { Route, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,11 @@ import { environment } from '../../environments/environment';
 export class Authentication {
   private api = `${environment.apiUrl}/auth`;
 
-  constructor(private http: HttpClient) {}
+
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {}
 
   /**
    *
@@ -43,5 +48,19 @@ export class Authentication {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('token');
     }
+    this.router.navigate(['/login']);
+  }
+
+  getRole(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    console.log(payload);
+    return payload.role;
+  }
+
+  isAdmin(): boolean {
+    return this.getRole() === 'ADMIN';
   }
 }

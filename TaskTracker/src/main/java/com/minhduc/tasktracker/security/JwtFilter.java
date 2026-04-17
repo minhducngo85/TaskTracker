@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,12 +32,12 @@ public class JwtFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		
+
 		if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-		    filterChain.doFilter(request, response);
-		    return;
+			filterChain.doFilter(request, response);
+			return;
 		}
-		
+
 		String header = request.getHeader("Authorization");
 		if (header == null || !header.startsWith("Bearer ")) {
 			filterChain.doFilter(request, response);
@@ -44,17 +45,33 @@ public class JwtFilter extends OncePerRequestFilter {
 		}
 
 		String token = header.substring(7);
-		// 🔥 validate token
-		if (jwtService.isTokenValid(token)) {
+		try {
+			if (!jwtService.isTokenValid(token)) {
+				throw new BadCredentialsException("Invalid token");
+			}
+			// 🔥 validate token
 			String username = jwtService.extractUsername(token);
+			String role = jwtService.extractRole(token);
+
+			List<SimpleGrantedAuthority> authorities =
+			    List.of(new SimpleGrantedAuthority("ROLE_" + role));
+			
 			UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null,
-					List.of(new SimpleGrantedAuthority("ROLE_USER")));
+					authorities);
 			// 👇 QUAN TRỌNG
 			auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 			SecurityContextHolder.getContext().setAuthentication(auth);
-		}
 
-		filterChain.doFilter(request, response);
+			filterChain.doFilter(request, response);
+		} catch (Exception e) {
+			 SecurityContextHolder.clearContext();
+
+			    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			    response.setContentType("application/json");
+			    response.getWriter().write("{\"error\": \"Invalid or expired token\"}");
+
+			    return;
+		}
 	}
 
 }

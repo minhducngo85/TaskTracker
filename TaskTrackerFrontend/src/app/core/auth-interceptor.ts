@@ -1,11 +1,15 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { error } from 'console';
+import { catchError, throwError } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   console.log('Interceptor chạy');
-
+ const router = inject(Router);
   let token: string | null = null;
 
-   // 👇 nếu chạy server → skip (Server-Side Rendering)
+   // server → skip (Server-Side Rendering)
   if (typeof window === 'undefined') {
     return next(req);
   }
@@ -26,15 +30,16 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     });
   }
 
-  // 🔥 LOG ALL HEADERS
-  
-  console.log('=== REQUEST HEADERS ===');
+ return next(modifiedReq).pipe(
+  catchError(error => {
 
-  modifiedReq.headers.keys().forEach(key => {
-    console.log(key + ':', modifiedReq.headers.get(key));
-  });
+    if (error.status === 401) {
+      localStorage.removeItem('token');
+      router.navigate(['/login']);
+    }
 
-  console.log('======================');
-
-  return next(modifiedReq);
+    // Must return
+    return throwError(() => error);
+  })
+);
 };

@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../core/task-service';
 import { CommonModule } from '@angular/common';
 import { map, Observable } from 'rxjs';
+import { Authentication } from '../../core/authentication';
 
 @Component({
   selector: 'app-task-component',
@@ -35,6 +36,7 @@ export class TaskComponent {
   constructor(
     private taskService: TaskService,
     private cdr: ChangeDetectorRef,
+    public auth: Authentication
   ) {
     this.loadTasks();
   }
