@@ -10,6 +10,7 @@ Built with **Spring Boot + Angular**, focusing on clean architecture, JWT authen
 ## ✨ Features
 
 - 🔐 Authentication with JWT
+- 👤 User roles: Admin & user
 - 📝 CRUD Task (Create, Read, Update, Delete)
 - 🔍 Filter & Search tasks
 - 👤 Assign tasks to users
@@ -40,6 +41,7 @@ Built with **Spring Boot + Angular**, focusing on clean architecture, JWT authen
 - Angular Material / Tailwind CSS
 - HttpClient
 - Angular Routing
+- Authentication guard and admin guard
 
 ---
 
