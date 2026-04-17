@@ -287,7 +287,7 @@ services:
 - start docker Image
 - test: docker ps -> outpout: task-frontend   ...   0.0.0.0:80->80/tcp   task-backend    ...   0.0.0.0:8080->8080/tcp
 
-### STEP 7: build from Windows
+### 🚀 STEP 7: build from Windows
 
 👉 Windows: delete node_modules localhost and install
 ```
@@ -298,7 +298,7 @@ del package-lock.json
 npm install
 ```
 
-👉 Windows: buidl form sratch
+👉 Windows: build form sratch
 ```
 docker-compose down -v
 docker system prune -a
