@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class Login {
   username = 'admin';
-  password = '1234';
+  password = 'abcd1234';
   error='';
 
   constructor(private authService : Authentication, private router: Router){};

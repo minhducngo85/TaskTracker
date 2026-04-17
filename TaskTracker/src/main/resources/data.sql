@@ -19,7 +19,7 @@ VALUES ('Play Tennis', 'Play tennis today. Practice forehand', 'TODO', 'Mngo');
 DELETE FROM users;
 
 INSERT INTO users (username, password, role)
-VALUES ('admin', '1234', 'ADMIN');
+VALUES ('admin', 'abcd1234', 'ADMIN');
 
 INSERT INTO users (username, password, role)
-VALUES ('user', '1234', 'USER');
+VALUES ('user', 'abcd1234', 'USER');
