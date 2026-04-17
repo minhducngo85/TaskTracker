@@ -136,6 +136,7 @@ server {
 
 Restart nginx:
 ```
+nginx -t
 sudo systemctl restart nginx
 ```
 
@@ -167,6 +168,27 @@ Extend: angular.json
     ],
 ```
 
+### Fake SSL and forward to http
+Extend /etc/nginx/sites-available/default
+```
+server {
+    listen 443 ssl;
+    server_name 82.165.51.255;
+
+    ssl_certificate /etc/nginx/self.crt;
+    ssl_certificate_key /etc/nginx/self.key;
+
+    return 301 http://$host$request_uri;
+}
+```
+
+Create Self-Signed Cert
+```
+openssl req -x509 -nodes -days 365 \
+-newkey rsa:2048 \
+-keyout /etc/nginx/self.key \
+-out /etc/nginx/self.crt
+```
 
 ## 📸 Screenshots
 
