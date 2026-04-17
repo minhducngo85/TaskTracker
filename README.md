@@ -3,6 +3,8 @@
 A simple full-stack task management application inspired by Jira.  
 Built with **Spring Boot + Angular**, focusing on clean architecture, JWT authentication, and modern frontend practices.
 
+Live Demo: http://82.165.51.255/
+
 <p align="center">
   <img src="./screenshots/dashboard.png" width="800"/>
 </p>
