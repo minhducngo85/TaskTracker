@@ -25,7 +25,7 @@ Built with **Spring Boot + Angular**, focusing on clean architecture, JWT authen
 
 ## 🛠 Tech Stack
 
-### Backend (Spring Boot)
+### Backend - TaskTracker (Spring Boot)
 
 - Java 17+
 - Spring Boot 3
@@ -34,7 +34,7 @@ Built with **Spring Boot + Angular**, focusing on clean architecture, JWT authen
 - PostgreSQL / H2
 - Lombok
 
-### Frontend (Angular)
+### Frontend - TaskTrackerFrontend (Angular)
 
 - Angular 21
 - RxJS (Observable, switchMap 🔥)
