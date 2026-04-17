@@ -63,6 +63,26 @@
       "response": []
     },
     {
+      "name": "Get Admin",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/tasks",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "tasks"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "Create",
       "request": {
         "method": "POST",

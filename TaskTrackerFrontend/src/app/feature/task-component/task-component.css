@@ -112,7 +112,7 @@ input.ng-valid.ng-touched {
 }
 
 .edit-btn {
-  background: #979696;
+  background: #2563eb;
   color: white;
   border: none;
   padding: 6px 6px;
@@ -125,7 +125,7 @@ input.ng-valid.ng-touched {
 }
 
 .delete-btn:hover {
-  background: #dc2626;
+  background: #2563eb;
 }
 
 /** Filter*/

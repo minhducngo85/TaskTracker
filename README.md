@@ -205,3 +205,6 @@ openssl req -x509 -nodes -days 365 \
 
 ### Edit
 ![Dashboard](./screenshots/edit-task.png)
+
+### Admin
+![Admin](./screenshots/admin.png)
