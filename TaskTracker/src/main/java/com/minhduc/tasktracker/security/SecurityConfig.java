@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity 
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -41,7 +41,10 @@ public class SecurityConfig {
 				)
 
 				// allow iframe (H2 console)
-				.headers(headers -> headers.frameOptions(frame -> frame.disable())).authorizeHttpRequests(auth -> auth
+				.headers(headers -> headers.frameOptions(frame -> frame.disable()))
+
+				// Authentication
+				.authorizeHttpRequests(auth -> auth
 						// Allow angular request. Angualuar always send OPTIONS /api/tasks
 						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 						// allow H2 console

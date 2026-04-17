@@ -77,7 +77,7 @@ src/app/
 ## 🛠 Testing with Postmann
 TaskTracker.postman_collection.json
 
-## Deployment
+## Deployment on VPS
 
 ### 🚀 Deployment Steps
 - [x] 🖥️ VPS setup  
@@ -190,6 +190,119 @@ openssl req -x509 -nodes -days 365 \
 -newkey rsa:2048 \
 -keyout /etc/nginx/self.key \
 -out /etc/nginx/self.crt
+```
+
+##  🛠️ Containerize with Docker Image
+### 🧱Docker architecture
+````
+[ Angular (build) ] → Nginx (serve frontend)
+[ Spring Boot ] → backend API
+[ H2 ] → database
+````
+
+### 🚀 STEP 1: Dockerfile for backend (TaskTracker/Dockerfile)
+```
+FROM eclipse-temurin:17-jdk-jammy
+
+WORKDIR /app
+
+COPY target/*.jar app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT [ "java", "-jar", "app.jar" ]
+```
+
+### 🚀 STEP 2: Dockerfile for Angular and Nginx (TaskTrackerFrontend/Dockerfile)
+```
+FROM node:20 as build
+
+WORKDIR /app
+
+# 🔥 Copy dependency
+COPY package*.json ./
+
+# 🔥 use ci to clean install matching platform
+RUN npm ci
+
+# copy source
+COPY . .
+
+# build
+RUN npm run build
+
+# -------- NGINX --------
+FROM nginx:alpine
+
+COPY --from=build /app/dist/TaskTrackerFrontend/browser/ /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+```
+
+### 🚀 STEP 3: nginx.conf file
+```
+server {
+    listen 80;
+
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /api/ {
+        proxy_pass http://backend:8080/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+### 🚀 STEP 4: docker-compose.yml file
+```
+version: '3.8'
+
+services:
+
+  backend:
+    build: ./TaskTracker
+    container_name: task-tracker-backend
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./TaskTrackerFrontend
+    container_name: task-tracker-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+```
+
+
+### 🚀 STEP 5: run docker-compose.yml file
+- start Docker Desktop
+- run: docker-compose up --build
+
+### 🚀 STEP 6: Run and Test
+- start docker Image
+- test: docker ps -> outpout: task-frontend   ...   0.0.0.0:80->80/tcp   task-backend    ...   0.0.0.0:8080->8080/tcp
+
+### STEP 7: build from Windows
+
+👉 Windows: delete node_modules localhost and install
+```
+cd frontend
+rmdir /s /q node_modules
+del package-lock.json
+
+npm install
+```
+
+👉 Windows: buidl form sratch
+```
+docker-compose down -v
+docker system prune -a
+docker-compose up --build
 ```
 
 ## 📸 Screenshots
