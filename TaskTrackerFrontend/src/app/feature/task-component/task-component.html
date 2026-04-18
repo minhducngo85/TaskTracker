@@ -71,15 +71,15 @@
     <option value="IN_PROGRESS">IN_PROGRESS</option>
     <option value="DONE">DONE</option>
   </select>
-  <input type="text" [(ngModel)]="searchValue" (change)="applyFilter()" placeholder="Search..." />
+  <input type="text" [(ngModel)]="searchValue" (change)="applyFilter()" placeholder="Search by title..." />
 </div>
 <div class="task-grid">
   <div class="task-card" *ngFor="let task of tasks$ | async">
     <h3>
       <b>{{ task.title }}</b>
     </h3>
-    <p>{{ task.description }}</p>
-    <p>{{ task.assignedTo }}</p>
+    <p>📃 {{ task.description }}</p>
+    <p>👱 {{ task.assignedTo }}</p>
 
     <span class="status" [ngClass]="task.status">
       {{ task.status }}
@@ -95,11 +95,11 @@
   <!-- EDIT MODAL -->
   <div class="modal-backdrop" *ngIf="editingTask">
     <div class="modal">
-      <h2>Edit Task</h2>
+      <h2><b>Edit Task</b></h2>
 
       <input [(ngModel)]="editingTask.title" placeholder="Title" />
-      <textarea [(ngModel)]="editingTask.description" placeholder="Description"></textarea>
-
+      <textarea [(ngModel)]="editingTask.description" placeholder="Description" rows="5"></textarea>
+      <input [(ngModel)]="editingTask.assignedTo" placeholder="Assignee" />
       <select [(ngModel)]="editingTask.status">
         <option value="TODO">TODO</option>
         <option value="IN_PROGRESS">IN_PROGRESS</option>

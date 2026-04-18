@@ -26,9 +26,9 @@
 
 .status {
   display: inline-block;
-  margin-top: 10px;
-  padding: 5px 10px;
-  border-radius: 8px;
+  margin-top: 5px;
+  padding: 4px 10px;
+  border-radius: 5px;
   font-size: 12px;
   font-weight: bold;
 }

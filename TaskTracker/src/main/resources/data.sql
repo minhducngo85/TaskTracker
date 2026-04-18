@@ -2,19 +2,25 @@ DELETE FROM task;
 
 
 INSERT INTO task (title, description, status, assigned_to)
-VALUES ('Build Backend', 'Spring Boot API', 'IN_PROGRESS', 'Minh');
+VALUES ('Build Backend', ' Implementing a REST API endpoint to retrieve user/task data in JSON format', 'DONE', 'Minh');
 
 INSERT INTO task (title, description, status, assigned_to)
-VALUES ('Deploy App', 'Docker', 'DONE', 'Minh');
+VALUES ('Build Frontend', 'Building a search bar component with Angular, including styling and autocomplete functionality', 'DONE', 'Minh');
 
 INSERT INTO task (title, description, status, assigned_to)
-VALUES ('Build fullstack project', 'Angular Frontend + Springboot Backend', 'DONE', 'Minh');
+VALUES ('Deployment on VPS', 'Configure nginx and deploy the frontend and backend in a VPS', 'DONE', 'Minh');
 
 INSERT INTO task (title, description, status, assigned_to)
-VALUES ('Play pickleball', 'Practice Dink and drop ', 'TODO', 'Mngo');
+VALUES ('DevOps/Configuration', 'Write Dockerfile and docker-compose files to enable deployment with one command', 'DONE', 'Minh');
 
 INSERT INTO task (title, description, status, assigned_to)
-VALUES ('Play Tennis', 'Play tennis today. Practice forehand', 'TODO', 'Mngo');
+VALUES ('Database Management', 'Modifying a database schema by adding a deleted_at column for soft-delete functionality', 'IN_PROGRESS', 'Minh');
+
+INSERT INTO task (title, description, status, assigned_to)
+VALUES ('Play pickleball', 'Practice Dink and drop ', 'TODO', 'Lucas');
+
+INSERT INTO task (title, description, status, assigned_to)
+VALUES ('Play Tennis', 'Play tennis today. Practice forehand', 'TODO', 'Lucas');
 
 DELETE FROM users;
 
@@ -23,3 +29,9 @@ VALUES ('admin', 'abcd1234', 'ADMIN');
 
 INSERT INTO users (username, password, role)
 VALUES ('user', 'abcd1234', 'USER');
+
+INSERT INTO users (username, password, role)
+VALUES ('mgno', 'abcd1234', 'ADMIN');
+
+INSERT INTO users (username, password, role)
+VALUES ('mia', 'abcd1234', 'USER');
