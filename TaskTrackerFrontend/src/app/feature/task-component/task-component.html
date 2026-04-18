@@ -1,4 +1,4 @@
-<h2 class="title">📋 Task List (Reset after every 30 minutes)</h2>
+<h2 class="title">📋 Task List</h2>
 
 <!-- Add button -->
 <button class="add-btn" (click)="toggleForm()">+ Add Task</button>
@@ -64,18 +64,27 @@
 </form>
 
 <div class="filter-bar">
+  <!-- Status filter-->
   <select [(ngModel)]="filterValue" (change)="applyFilter()">
     <option value="">All</option>
     <option value="TODO">TODO</option>
     <option value="IN_PROGRESS">IN_PROGRESS</option>
     <option value="DONE">DONE</option>
   </select>
+  <!-- Search by name-->
   <input
     type="text"
     [(ngModel)]="searchValue"
     (change)="applyFilter()"
     placeholder="Search by title..."
   />
+
+  <!-- Sorting-->
+   <select [(ngModel)]="sortValue" (change)="applyFilter()">
+    <option value="">Sort (Default)</option>
+    <option value="asc">Title A-Z</option>
+    <option value="desc">Title Z-A</option>
+   </select>
 </div>
 <div class="task-grid">
   <div class="task-card" *ngFor="let task of tasks$ | async">

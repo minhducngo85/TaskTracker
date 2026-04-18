@@ -30,6 +30,9 @@ export class TaskComponent {
   filterValue = '';
   searchValue = '';
 
+  // Sorting
+  sortValue = ''
+
   // task to be edited
   editingTask: any = null;
 
@@ -81,14 +84,34 @@ export class TaskComponent {
   applyFilter() {
     this.tasks$ = this.taskService.getTasks().pipe(
       map((tasks) =>
-        tasks.filter((t) => {
-          return (
-            (!this.filterValue || t.status === this.filterValue) &&
-            (!this.searchValue || t.title.toLowerCase().includes(this.searchValue))
-          );
-        }),
-      ),
-    );
+       {
+          // Copy task to void mutable array while sorting
+          let result = [...tasks];
+
+          // Filter status
+          if (this.filterValue) {
+            result = result.filter(t => t.status === this.filterValue);
+          }
+
+          // Search by title
+          if (this.searchValue) {
+            result = result.filter(t => t.title.toLowerCase().includes(this.searchValue.toLowerCase()));
+          }
+
+          // sorting
+          if (this.sortValue === 'asc') {
+            result = result.sort((a,b) => {
+              return a.title.localeCompare(b.title);
+            });
+          } else if (this.sortValue === 'desc') {
+             result = result.sort((a,b) => {
+              return b.title.localeCompare(a.title);
+            });
+          }
+
+          return result;
+        },
+    ));
   }
 
   /** start edit */
