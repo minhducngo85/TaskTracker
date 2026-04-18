@@ -57,28 +57,32 @@
   <br />
   <!-- Buttons -->
   <div class="form-actions">
-    <button class="save-btn"  type="submit" [disabled]="taskForm.invalid">Save</button>
-    <span style="padding:5px;"></span>
-    <button class="cancel-btn"  type="button" (click)="toggleForm()">Cancel</button>
+    <button class="save-btn" type="submit" [disabled]="taskForm.invalid">Save</button>
+    <span style="padding: 5px"></span>
+    <button class="cancel-btn" type="button" (click)="toggleForm()">Cancel</button>
   </div>
 </form>
 
 <div class="filter-bar">
-  
   <select [(ngModel)]="filterValue" (change)="applyFilter()">
     <option value="">All</option>
     <option value="TODO">TODO</option>
     <option value="IN_PROGRESS">IN_PROGRESS</option>
     <option value="DONE">DONE</option>
   </select>
-  <input type="text" [(ngModel)]="searchValue" (change)="applyFilter()" placeholder="Search by title..." />
+  <input
+    type="text"
+    [(ngModel)]="searchValue"
+    (change)="applyFilter()"
+    placeholder="Search by title..."
+  />
 </div>
 <div class="task-grid">
   <div class="task-card" *ngFor="let task of tasks$ | async">
     <h3>
       <b>{{ task.title }}</b>
     </h3>
-    <p>📃 {{ task.description }}</p>
+    <p style="margin-top: 5px">📃 {{ task.description }}</p>
     <p>👱 {{ task.assignedTo }}</p>
 
     <span class="status" [ngClass]="task.status">
@@ -108,7 +112,7 @@
 
       <div class="modal-actions">
         <button class="save-btn" (click)="saveEdit()">💾 Save</button>
-        <button class="cancel-btn" (click)="cancelEdit()">Cancel</button>
+        <button class="cancel-btn" (click)="cancelEdit()">❌ Cancel</button>
       </div>
     </div>
   </div>

@@ -12,11 +12,11 @@
 }
 
 .task-card {
-   position: relative;
+  position: relative;
   padding: 16px;
   border-radius: 12px;
   background: #f5f5f5;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
 }
 
@@ -92,7 +92,6 @@ input.ng-valid.ng-touched {
   border: 1px solid green;
 }
 
-
 /** delete btn */
 .actions {
   margin-top: 10px;
@@ -105,10 +104,13 @@ input.ng-valid.ng-touched {
   padding: 6px 10px;
   border-radius: 6px;
   cursor: pointer;
-   position: absolute;
+  position: absolute;
   top: 10px;
   right: 10px;
+}
 
+.delete-btn:hover {
+  background: #2563eb;
 }
 
 .edit-btn {
@@ -121,11 +123,10 @@ input.ng-valid.ng-touched {
   position: absolute;
   top: 10px;
   right: 45px;
-
 }
 
-.delete-btn:hover {
-  background: #2563eb;
+.edit-btn:hover  {
+  background: #b0c4f1;
 }
 
 /** Filter*/
@@ -141,7 +142,6 @@ input.ng-valid.ng-touched {
   border-radius: 6px;
   border: 1px solid #ccc;
 }
-
 
 /* backdrop */
 .modal-backdrop {
@@ -165,7 +165,7 @@ input.ng-valid.ng-touched {
   border-radius: 12px;
   width: 350px;
 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 /* inputs */
