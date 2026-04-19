@@ -14,6 +14,7 @@ import { TaskStatus } from '../../core/models/TaskStatus';
 import { TaskPriority } from '../../core/models/TaskPriority';
 import { Chart } from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { Router } from '@angular/router';
 
 Chart.register(ChartDataLabels);
 
@@ -47,6 +48,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   stats$!: Observable<TaskStats>;
 
   // Priority chart
+  private chartCanvas!: ElementRef<HTMLCanvasElement>;
+
   @ViewChild('chartCanvas')
   set chartCanvasSetter(canvas: ElementRef<HTMLCanvasElement>) {
     if (!canvas) return;
@@ -56,11 +59,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     // Khi canvas xuất hiện → create chart
     this.initChart();
   }
-  private chartCanvas!: ElementRef<HTMLCanvasElement>;
 
   constructor(
     private taskService: TaskService,
     private cdr: ChangeDetectorRef,
+    private router: Router,
   ) {}
 
   ngAfterViewInit(): void {}
@@ -79,7 +82,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         tasks
           .slice()
           .sort((a, b) => b.id - a.id)
-          .slice(0, 5),
+          .slice(0, 8),
       ),
     );
     this.stats$ = this.tasks$.pipe(
@@ -148,5 +151,41 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.chart.data.datasets[0].data = [stats.critical, stats.high, stats.medium, stats.low];
       this.chart.update();
     });
+  }
+
+  onChartClick(event: any) {
+    const points = this.chart.getElementsAtEventForMode(
+      event,
+      'nearest',
+      { intersect: true },
+      true,
+    );
+
+    if (points.length) {
+      const index = points[0].index;
+      const label = this.chart.data.labels?.[index];
+      console.log('Chart clicked: ' + label);
+      this.router.navigate(['/tasks'], {
+        queryParams: { priority: label },
+        queryParamsHandling: 'merge',
+      });
+    }
+  }
+
+  /**
+   * to show task by status
+   *
+   * @param status
+   */
+  filterStatus(status: string) {
+    this.router.navigate(['/tasks'], {
+      queryParams: { status: status },
+    });
+  }
+
+  progressColorClass(percent: number): string {
+    if (percent < 50) return 'progress-medium';
+    //if (percent < 70) return 'progress-medium';
+    return 'progress-high';
   }
 }

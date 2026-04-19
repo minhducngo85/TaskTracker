@@ -206,6 +206,26 @@ input.ng-valid.ng-touched {
   border: 1px solid #ccc;
 }
 
+.clear-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: #64748b;
+  border: 1px solid #cbd5e1;
+  padding: 6px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.clear-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #94a3b8;
+}
+
 /* Mobile */
 @media (max-width: 768px) {
   .filter-bar {
@@ -332,4 +352,17 @@ button {
 /* Content */
 .border-content {
   margin-top: 10px;
+}
+
+// Button polish
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: scale(0.96);
 }

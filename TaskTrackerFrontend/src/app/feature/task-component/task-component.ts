@@ -1,12 +1,11 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../core/services/task-service';
 import { CommonModule } from '@angular/common';
 import { map, Observable } from 'rxjs';
 import { Authentication } from '../../core/services/authentication';
 import { TaskPriority } from '../../core/models/TaskPriority';
-
-
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-task-component',
@@ -14,11 +13,10 @@ import { TaskPriority } from '../../core/models/TaskPriority';
   templateUrl: './task-component.html',
   styleUrl: './task-component.css',
 })
-export class TaskComponent {
-
+export class TaskComponent implements OnInit {
   // Priority Options
   priorityOptions = Object.values(TaskPriority);
-  
+
   // 🔥 dùng Observable thay vì array
   tasks$!: Observable<any[]>;
 
@@ -31,7 +29,7 @@ export class TaskComponent {
     description: '',
     assignedTo: 'mngo',
     status: 'TODO',
-    priority: 'LOW'
+    priority: 'LOW',
   };
 
   // filter and search
@@ -45,12 +43,35 @@ export class TaskComponent {
   // task to be edited
   editingTask: any = null;
 
+  /**
+   * 
+   * @param taskService Constructor to inject dependencies
+   * @param cdr 
+   * @param auth 
+   * @param route 
+   * @param router 
+   */
   constructor(
     private taskService: TaskService,
     private cdr: ChangeDetectorRef,
     public auth: Authentication,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {
     this.loadTasks();
+  }
+
+  /**
+   * on init
+   */
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.filterValue = params['status'] || '';
+      this.filterPriorityValue = params['priority'].toUpperCase() || '';
+      this.applyFilter();
+    });
+
+   
   }
 
   loadTasks() {
@@ -67,7 +88,13 @@ export class TaskComponent {
     this.taskService.addTask(this.newTask).subscribe({
       next: () => {
         this.toggleForm();
-        this.newTask = { title: '', description: '', assignedTo: 'mngo', status: 'TODO',priority: 'LOW' };
+        this.newTask = {
+          title: '',
+          description: '',
+          assignedTo: 'mngo',
+          status: 'TODO',
+          priority: 'LOW',
+        };
         this.loadTasks();
         form.resetForm();
       },
@@ -101,7 +128,7 @@ export class TaskComponent {
           result = result.filter((t) => t.status === this.filterValue);
         }
 
-         // Filter priority
+        // Filter priority
         if (this.filterPriorityValue) {
           result = result.filter((t) => t.priority === this.filterPriorityValue);
         }
@@ -151,6 +178,12 @@ export class TaskComponent {
     });
   }
 
+  /**
+   *
+   * @param priority
+   * @returns
+   *  css clas for priority
+   */
   getPriorityClass(priority: string) {
     switch (priority) {
       case 'CRITICAL':
@@ -166,14 +199,32 @@ export class TaskComponent {
     }
   }
 
-
+  /**
+   *
+   * @param p priority emoji
+   * @returns
+   */
   getPriorityEmoji(p: TaskPriority): string {
-  switch (p) {
-    case 'CRITICAL': return '🔴';
-    case 'HIGH': return '🟠';
-    case 'MEDIUM': return '🟡';
-    default : return '🟢';
+    switch (p) {
+      case 'CRITICAL':
+        return '🔴';
+      case 'HIGH':
+        return '🟠';
+      case 'MEDIUM':
+        return '🟡';
+      default:
+        return '🟢';
+    }
   }
 
-}
+  clearFilter() {
+    // filter and search
+    this.filterValue = '';
+    this.filterPriorityValue = '';
+    this.searchValue = '';
+
+    // Sorting
+    this.sortValue = '';
+    this.applyFilter();
+  }
 }

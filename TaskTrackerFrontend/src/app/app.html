@@ -5,10 +5,10 @@
     <h2>🚀 Menu</h2>
 
     <nav>
-      <a routerLink="/dashboard" routerLinkActive="active" (click)="closeSidebar()">📉 Dashboard</a>
-      <a routerLink="/tasks" (click)="closeSidebar()">📋 Tasks</a>
-      <a *ngIf="auth.isAdmin()" routerLink="/admin" (click)="closeSidebar()">🛠️ Admin</a>
-      <a routerLink="/login" (click)="closeSidebar()">🔐 Login</a>
+      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeSidebar()">📉 Dashboard</a>
+      <a routerLink="/tasks" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" (click)="closeSidebar()">📋 Tasks</a>
+      <a *ngIf="auth.isAdmin()" routerLinkActive="active" routerLink="/admin" (click)="closeSidebar()">🛠️ Admin</a>
+      <a *ngIf="!auth.isLoggedIn()" routerLink="/login"  routerLinkActive="active" (click)="closeSidebar()">🔐 Login</a>
     </nav>
   </aside>
 

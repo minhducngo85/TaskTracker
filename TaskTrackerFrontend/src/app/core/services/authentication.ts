@@ -10,7 +10,6 @@ import { Route, Router } from '@angular/router';
 export class Authentication {
   private api = `${environment.apiUrl}/auth`;
 
-
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -62,5 +61,9 @@ export class Authentication {
 
   isAdmin(): boolean {
     return this.getRole() === 'ADMIN';
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken();
   }
 }
