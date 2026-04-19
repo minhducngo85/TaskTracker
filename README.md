@@ -15,11 +15,17 @@ Live Demo: http://82.165.51.255/
 - 👤 User roles: Admin & user
 - 📝 CRUD Task (Create, Read, Update, Delete)
 - 🔍 Filter & Search tasks
+- 📉 Dashboard: statistics, chart and recent tasks
 - 👤 Assign tasks to users
 - 📊 Task status management:
   - TODO
   - IN_PROGRESS
   - DONE
+- 🚩 Task priority management:
+  - CRITCAL
+  - HIGH
+  - MEDIUM
+  - LOW
 - 🌐 Clean REST API design
 - 📱 Responsive UI
 

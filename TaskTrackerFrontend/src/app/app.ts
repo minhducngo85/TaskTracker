@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { Authentication } from './core/authentication';
+import { Authentication } from './core/services/authentication';
 import { CommonModule } from '@angular/common';
 
 @Component({

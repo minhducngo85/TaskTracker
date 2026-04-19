@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { tap } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { Route, Router } from '@angular/router';
 
 @Injectable({
@@ -26,7 +26,7 @@ export class Authentication {
       // tap: don't modify data
       tap((res) => {
         if (typeof window !== 'undefined') {
-          console.log(res.token);
+          // console.log(res.token);
           localStorage.setItem('token', res.token);
         }
       }),
@@ -56,7 +56,7 @@ export class Authentication {
     if (!token) return null;
 
     const payload = JSON.parse(atob(token.split('.')[1]));
-    console.log(payload);
+    //console.log(payload);
     return payload.role;
   }
 

@@ -1,10 +1,11 @@
 <div class="layout">
   <!-- Sidebar -->
   <aside class="sidebar">
-    <h2>🚀 Task Tracker App</h2>
+    <h2>🚀 Menu</h2>
 
     <nav>
-      <a routerLink="/tasks" routerLinkActive="active">📋 Tasks</a>
+      <a routerLink="/dashboard" routerLinkActive="active">📉 Dashboard</a>
+      <a routerLink="/tasks" >📋 Tasks</a>
       <!-- 🔥 chỉ admin thấy -->
       <a *ngIf="auth.isAdmin()" routerLink="/admin"> 🛠️ Admin</a>
       <a routerLink="/login">🔐 Login</a>
@@ -15,7 +16,7 @@
   <div class="main">
     <!-- Header -->
     <header class="header">
-      <h2>Dashboard</h2>
+      <h2>Task Tracker - Mini Jira</h2>
       <button (click)="logout()">Logout</button>
     </header>
 

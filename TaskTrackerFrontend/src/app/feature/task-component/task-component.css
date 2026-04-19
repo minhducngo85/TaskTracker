@@ -24,27 +24,34 @@
   transform: translateY(-5px);
 }
 
+.add-task-form {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px 10px 0px 10px;
+  margin-bottom: 10px;
+}
+
 .status {
   display: inline-block;
-  margin-top: 5px;
+  margin-top: 0px;
   padding: 4px 10px;
   border-radius: 5px;
   font-size: 12px;
-  font-weight: bold;
 }
 
 /* status colors */
 .TODO {
-  background: #ffcc00;
+  background: #6b7280;
+  color: white;
 }
 
 .IN_PROGRESS {
-  background: #2196f3;
+  background: #f59e0b;
   color: white;
 }
 
 .DONE {
-  background: #4caf50;
+  background: #22c55e;
   color: white;
 }
 
@@ -199,4 +206,57 @@ input.ng-valid.ng-touched {
   border: none;
   padding: 8px 12px;
   border-radius: 6px;
+}
+
+.priority-icon {
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.priority-icon:hover {
+  transform: scale(1.2);
+}
+
+/* 🎨 Colors */
+.priority-critical {
+  color: #f80004; /* red */
+}
+
+.priority-high {
+  color: #da680b; /* orange */
+}
+
+.priority-medium {
+  color: #facc15; /* yellow */
+}
+
+.priority-low {
+  color: #22c55e; /* green */
+}
+
+
+.border-box {
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 12px 0px 12px;
+  margin-top: 15px;
+}
+
+/* Title nằm đè lên border */
+.border-title {
+  position: absolute;
+  top: -10px;
+  left: 12px;
+  background: #fff;
+  padding: 0 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Content */
+.border-content {
+  margin-top: 10px;
 }

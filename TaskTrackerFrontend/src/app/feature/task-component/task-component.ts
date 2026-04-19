@@ -1,9 +1,12 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TaskService } from '../../core/task-service';
+import { TaskService } from '../../core/services/task-service';
 import { CommonModule } from '@angular/common';
 import { map, Observable } from 'rxjs';
-import { Authentication } from '../../core/authentication';
+import { Authentication } from '../../core/services/authentication';
+import { TaskPriority } from '../../core/models/TaskPriority';
+
+
 
 @Component({
   selector: 'app-task-component',
@@ -12,6 +15,10 @@ import { Authentication } from '../../core/authentication';
   styleUrl: './task-component.css',
 })
 export class TaskComponent {
+
+  // Priority Options
+  priorityOptions = Object.values(TaskPriority);
+  
   // 🔥 dùng Observable thay vì array
   tasks$!: Observable<any[]>;
 
@@ -24,14 +31,16 @@ export class TaskComponent {
     description: '',
     assignedTo: 'mngo',
     status: 'TODO',
+    priority: 'LOW'
   };
 
   // filter and search
   filterValue = '';
+  filterPriorityValue = '';
   searchValue = '';
 
   // Sorting
-  sortValue = ''
+  sortValue = '';
 
   // task to be edited
   editingTask: any = null;
@@ -39,7 +48,7 @@ export class TaskComponent {
   constructor(
     private taskService: TaskService,
     private cdr: ChangeDetectorRef,
-    public auth: Authentication
+    public auth: Authentication,
   ) {
     this.loadTasks();
   }
@@ -58,7 +67,7 @@ export class TaskComponent {
     this.taskService.addTask(this.newTask).subscribe({
       next: () => {
         this.toggleForm();
-        this.newTask = { title: '', description: '', assignedTo: 'mngo', status: 'TODO' };
+        this.newTask = { title: '', description: '', assignedTo: 'mngo', status: 'TODO',priority: 'LOW' };
         this.loadTasks();
         form.resetForm();
       },
@@ -83,41 +92,47 @@ export class TaskComponent {
    */
   applyFilter() {
     this.tasks$ = this.taskService.getTasks().pipe(
-      map((tasks) =>
-       {
-          // Copy task to void mutable array while sorting
-          let result = [...tasks];
+      map((tasks) => {
+        // Copy task to void mutable array while sorting
+        let result = [...tasks];
 
-          // Filter status
-          if (this.filterValue) {
-            result = result.filter(t => t.status === this.filterValue);
-          }
+        // Filter status
+        if (this.filterValue) {
+          result = result.filter((t) => t.status === this.filterValue);
+        }
 
-          // Search by title
-          if (this.searchValue) {
-            result = result.filter(t => t.title.toLowerCase().includes(this.searchValue.toLowerCase()));
-          }
+         // Filter priority
+        if (this.filterPriorityValue) {
+          result = result.filter((t) => t.priority === this.filterPriorityValue);
+        }
 
-          // sorting
-          if (this.sortValue === 'asc') {
-            result = result.sort((a,b) => {
-              return a.title.localeCompare(b.title);
-            });
-          } else if (this.sortValue === 'desc') {
-             result = result.sort((a,b) => {
-              return b.title.localeCompare(a.title);
-            });
-          }
+        // Search by title
+        if (this.searchValue) {
+          result = result.filter((t) =>
+            t.title.toLowerCase().includes(this.searchValue.toLowerCase()),
+          );
+        }
 
-          return result;
-        },
-    ));
+        // sorting
+        if (this.sortValue === 'asc') {
+          result = result.sort((a, b) => {
+            return a.title.localeCompare(b.title);
+          });
+        } else if (this.sortValue === 'desc') {
+          result = result.sort((a, b) => {
+            return b.title.localeCompare(a.title);
+          });
+        }
+
+        return result;
+      }),
+    );
   }
 
   /** start edit */
   startEdit(task: any) {
     // clone task
-    this.editingTask = {...task};
+    this.editingTask = { ...task };
   }
 
   cancelEdit() {
@@ -125,15 +140,40 @@ export class TaskComponent {
   }
 
   saveEdit() {
-    this.taskService.updateTask(this.editingTask.id, this.editingTask).subscribe(
-      {
-        next : () => {
-          this.editingTask = null;
-          this.loadTasks();
-          this.cdr.detectChanges(); // trigger ui update
-        },
-        error: (err : any) => console.error(err)
-      }
-    );
+    console.log(JSON.stringify(this.editingTask, null, 2));
+    this.taskService.updateTask(this.editingTask.id, this.editingTask).subscribe({
+      next: () => {
+        this.editingTask = null;
+        this.loadTasks();
+        this.cdr.detectChanges(); // trigger ui update
+      },
+      error: (err: any) => console.error(err),
+    });
   }
+
+  getPriorityClass(priority: string) {
+    switch (priority) {
+      case 'CRITICAL':
+        return 'badge badge-critical'; // red
+      case 'HIGH':
+        return 'badge badge-high'; // orange (custom)
+      case 'MEDIUM':
+        return 'badge badge-medium'; // yellow
+      case 'LOW':
+        return 'badge badge-low'; // green
+      default:
+        return 'badge badge-default';
+    }
+  }
+
+
+  getPriorityEmoji(p: TaskPriority): string {
+  switch (p) {
+    case 'CRITICAL': return '🔴';
+    case 'HIGH': return '🟠';
+    case 'MEDIUM': return '🟡';
+    default : return '🟢';
+  }
+
+}
 }

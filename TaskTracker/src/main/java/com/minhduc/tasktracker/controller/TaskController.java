@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.minhduc.tasktracker.entity.Task;
+import com.minhduc.tasktracker.entity.TaskPriority;
 import com.minhduc.tasktracker.service.TaskService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,11 +28,15 @@ import lombok.extern.slf4j.Slf4j;
 public class TaskController {
 
 	private final TaskService taskService;
+
 	
 	@GetMapping
-	public List<Task> getAll() {
-		log.info("getAll() called");
-		return taskService.getAll();
+	public List<Task> getTasks(@RequestParam(required = false) TaskPriority priority) {
+		log.info("getTask() called");
+	    if (priority != null) {
+	        return taskService.findByPriority(priority);
+	    }
+	    return taskService.getAll();
 	}
 	
 	@PostMapping

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { UserService } from '../../core/user-service';
+import { UserService } from '../../core/services/user-service';
 import { CommonModule } from '@angular/common';
 
 export interface User {

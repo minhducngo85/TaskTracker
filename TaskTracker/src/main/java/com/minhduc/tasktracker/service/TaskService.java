@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.minhduc.tasktracker.controller.exceptionhandling.ResourceNotFoundException;
 import com.minhduc.tasktracker.entity.Task;
+import com.minhduc.tasktracker.entity.TaskPriority;
 import com.minhduc.tasktracker.entity.TaskStatus;
 import com.minhduc.tasktracker.repository.TaskRepository;
 
@@ -48,6 +49,7 @@ public class TaskService{
 		task.setAssignedTo(updated.getAssignedTo());
 		task.setDescription(updated.getDescription());
 		task.setStatus(updated.getStatus());
+		task.setPriority(updated.getPriority());
 		
 		return taskRepository.save(task);
 	}
@@ -55,5 +57,9 @@ public class TaskService{
 	public void delete(Long id) {
 		taskRepository.findById(id).orElseThrow(() -> new  ResourceNotFoundException("Task not found with id: " + id));
 		taskRepository.deleteById(id);
+	}
+
+	public List<Task> findByPriority(TaskPriority priority) {
+		return taskRepository.findByPriority(priority);
 	}
 }
