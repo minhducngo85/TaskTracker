@@ -17,6 +17,20 @@
   gap: 12px;
 }
 
+/* Tablet */
+@media (max-width: 1024px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
 .card {
   padding: 16px;
   border-radius: 10px;
@@ -116,6 +130,13 @@
   grid-template-columns: 2fr 1fr;
   gap: 16px;
   margin-top: 16px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .row-2col {
+    grid-template-columns: 1fr;
+  }
 }
 
 canvas {

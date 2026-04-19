@@ -1,28 +1,39 @@
 <div class="layout">
+
   <!-- Sidebar -->
-  <aside class="sidebar">
+  <aside class="sidebar" [class.open]="isSidebarOpen">
     <h2>🚀 Menu</h2>
 
     <nav>
-      <a routerLink="/dashboard" routerLinkActive="active">📉 Dashboard</a>
-      <a routerLink="/tasks" >📋 Tasks</a>
-      <!-- 🔥 chỉ admin thấy -->
-      <a *ngIf="auth.isAdmin()" routerLink="/admin"> 🛠️ Admin</a>
-      <a routerLink="/login">🔐 Login</a>
+      <a routerLink="/dashboard" routerLinkActive="active" (click)="toggleSidebar()">📉 Dashboard</a>
+      <a routerLink="/tasks" (click)="toggleSidebar()">📋 Tasks</a>
+      <a *ngIf="auth.isAdmin()" routerLink="/admin" (click)="toggleSidebar()">🛠️ Admin</a>
+      <a routerLink="/login" (click)="toggleSidebar()">🔐 Login</a>
     </nav>
   </aside>
 
-  <!-- Main content -->
+  <!-- Overlay (mobile) -->
+  <div 
+    class="overlay" 
+    *ngIf="isSidebarOpen"
+    (click)="toggleSidebar()">
+  </div>
+
+  <!-- Main -->
   <div class="main">
+
     <!-- Header -->
     <header class="header">
+      <button class="menu-btn" (click)="toggleSidebar()">☰</button>
       <h2>Task Tracker - Mini Jira</h2>
-      <button (click)="logout()">Logout</button>
+      <button class="logout-btn" (click)="logout()">Logout</button>
     </header>
 
-    <!-- Page content -->
-    <div class="content">
+    <!-- Content -->
+    <main class="content">
       <router-outlet></router-outlet>
-    </div>
+    </main>
+
   </div>
+
 </div>

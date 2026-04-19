@@ -1,14 +1,26 @@
+/* ===== RESET ===== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* ===== LAYOUT ===== */
 .layout {
   display: flex;
   height: 100vh;
 }
 
-/* Sidebar */
+/* ===== SIDEBAR ===== */
 .sidebar {
   width: 220px;
   background: #1e293b;
   color: white;
   padding: 20px;
+  transition: 0.3s;
 }
 
 .sidebar h2 {
@@ -32,43 +44,107 @@
   background: #2563eb;
 }
 
-/* Main */
+/* ===== MAIN ===== */
 .main {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-/* Header */
+/* ===== HEADER ===== */
 .header {
   height: 60px;
   background: white;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  justify-content: space-between;
+  padding: 0 16px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .header h2 {
   font-size: 16px;
-  font-weight: bold;
+  margin: 0;
 }
 
-/* Content */
+/* ===== CONTENT ===== */
 .content {
-  padding: 20px;
-  background: #f1f5f9;
   flex: 1;
+  padding: 16px;
+  background: #f1f5f9;
   overflow: auto;
 }
 
-/* Button */
+/* ===== BUTTONS ===== */
 button {
   padding: 6px 12px;
   border: none;
   border-radius: 6px;
+  cursor: pointer;
+}
+
+.logout-btn {
   background: #ef4444;
   color: white;
+}
+
+/* ===== MENU BUTTON ===== */
+.menu-btn {
+  display: none;
+  font-size: 22px;
+  background: none;
+  border: none;
   cursor: pointer;
+}
+
+/* ===== OVERLAY ===== */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  z-index: 999;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+
+  .layout {
+    flex-direction: column;
+  }
+
+  /* Sidebar hidden by default */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -220px;
+    height: 100%;
+    z-index: 1000;
+  }
+
+  /* Open state */
+  .sidebar.open {
+    left: 0;
+  }
+
+  /* Show menu button */
+  .menu-btn {
+    display: block;
+  }
+
+  /* Header adjust */
+  .header {
+    padding: 0 12px;
+  }
+
+  .header h2 {
+    font-size: 14px;
+  }
+
+  /* Content spacing */
+  .content {
+    padding: 12px;
+  }
 }

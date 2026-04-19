@@ -12,9 +12,20 @@ import { CommonModule } from '@angular/common';
 })
 export class App {
   protected readonly title = signal('TaskTrackerFrontend');
-  constructor(private router: Router, public auth : Authentication) {}
+
+  constructor(
+    private router: Router,
+    public auth: Authentication,
+  ) {}
+
   logout() {
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
+  }
+
+  isSidebarOpen = false;
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
   }
 }

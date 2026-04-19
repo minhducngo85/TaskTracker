@@ -28,6 +28,7 @@ Live Demo: http://82.165.51.255/
   - LOW
 - 🌐 Clean REST API design
 - 📱 Responsive UI
+- 📲 Mobile-friendly UI
 
 ---
 
