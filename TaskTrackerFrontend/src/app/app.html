@@ -5,10 +5,10 @@
     <h2>🚀 Menu</h2>
 
     <nav>
-      <a routerLink="/dashboard" routerLinkActive="active" (click)="toggleSidebar()">📉 Dashboard</a>
-      <a routerLink="/tasks" (click)="toggleSidebar()">📋 Tasks</a>
-      <a *ngIf="auth.isAdmin()" routerLink="/admin" (click)="toggleSidebar()">🛠️ Admin</a>
-      <a routerLink="/login" (click)="toggleSidebar()">🔐 Login</a>
+      <a routerLink="/dashboard" routerLinkActive="active" (click)="closeSidebar()">📉 Dashboard</a>
+      <a routerLink="/tasks" (click)="closeSidebar()">📋 Tasks</a>
+      <a *ngIf="auth.isAdmin()" routerLink="/admin" (click)="closeSidebar()">🛠️ Admin</a>
+      <a routerLink="/login" (click)="closeSidebar()">🔐 Login</a>
     </nav>
   </aside>
 
@@ -24,7 +24,7 @@
 
     <!-- Header -->
     <header class="header">
-      <button class="menu-btn" (click)="toggleSidebar()">☰</button>
+      <button class="menu-btn" (click)="toggleSidebar()" style="font-weight: bold;">☰</button>
       <h2>Task Tracker - Mini Jira</h2>
       <button class="logout-btn" (click)="logout()">Logout</button>
     </header>

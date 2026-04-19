@@ -65,6 +65,7 @@ body {
 .header h2 {
   font-size: 16px;
   margin: 0;
+  font-weight: bold;
 }
 
 /* ===== CONTENT ===== */
@@ -136,11 +137,11 @@ button {
 
   /* Header adjust */
   .header {
-    padding: 0 12px;
+    padding: 0 16px;
   }
 
   .header h2 {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   /* Content spacing */

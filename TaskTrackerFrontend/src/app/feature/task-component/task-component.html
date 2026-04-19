@@ -83,7 +83,7 @@
     <div class="filter-bar">
       <!-- Status filter-->
       <select [(ngModel)]="filterValue" (change)="applyFilter()">
-        <option value="">Status Filter</option>
+        <option value="">Status All</option>
         <option value="TODO">TODO</option>
         <option value="IN_PROGRESS">IN_PROGRESS</option>
         <option value="DONE">DONE</option>
@@ -91,7 +91,7 @@
 
       <!-- Priority Filter -->
       <select [(ngModel)]="filterPriorityValue" (change)="applyFilter()">
-        <option value="">Priority Filter</option>
+        <option value="">Priority All</option>
         <option *ngFor="let p of priorityOptions" [value]="p">
           {{ getPriorityEmoji(p) }} {{ p }}
         </option>
@@ -137,8 +137,8 @@
 
     <!--Actions-->
     <div class="actions">
-      <button class="edit-btn" (click)="startEdit(task)">✏️</button>
-      <button class="delete-btn" (click)="deleteTask(task.id)">🗑</button>
+      <button class="edit-btn" (click)="startEdit(task)">📝</button>
+      <button class="delete-btn" (click)="deleteTask(task.id)">🗑️</button>
     </div>
   </div>
 
