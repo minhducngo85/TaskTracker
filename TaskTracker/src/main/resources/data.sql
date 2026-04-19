@@ -26,19 +26,25 @@ INSERT INTO task (title, description, status, priority, assigned_to)
 VALUES ('Intergate Keycloak', 'Implement and integrate ODIC authentication with Keycloak', 'TODO', 'MEDIUM', 'Minh Duc');
 
 INSERT INTO task (title, description, status, priority, assigned_to)
-VALUES ('Drag & Drop Feature', 'TODO → IN_PROGRESS → DONE. Angular CDK Dragdrop', 'TODO', 'CRITICAL', 'Minh Duc');
-
-INSERT INTO task (title, description, status, priority, assigned_to)
 VALUES ('Paginator', 'Backend: GET /tasks?page=0&size=10. Frontend: next / prev', 'IN_PROGRESS', 'MEDIUM', 'Minh Duc');
 
 INSERT INTO task (title, description, status, priority, assigned_to)
 VALUES ('Due Date and Overdue', 'Add due date to task and highlight', 'IN_PROGRESS', 'HIGH', 'Minh Duc');
 
 INSERT INTO task (title, description, status, priority, assigned_to)
-VALUES ('Play pickleball', 'Practice Dink and drop ', 'TODO', 'LOW', 'Lucas');
+VALUES ('Play pickleball', 'Practice Dink and drop ', 'DONE', 'LOW', 'Lucas');
 
 INSERT INTO task (title, description, status, priority, assigned_to)
-VALUES ('Play Tennis', 'Play tennis today. Practice forehand', 'TODO', 'LOW', 'Lucas');
+VALUES ('Play Tennis', 'Play tennis today. Practice forehand', 'TODO', 'MEDIUM', 'Lucas');
+
+INSERT INTO task (title, description, status, priority, assigned_to)
+VALUES ('Email notification', 'If task is assigned. An email to assignee will be sent', 'TODO', 'HIGH', 'Lucas');
+
+INSERT INTO task (title, description, status, priority, assigned_to)
+VALUES ('Kanban Drag & Drop Feature', 'TODO → IN_PROGRESS → DONE. Angular CDK Dragdrop', 'IN_PROGRESS', 'CRITICAL', 'Minh Duc');
+
+INSERT INTO task (title, description, status, priority, assigned_to)
+VALUES ('Task Comments', 'Implement feature "Task comments"', 'TODO', 'LOW', 'Lucas');
 
 DELETE FROM users;
 

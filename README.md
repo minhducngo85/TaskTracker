@@ -82,6 +82,10 @@ src/app/
  └── app.routes.ts
 ```
 
+### Frontend packages
+npm install chart.js
+npm install chartjs-plugin-datalabels
+
 ## 🛠 Testing with Postmann
 TaskTracker.postman_collection.json
 
