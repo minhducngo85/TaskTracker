@@ -14,7 +14,7 @@ INSERT INTO task (title, description, status, priority, assigned_to)
 VALUES ('Dashboard', 'Dashboard with number of DONE/TODO/IN_PROGRESS and chart. Using chart.js', 'TODO', 'HIGH', 'Lucas Ngo');
 
 INSERT INTO task (title, description, status, priority, assigned_to)
-VALUES ('Priority Function', 'Entend Task with Priority (Critial, high, medim, low) including backend and front end side.', 'TODO', 'HIGH', 'Lucas Ngo');
+VALUES ('Priority Function', 'Extend Task with Priority (Critial, high, medim, low) including backend and front end side.', 'TODO', 'HIGH', 'Lucas Ngo');
 
 INSERT INTO task (title, description, status, priority, assigned_to)
 VALUES ('DevOps/Configuration', 'Write Dockerfile and docker-compose files to enable deployment with one command', 'DONE', 'MEDIUM', 'Minh Duc');

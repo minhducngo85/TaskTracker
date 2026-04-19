@@ -56,7 +56,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     // Khi canvas xuất hiện → create chart
     this.initChart();
   }
-
   private chartCanvas!: ElementRef<HTMLCanvasElement>;
 
   constructor(
@@ -70,6 +69,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.loadTasks();
   }
 
+  /**
+   * loas tasks from backend and calcualte stats
+   */
   loadTasks() {
     this.tasks$ = this.taskService.getTasks();
     this.recentTasks$ = this.tasks$.pipe(
@@ -102,27 +104,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     );
   }
 
-  countByPriority(priority: string): Observable<number> {
-    return this.stats$.pipe(
-      map((stats) => {
-        switch (priority) {
-          case 'CRITICAL':
-            return stats.critical;
-          case 'HIGH':
-            return stats.high;
-          case 'MEDIUM':
-            return stats.medium;
-          case 'LOW':
-            return stats.low;
-          default:
-            return 0;
-        }
-      }),
-    );
-  }
-
+  /**
+   * chart creation
+   */
   chart!: Chart;
-
   initChart() {
     const ctx = this.chartCanvas.nativeElement.getContext('2d');
     if (!ctx) return;
