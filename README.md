@@ -31,8 +31,6 @@ Live Demo: http://82.165.51.255/
 - 📱 Responsive UI
 - 📲 Mobile-optimized layout (Kanban swipe / horizontal scroll)
 
----
-
 ## 🛠 Tech Stack
 
 ### Backend - TaskTracker (Spring Boot)
@@ -111,7 +109,7 @@ npm install @angular/animations
 ## 🛠 Testing with Postmann
 TaskTracker.postman_collection.json
 
-## Deployment on VPS
+## 🗯️ Deployment on VPS
 
 ### 🚀 Deployment Steps
 - [x] 🖥️ VPS setup  
