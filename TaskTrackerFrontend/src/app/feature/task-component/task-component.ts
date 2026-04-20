@@ -2,10 +2,12 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../core/services/task-service';
 import { CommonModule } from '@angular/common';
-import { map, Observable } from 'rxjs';
+import { map, Observable, shareReplay, tap } from 'rxjs';
 import { Authentication } from '../../core/services/authentication';
 import { TaskPriority } from '../../core/models/TaskPriority';
 import { ActivatedRoute, Router } from '@angular/router';
+import { error } from 'console';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-task-component',
@@ -44,12 +46,12 @@ export class TaskComponent implements OnInit {
   editingTask: any = null;
 
   /**
-   * 
+   *
    * @param taskService Constructor to inject dependencies
-   * @param cdr 
-   * @param auth 
-   * @param route 
-   * @param router 
+   * @param cdr
+   * @param auth
+   * @param route
+   * @param router
    */
   constructor(
     private taskService: TaskService,
@@ -57,7 +59,9 @@ export class TaskComponent implements OnInit {
     public auth: Authentication,
     private route: ActivatedRoute,
     private router: Router,
+    private snackBar: MatSnackBar,
   ) {
+    console.log('Constructor');
     this.loadTasks();
   }
 
@@ -65,17 +69,30 @@ export class TaskComponent implements OnInit {
    * on init
    */
   ngOnInit(): void {
+    console.log('ngOnInit');
     this.route.queryParams.subscribe((params) => {
       this.filterValue = params['status'] || '';
       this.filterPriorityValue = params['priority'].toUpperCase() || '';
-      this.applyFilter();
     });
-
-   
+    this.applyFilter();
   }
 
   loadTasks() {
-    this.tasks$ = this.taskService.getTasks();
+    this.tasks$ = this.taskService.getTasks().pipe(
+      tap({
+        next: (tasks) => {
+          // this.snackBar.open(tasks?.length + ' Tasks loaded', 'Close', {
+          //   duration: 2000,
+          // });
+        },
+        error: (err) => {
+          this.snackBar.open('Error: ' + err, 'Close', {
+            duration: 2000,
+          });
+        },
+      }),
+      shareReplay(1),
+    );
   }
 
   toggleForm() {
@@ -97,8 +114,17 @@ export class TaskComponent implements OnInit {
         };
         this.loadTasks();
         form.resetForm();
+
+        this.snackBar.open('Task added', 'Close', {
+          duration: 2000,
+        });
       },
-      error: (err: any) => console.error(err),
+      error: (err: any) => {
+        console.error(err);
+        this.snackBar.open('Error: ' + err, 'Close', {
+          duration: 2000,
+        });
+      },
     });
   }
 
@@ -109,6 +135,9 @@ export class TaskComponent implements OnInit {
       next: () => {
         this.loadTasks(); // 👈 assign trực tiếp
         this.cdr.detectChanges(); // trigger ui update
+        this.snackBar.open(`Task id ${id} deleted`, 'Close', {
+          duration: 2000,
+        });
       },
       error: (err: any) => console.error(err),
     });
@@ -151,6 +180,10 @@ export class TaskComponent implements OnInit {
           });
         }
 
+        // show snack bar
+        this.snackBar.open(result?.length + ' Task(s) found!', 'Close', {
+          duration: 2000,
+        });
         return result;
       }),
     );

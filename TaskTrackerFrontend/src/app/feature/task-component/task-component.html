@@ -10,69 +10,69 @@
 
   <div class="border-content">
     <form *ngIf="showForm" #taskForm="ngForm" (ngSubmit)="addTask(taskForm)" class="task-form">
-    <!-- Title -->
-    <input
-      type="text"
-      name="title"
-      [(ngModel)]="newTask.title"
-      placeholder="Title"
-      required
-      minlength="3"
-      #title="ngModel"
-    />
-    <div class="error" *ngIf="title.invalid && title.touched">
-      <small *ngIf="title.errors?.['required']">Title is required</small>
-      <small *ngIf="title.errors?.['minlength']">Min 3 characters</small>
-    </div>
-    <br />
-    <!-- Description -->
-    <input
-      type="text"
-      name="description"
-      [(ngModel)]="newTask.description"
-      placeholder="Description"
-      required
-      #desc="ngModel"
-    />
-    <div class="error" *ngIf="desc.invalid && desc.touched">
-      <small>Description is required</small>
-    </div>
+      <!-- Title -->
+      <input
+        type="text"
+        name="title"
+        [(ngModel)]="newTask.title"
+        placeholder="Title"
+        required
+        minlength="3"
+        #title="ngModel"
+      />
+      <div class="error" *ngIf="title.invalid && title.touched">
+        <small *ngIf="title.errors?.['required']">Title is required</small>
+        <small *ngIf="title.errors?.['minlength']">Min 3 characters</small>
+      </div>
+      <br />
+      <!-- Description -->
+      <input
+        type="text"
+        name="description"
+        [(ngModel)]="newTask.description"
+        placeholder="Description"
+        required
+        #desc="ngModel"
+      />
+      <div class="error" *ngIf="desc.invalid && desc.touched">
+        <small>Description is required</small>
+      </div>
 
-    <br />
-    <!-- Status -->
-    <select name="status" [(ngModel)]="newTask.status">
-      <option value="TODO">TODO</option>
-      <option value="IN_PROGRESS">IN_PROGRESS</option>
-      <option value="DONE">DONE</option>
-    </select>
+      <br />
+      <!-- Status -->
+      <select name="status" [(ngModel)]="newTask.status">
+        <option value="TODO">TODO</option>
+        <option value="IN_PROGRESS">IN_PROGRESS</option>
+        <option value="DONE">DONE</option>
+      </select>
 
-    <!-- Priority -->
-    <select name="priority" [(ngModel)]="newTask.priority">
-      <option *ngFor="let p of priorityOptions" [value]="p">
-        {{ getPriorityEmoji(p) }} {{ p }}
-      </option>
-    </select>
+      <!-- Priority -->
+      <select name="priority" [(ngModel)]="newTask.priority">
+        <option *ngFor="let p of priorityOptions" [value]="p">
+          {{ getPriorityEmoji(p) }} {{ p }}
+        </option>
+      </select>
 
-    <!-- Assigned to -->
-    <input
-      type="text"
-      name="assignedTo"
-      [(ngModel)]="newTask.assignedTo"
-      placeholder="Assigned to"
-      required
-      #assignedTo="ngModel"
-    />
-    <div class="error" *ngIf="assignedTo.invalid && assignedTo.touched">
-      <small>AssignedTo is required</small>
-    </div>
-    <br />
-    <!-- Buttons -->
-    <div class="form-actions">
-      <button class="save-btn" type="submit" [disabled]="taskForm.invalid">Save</button>
-      <span style="padding: 5px"></span>
-      <button class="cancel-btn" type="button" (click)="toggleForm()">Cancel</button>
-    </div>
-  </form>
+      <!-- Assigned to -->
+      <input
+        type="text"
+        name="assignedTo"
+        [(ngModel)]="newTask.assignedTo"
+        placeholder="Assigned to"
+        required
+        #assignedTo="ngModel"
+      />
+      <div class="error" *ngIf="assignedTo.invalid && assignedTo.touched">
+        <small>AssignedTo is required</small>
+      </div>
+      <br />
+      <!-- Buttons -->
+      <div class="form-actions">
+        <button class="save-btn" type="submit" [disabled]="taskForm.invalid">Save</button>
+        <span style="padding: 5px"></span>
+        <button class="cancel-btn" type="button" (click)="toggleForm()">Cancel</button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -125,6 +125,7 @@
         {{ task.status }}
       </span>
       <span class="title" style="margin-left: 5px">{{ task.title }}</span>
+
       <span
         style="margin-left: 5px"
         class="material-icons priority-icon"
@@ -135,7 +136,7 @@
       </span>
     </div>
     <p style="margin-top: 5px">📃 {{ task.description }}</p>
-    <p>👱 {{ task.assignedTo }}</p>
+    <p>🐨 {{ task.assignedTo }}</p>
 
     <!--Actions-->
     <div class="actions">

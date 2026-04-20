@@ -9,12 +9,13 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../core/services/task-service';
-import { map, Observable, shareReplay } from 'rxjs';
+import { map, Observable, shareReplay, tap } from 'rxjs';
 import { TaskStatus } from '../../core/models/TaskStatus';
 import { TaskPriority } from '../../core/models/TaskPriority';
 import { Chart } from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 Chart.register(ChartDataLabels);
 
@@ -64,6 +65,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private taskService: TaskService,
     private cdr: ChangeDetectorRef,
     private router: Router,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngAfterViewInit(): void {}
@@ -76,7 +78,29 @@ export class DashboardComponent implements OnInit, AfterViewInit {
    * loas tasks from backend and calcualte stats
    */
   loadTasks() {
-    this.tasks$ = this.taskService.getTasks();
+    this.tasks$ = this.taskService.getTasks().pipe(
+      tap({
+        next: (tasks) => {
+          // Only shown if there is data
+          if (tasks?.length) {
+            this.snackBar.open(tasks?.length + ' Tasks loaded', 'Close', {
+              duration: 2000
+            });
+          } else {
+            this.snackBar.open('No Task found', 'OK', {
+              duration: 2000
+            });
+          }
+        },
+        error: (err) => {
+           this.snackBar.open('Error: ' + err, 'Close', {
+              duration: 2000
+            });
+        },
+      }),
+      shareReplay(1), // avoid multiple api calls
+    );
+
     this.recentTasks$ = this.tasks$.pipe(
       map((tasks) =>
         tasks

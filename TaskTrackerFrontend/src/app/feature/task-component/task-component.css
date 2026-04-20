@@ -354,7 +354,7 @@ button {
   margin-top: 10px;
 }
 
-// Button polish
+/* Button polish */
 button {
   transition: all 0.2s ease;
 }

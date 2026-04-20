@@ -84,8 +84,23 @@ src/app/
 ```
 
 ### Frontend packages
+### Chart
+```
 npm install chart.js
 npm install chartjs-plugin-datalabels
+```
+
+### Angular Material
+``` 
+npm install @angular/material
+```
+to use snackbar
+
+###  toastr - not compatible for angular 21
+```
+npm install ngx-toastr
+npm install @angular/animations
+```
 
 ## 🛠 Testing with Postmann
 TaskTracker.postman_collection.json
