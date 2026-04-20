@@ -1,7 +1,6 @@
 package com.minhduc.tasktracker.security;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.security.authentication.BadCredentialsException;

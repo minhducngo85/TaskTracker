@@ -3,9 +3,15 @@ import { TaskService } from '../../core/services/task-service';
 import { Task } from '../../core/models/Task';
 import { TaskStatus } from '../../core/models/TaskStatus';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import {
+  CdkDragDrop,
+  DragDropModule,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { TimeAgoPipe } from "../../core/pipe/TimeAgoPipe";
+import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
+import { filter, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-kanban-board-component',
@@ -60,25 +66,20 @@ export class KanbanBoardComponent implements OnInit {
     });
   }
 
-   /* =======================
+  /* =======================
      DRAG & DROP
   ======================= */
   drop(event: CdkDragDrop<Task[]>, newStatus: TaskStatus) {
-
     if (event.previousContainer === event.container) {
       // same column
-      moveItemInArray(
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       // move across columns
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
         event.previousIndex,
-        event.currentIndex
+        event.currentIndex,
       );
 
       const movedTask = event.container.data[event.currentIndex];
@@ -102,14 +103,24 @@ export class KanbanBoardComponent implements OnInit {
      BACKEND SYNC
   ======================= */
   updateTask(task: Task, showLog: boolean = true) {
-    this.taskService.updateTask(task.id, task).subscribe({
-      next: () => {
-        if (showLog) console.log('Task updated', task);
-      },
-      error: err => {
-        console.error('Update failed', err);
-      }
-    });
+    this.taskService
+      .getTask(task.id)
+      .pipe(
+        filter((value) => task.status !== value.status),
+        switchMap((value) => this.taskService.updateTask(task.id, task)),
+      )
+      .subscribe({
+        next: () => {
+          if (showLog) console.log('Task updated', task);
+          // show snack bar
+          this.snackBar.open(`Knanban board updated!`, 'Close', {
+            duration: 2000,
+          });
+        },
+        error: (err) => {
+          console.error('Update failed', err);
+        },
+      });
   }
 
   /* =======================
@@ -120,6 +131,6 @@ export class KanbanBoardComponent implements OnInit {
   }
 
   getConnectedLists(): string[] {
-    return this.kanbanColumns.map(c => c.status);
+    return this.kanbanColumns.map((c) => c.status);
   }
 }

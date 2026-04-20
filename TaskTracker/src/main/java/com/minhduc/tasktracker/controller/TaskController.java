@@ -29,31 +29,36 @@ public class TaskController {
 
 	private final TaskService taskService;
 
-	
 	@GetMapping
 	public List<Task> getTasks(@RequestParam(required = false) TaskPriority priority) {
 		log.info("getTask() called");
-	    if (priority != null) {
-	        return taskService.findByPriority(priority);
-	    }
-	    return taskService.getAll();
+		if (priority != null) {
+			return taskService.findByPriority(priority);
+		}
+		return taskService.getAll();
 	}
-	
+
 	@PostMapping
 	public Task create(@RequestBody Task task) {
 		log.info("create() called");
 		return taskService.create(task);
 	}
-	
+
 	@PutMapping("/{id}")
 	public Task update(@PathVariable Long id, @RequestBody Task task) {
 		log.info("update() called");
 		return taskService.update(id, task);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
-		log.info("delete() called");
-		 taskService.delete(id);
+		log.info("delete() called id=", id);
+		taskService.delete(id);
+	}
+
+	@GetMapping("/{id}")
+	public Task getTask(@PathVariable Long id) {
+		log.info("getTask() called id=", id);
+		return taskService.getTask(id);
 	}
 }

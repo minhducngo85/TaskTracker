@@ -5,11 +5,11 @@ import { error } from 'console';
 import { catchError, throwError } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  console.log('Interceptor chạy');
- const router = inject(Router);
+  //console.log('Interceptor chạy');
+  const router = inject(Router);
   let token: string | null = null;
 
-   // server → skip (Server-Side Rendering)
+  // server → skip (Server-Side Rendering)
   if (typeof window === 'undefined') {
     return next(req);
   }
@@ -24,21 +24,20 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     const bearerToken = `Bearer ${token}`;
     modifiedReq = req.clone({
       setHeaders: {
-        Authorization: bearerToken
+        Authorization: bearerToken,
       },
     });
   }
 
- return next(modifiedReq).pipe(
-  catchError(error => {
+  return next(modifiedReq).pipe(
+    catchError((error) => {
+      if (error.status === 401) {
+        localStorage.removeItem('token');
+        router.navigate(['/login']);
+      }
 
-    if (error.status === 401) {
-      localStorage.removeItem('token');
-      router.navigate(['/login']);
-    }
-
-    // Must return
-    return throwError(() => error);
-  })
-);
+      // Must return
+      return throwError(() => error);
+    }),
+  );
 };

@@ -24,17 +24,33 @@
 }
 
 .column h3 {
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: #333;
+  position: sticky;
+  top: 0;
+  background: #f7f8fa;
+  padding: 5px 0 15px 0;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .board {
+    flex-direction: column;
+    height: auto;
+    overflow-x: hidden;
+    padding: 10px;
+  }
+
+  .column {
+    flex: 1;
+    width: 100%;
+    padding: 10px;
+  }
 }
 
 .task-card {
   background: white;
   border-radius: 12px;
   padding: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   cursor: grab;
   transition: all 0.2s ease;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
@@ -85,14 +101,38 @@
 }
 
 .task-desc {
-  margin-top: 6px;
+  margin-top: 0px;
   font-size: 13px;
   color: #64748b;
 }
 
-.task-assignee, .task-time {
+.task-footer {
+  margin-top: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-assignee,
+.task-time {
   font-size: 13px;
   color: #94a3b8;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .task-card {
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  .task-title {
+    font-size: 15px;
+  }
+
+  .task-desc {
+    font-size: 14px;
+  }
 }
 
 .cdk-drag-preview {
@@ -108,7 +148,6 @@
   transition: transform 0.2s;
 }
 
-
 /* ===== AVATAR ===== */
 .avatar {
   width: 15px;
@@ -122,4 +161,12 @@
   justify-content: center;
   margin-right: 2px;
   margin-left: 2px;
+}
+
+.count {
+  background: #e2e8f0;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  margin-left: 6px;
 }

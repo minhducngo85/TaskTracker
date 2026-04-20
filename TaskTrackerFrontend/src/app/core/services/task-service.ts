@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { Task } from '../models/Task';
 
 
 @Injectable({
@@ -25,5 +26,9 @@ export class TaskService {
 
   updateTask(id: number, task: any) {
     return this.http.put(`${this.api}/${id}`, task);
+  }
+
+  getTask(id : number) {
+    return this.http.get<Task>(`${this.api}/${id}`);
   }
 }
