@@ -62,6 +62,13 @@
               </span>
 
               <span class="task-title">{{ task.title }}</span>
+
+              <span class="task-assignee"> 👤 {{ task.assignedTo || 'Unassigned' }} </span>
+
+              <div class="task-time">
+                <!--  Updated: {{ task.updatedAt | date: 'short' }} -->
+                🕒 Updated {{ task.updatedAt | timeAgo }}
+              </div>
             </div>
 
             <div class="task-right">

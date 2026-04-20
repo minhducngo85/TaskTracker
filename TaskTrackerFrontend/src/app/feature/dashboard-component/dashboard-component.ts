@@ -16,6 +16,7 @@ import { Chart } from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
 
 Chart.register(ChartDataLabels);
 
@@ -35,7 +36,7 @@ export interface TaskStats {
 
 @Component({
   selector: 'app-dashboard-component',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TimeAgoPipe],
   templateUrl: './dashboard-component.html',
   styleUrl: './dashboard-component.css',
 })
@@ -105,8 +106,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       map((tasks) =>
         tasks
           .slice()
-          .sort((a, b) => b.id - a.id)
-          .slice(0, 8),
+          .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+          .slice(0, 8)
       ),
     );
     this.stats$ = this.tasks$.pipe(

@@ -8,16 +8,21 @@ import { TaskPriority } from '../../core/models/TaskPriority';
 import { ActivatedRoute, Router } from '@angular/router';
 import { error } from 'console';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TaskStatus } from '../../core/models/TaskStatus';
+import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
 
 @Component({
   selector: 'app-task-component',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, TimeAgoPipe],
   templateUrl: './task-component.html',
   styleUrl: './task-component.css',
 })
 export class TaskComponent implements OnInit {
   // Priority Options
   priorityOptions = Object.values(TaskPriority);
+
+  // Priority Options
+  statusOptions = Object.values(TaskStatus);
 
   // 🔥 dùng Observable thay vì array
   tasks$!: Observable<any[]>;
@@ -72,7 +77,7 @@ export class TaskComponent implements OnInit {
     console.log('ngOnInit');
     this.route.queryParams.subscribe((params) => {
       this.filterValue = params['status'] || '';
-      this.filterPriorityValue = params['priority'].toUpperCase() || '';
+      this.filterPriorityValue = params['priority']?.toUpperCase() || '';
     });
     this.applyFilter();
   }
@@ -178,6 +183,14 @@ export class TaskComponent implements OnInit {
           result = result.sort((a, b) => {
             return b.title.localeCompare(a.title);
           });
+        } else if (this.sortValue === 'updatedAtAsc') {
+          result = result.sort((a, b) => {
+            return a.updatedAt.localeCompare(b.updatedAt);
+          });
+        } else if (this.sortValue === 'updatedAtDesc') {
+          result = result.sort((a, b) => {
+            return b.updatedAt.localeCompare(a.updatedAt);
+          });
         }
 
         // show snack bar
@@ -247,6 +260,22 @@ export class TaskComponent implements OnInit {
         return '🟡';
       default:
         return '🟢';
+    }
+  }
+
+  /**
+   *
+   * @param p priority emoji
+   * @returns
+   */
+  getStatusEmoji(s: TaskStatus): string {
+    switch (s) {
+      case 'DONE':
+        return '🟢';
+      case 'IN_PROGRESS':
+        return '🟠';
+      default:
+        return '⚪';
     }
   }
 

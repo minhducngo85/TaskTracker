@@ -44,6 +44,7 @@ public class TaskService{
 	 * @return
 	 */
 	public Task update(Long id, Task updated) {
+		log.info("Updated Obj={}", updated.toString());
 		Task task = taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
 		task.setTitle(updated.getTitle());
 		task.setAssignedTo(updated.getAssignedTo());

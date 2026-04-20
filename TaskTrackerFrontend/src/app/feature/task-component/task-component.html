@@ -41,9 +41,7 @@
       <br />
       <!-- Status -->
       <select name="status" [(ngModel)]="newTask.status">
-        <option value="TODO">TODO</option>
-        <option value="IN_PROGRESS">IN_PROGRESS</option>
-        <option value="DONE">DONE</option>
+        <option *ngFor="let s of statusOptions" [value]="s">{{ getStatusEmoji(s) }} {{ s }}</option>
       </select>
 
       <!-- Priority -->
@@ -68,9 +66,9 @@
       <br />
       <!-- Buttons -->
       <div class="form-actions">
-        <button class="save-btn" type="submit" [disabled]="taskForm.invalid">Save</button>
+        <button class="save-btn" type="submit" [disabled]="taskForm.invalid">💾 Save</button>
         <span style="padding: 5px"></span>
-        <button class="cancel-btn" type="button" (click)="toggleForm()">Cancel</button>
+        <button class="clear-btn" (click)="toggleForm()">❌ Cancel</button>
       </div>
     </form>
   </div>
@@ -84,9 +82,7 @@
       <!-- Status filter-->
       <select [(ngModel)]="filterValue" (change)="applyFilter()">
         <option value="">Status All</option>
-        <option value="TODO">TODO</option>
-        <option value="IN_PROGRESS">IN_PROGRESS</option>
-        <option value="DONE">DONE</option>
+        <option *ngFor="let s of statusOptions" [value]="s">{{ getStatusEmoji(s) }} {{ s }}</option>
       </select>
 
       <!-- Priority Filter -->
@@ -108,8 +104,10 @@
       <!-- Sorting-->
       <select [(ngModel)]="sortValue" (change)="applyFilter()">
         <option value="">Sort (Default)</option>
-        <option value="asc">Title A-Z</option>
-        <option value="desc">Title Z-A</option>
+        <option value="asc">Title ↑</option>
+        <option value="desc">Title ↓</option>
+        <option value="updatedAtAsc">Updated at ↑</option>
+        <option value="updatedAtDesc">Updated at ↓</option>
       </select>
 
       <button (click)="clearFilter()" class="clear-btn">❌ Clear</button>
@@ -120,28 +118,50 @@
 <div style="margin-bottom: 10px"></div>
 <div class="task-grid">
   <div class="task-card" *ngFor="let task of tasks$ | async">
-    <div>
-      <span class="status" [ngClass]="task.status">
-        {{ task.status }}
-      </span>
-      <span class="title" style="margin-left: 5px">{{ task.title }}</span>
+    <div class="task-main">
+      <!-- LEFT -->
+      <div class="task-left">
+        <span class="status-badge" [ngClass]="task.status">
+          {{ task.status }}
+        </span>
 
-      <span
-        style="margin-left: 5px"
-        class="material-icons priority-icon"
-        [ngClass]="'priority-' + task.priority.toLowerCase()"
-        [attr.title]="task.priority"
-      >
-        flag
-      </span>
+        <span class="task-title">{{ task.title }}</span>
+
+        <span
+          class="material-icons priority-icon"
+          [ngClass]="'priority-' + task.priority.toLowerCase()"
+        >
+          flag
+        </span>
+      </div>
+
+      <!--RIGHT-->
+      <div class="task-actions">
+        <button class="clear-btn edit-btn" (click)="startEdit(task)">✏️</button>
+        <button class="clear-btn delete-btn" (click)="deleteTask(task.id)">❌</button>
+      </div>
     </div>
-    <p style="margin-top: 5px">📃 {{ task.description }}</p>
-    <p>🐨 {{ task.assignedTo }}</p>
 
-    <!--Actions-->
-    <div class="actions">
-      <button class="edit-btn" (click)="startEdit(task)">📝</button>
-      <button class="delete-btn" (click)="deleteTask(task.id)">🗑️</button>
+    <!-- DESCRIPTION -->
+    <div class="task-desc">
+      {{ task.description }}
+    </div>
+
+    <!-- FOOTER -->
+    <div class="task-footer">
+      <div class="assignee">
+        <span class="avatar">
+          {{ task.assignedTo?.[0] || '?' }}
+        </span>
+        {{ task.assignedTo || 'Unassigned' }}
+      </div>
+
+      <div class="task-time" [title]="task.updatedAt | date:'medium'">
+        <!--  Updated: {{ task.updatedAt | date: 'short' }} -->
+         🕒 Updated {{ task.updatedAt | timeAgo }}
+
+        
+      </div>
     </div>
   </div>
 
@@ -172,9 +192,9 @@
       <div class="form-group">
         <label>Status</label>
         <select [(ngModel)]="editingTask.status">
-          <option value="TODO">TODO</option>
-          <option value="IN_PROGRESS">IN_PROGRESS</option>
-          <option value="DONE">DONE</option>
+          <option *ngFor="let s of statusOptions" [value]="s">
+            {{ getStatusEmoji(s) }} {{ s }}
+          </option>
         </select>
       </div>
 
@@ -190,7 +210,7 @@
 
       <div class="modal-actions">
         <button class="save-btn" (click)="saveEdit()">💾 Save</button>
-        <button class="cancel-btn" (click)="cancelEdit()">❌ Cancel</button>
+        <button class="clear-btn" (click)="cancelEdit()">❌ Cancel</button>
       </div>
     </div>
   </div>
