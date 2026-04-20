@@ -14,21 +14,22 @@ Live Demo: http://82.165.51.255/
 - 🔐 Authentication with JWT
 - 👤 User roles: Admin & user
 - 📝 CRUD Task (Create, Read, Update, Delete)
-- 🔍 Filter & Search tasks
+- 🔍 Filter & Search
 - 📉 Dashboard: statistics, chart and recent tasks
+- 📋 Kanban Board: interactive Kanban board with drag-and-drop (Angular CDK)
 - 👤 Assign tasks to users
-- 📊 Task status management:
+- 📌 Status management:
   - TODO
   - IN_PROGRESS
   - DONE
-- 🚩 Task priority management:
-  - CRITCAL
+- 🚩 Priority levels:
+  - CRITICAL
   - HIGH
   - MEDIUM
   - LOW
 - 🌐 Clean REST API design
 - 📱 Responsive UI
-- 📲 Mobile-friendly UI
+- 📲 Mobile-optimized layout (Kanban swipe / horizontal scroll)
 
 ---
 
@@ -339,6 +340,9 @@ docker-compose up --build
 ```
 
 ## 📸 Screenshots
+
+### Dashboard
+![Kanban](./screenshots/dashboard.png)
 
 ### Kanban Board
 ![Kanban](./screenshots/kanban-board.png)
