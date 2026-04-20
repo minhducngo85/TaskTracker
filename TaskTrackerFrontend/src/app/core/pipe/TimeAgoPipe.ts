@@ -6,11 +6,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TimeAgoPipe implements PipeTransform {
 
-  transform(value: string | Date): string {
+  transform(value: string): string {
     if (!value) return '';
 
+    const time = new Date(value.endsWith('Z') ? value : value + 'Z').getTime();
     const now = new Date().getTime();
-    const time = new Date(value).getTime();
+
     const diff = Math.floor((now - time) / 1000);
 
     if (diff < 60) return `${diff} seconds ago`;

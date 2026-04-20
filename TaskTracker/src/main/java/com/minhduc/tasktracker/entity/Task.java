@@ -1,7 +1,9 @@
 package com.minhduc.tasktracker.entity;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,9 +38,9 @@ public class Task {
 	private String assignedTo;
 	
 	@Column(updatable = false)
-	private LocalDateTime createdAt;
+	private Instant createdAt;
 	
-	private LocalDateTime updatedAt;
+	private Instant updatedAt;
 	
 	
 	@PrePersist
@@ -46,14 +48,12 @@ public class Task {
 	    if (this.priority == null) {
 	        this.priority = TaskPriority.MEDIUM;
 	    }
-	    this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+	    this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
 	}
 	
 	@PreUpdate
 	public void preUpdate() {
-		this.updatedAt = LocalDateTime.now();
+		this.updatedAt = Instant.now();
 	}
-	
-	
 }

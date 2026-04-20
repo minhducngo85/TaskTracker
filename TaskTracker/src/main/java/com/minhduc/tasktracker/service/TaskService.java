@@ -1,5 +1,8 @@
 package com.minhduc.tasktracker.service;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -53,7 +56,7 @@ public class TaskService {
 		task.setDescription(updated.getDescription());
 		task.setStatus(updated.getStatus());
 		task.setPriority(updated.getPriority());
-
+		task.setUpdatedAt(Instant.now());
 		return taskRepository.save(task);
 	}
 
