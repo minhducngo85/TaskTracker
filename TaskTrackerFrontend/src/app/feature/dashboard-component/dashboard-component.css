@@ -218,6 +218,7 @@ canvas {
 }
 
 .task-item {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -234,6 +235,7 @@ canvas {
   display: flex;
   align-items: center;
   gap: 8px;
+ 
 }
 
 .task-title {
@@ -252,11 +254,30 @@ canvas {
   color: #64748b;
 }
 
+/* Mobile Breaek new line */
+@media (max-width: 768px) {
+  .task-left {
+    flex-wrap: wrap; 
+  }
+
+  .task-assignee {
+    display: none;
+  }
+
+  .task-time { 
+    flex-basis: 100%;  /** force new line*/
+  }
+
+}
+
 /* Right */
 .task-right .status {
   font-size: 12px;
   padding: 3px 8px;
   border-radius: 10px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
 }
 
 /* Priority colors */

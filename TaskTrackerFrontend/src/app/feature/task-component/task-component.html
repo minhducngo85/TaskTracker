@@ -75,9 +75,14 @@
 </div>
 
 <div class="border-box">
-  <div class="border-title">Filter & Sort</div>
+  <div class="border-title" (click)="toggleFilter()">
+    Filter & Sort
+    <span class="toggle-icon">
+      {{ isFilterOpen ? '▲' : '▼' }}
+    </span>
+  </div>
 
-  <div class="border-content">
+  <div class="border-content" *ngIf="isFilterOpen">
     <div class="filter-bar">
       <!-- Status filter-->
       <select [(ngModel)]="filterValue" (change)="applyFilter()">
@@ -137,8 +142,8 @@
 
       <!--RIGHT-->
       <div class="task-actions">
-        <button class="clear-btn edit-btn" (click)="startEdit(task)">✏️</button>
-        <button class="clear-btn delete-btn" (click)="deleteTask(task.id)">❌</button>
+        <button class="icon-btn" (click)="startEdit(task)" style="margin-right: 5px">✏️</button>
+        <button class="icon-btn" (click)="deleteTask(task.id)">❌</button>
       </div>
     </div>
 
@@ -156,12 +161,15 @@
         {{ task.assignedTo || 'Unassigned' }}
       </div>
 
-      <div class="task-time" [title]="task.updatedAt | date:'medium'">
+      <div class="task-time" [title]="task.updatedAt | date: 'medium'">
         <!--  Updated: {{ task.updatedAt | date: 'short' }} -->
-         🕒 Updated {{ task.updatedAt | timeAgo }}
-
-        
+        🕒 Updated {{ task.updatedAt | timeAgo }}
       </div>
+    </div>
+
+    <div class="task-actions-mobile">
+      <button class="icon-btn" (click)="startEdit(task)" style="margin-right: 5px">✏️</button>
+      <button class="icon-btn" (click)="deleteTask(task.id)">❌</button>
     </div>
   </div>
 

@@ -162,7 +162,7 @@ input.ng-valid.ng-touched {
   right: 45px;
 }
 
-.edit-btn:hover  {
+.edit-btn:hover {
   background: #2563eb;
 }
 
@@ -179,8 +179,6 @@ input.ng-valid.ng-touched {
     gap: 8px;
   }
 }
-
-
 
 /** Filter*/
 .filter-bar {
@@ -226,8 +224,6 @@ input.ng-valid.ng-touched {
     width: 100%;
   }
 }
-
-
 
 /* backdrop */
 .modal-backdrop {
@@ -335,13 +331,13 @@ button:active {
   border-radius: 14px;
   padding: 14px 16px;
   margin-bottom: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
   transition: all 0.2s ease;
 }
 
 .task-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 /*** TASK ITEM*/
@@ -421,11 +417,13 @@ button:active {
 }
 
 /* ===== ACTION ===== */
+
 .icon-btn {
   border: none;
   background: transparent;
   cursor: pointer;
-  opacity: 0.6;
+  opacity: 0.9;
+  font-size: 16px;
 }
 
 .icon-btn:hover {
@@ -436,6 +434,29 @@ button:active {
   color: #ef4444;
 }
 
+.task-actions-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .task-actions {
+    display: none;
+  }
+
+  .task-actions-mobile {
+    display: flex;
+    /** shift to right*/
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .icon-btn {
+    border: none;
+    cursor: pointer;
+    opacity: 1;
+    font-size: 20px;
+  }
+}
 
 /* 🎨 Colors */
 .priority-critical {

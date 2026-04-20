@@ -50,6 +50,9 @@ export class TaskComponent implements OnInit {
   // task to be edited
   editingTask: any = null;
 
+  // Filter panel opened
+  isFilterOpen: boolean = true;
+
   /**
    *
    * @param taskService Constructor to inject dependencies
@@ -75,6 +78,11 @@ export class TaskComponent implements OnInit {
    */
   ngOnInit(): void {
     console.log('ngOnInit');
+
+    if (window.innerWidth <= 768) {
+      this.isFilterOpen = false; // mobile collapse
+    }
+
     this.route.queryParams.subscribe((params) => {
       this.filterValue = params['status'] || '';
       this.filterPriorityValue = params['priority']?.toUpperCase() || '';
@@ -288,5 +296,9 @@ export class TaskComponent implements OnInit {
     // Sorting
     this.sortValue = '';
     this.applyFilter();
+  }
+
+  toggleFilter() {
+    this.isFilterOpen = !this.isFilterOpen;
   }
 }

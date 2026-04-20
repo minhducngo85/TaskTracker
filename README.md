@@ -96,6 +96,11 @@ npm install @angular/material
 ```
 to use snackbar
 
+### Angular CDK for Drag & Drop
+``` 
+npm install @angular/cdk
+``` 
+
 ###  toastr - not compatible for angular 21
 ```
 npm install ngx-toastr
