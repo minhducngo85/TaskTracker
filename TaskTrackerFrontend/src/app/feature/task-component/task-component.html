@@ -122,13 +122,10 @@
 
 <div style="margin-bottom: 10px"></div>
 <div class="task-grid">
-  <div class="task-card" *ngFor="let task of tasks$ | async">
+  <div class="task-card" [ngClass]="'status-'+task.status" *ngFor="let task of tasks$ | async">
     <div class="task-main">
       <!-- LEFT -->
       <div class="task-left">
-        <span class="status-badge" [ngClass]="task.status">
-          {{ task.status }}
-        </span>
 
         <span class="task-title">{{ task.title }}</span>
 
@@ -137,6 +134,10 @@
           [ngClass]="'priority-' + task.priority.toLowerCase()"
         >
           flag
+        </span>
+
+         <span class="status-badge" [ngClass]="task.status">
+          {{ task.status }}
         </span>
       </div>
 

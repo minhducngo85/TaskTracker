@@ -27,10 +27,9 @@
   <div class="row-2col">
     <!--Left-->
     <div>
-      <!--Prgress bar-->
-      <div class="section">
+      <!--Progress bar-->
+      <div class="section section-progress clickable" (click)="toKanbanBoard()">
         <div class="section-title">Progress Overview</div>
-
         <div class="progress-wrapper">
           <div class="progress-info">
             <span>{{ stats.done }} / {{ stats.total }} tasks</span>
@@ -56,7 +55,7 @@
               <span
                 class="material-icons priority-icon"
                 [ngClass]="'priority-' + task.priority.toLowerCase()"
-                [attr.title]="task.priority"
+                [attr.title]="task.priority.toString()"
               >
                 flag
               </span>

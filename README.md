@@ -340,6 +340,9 @@ docker-compose up --build
 
 ## 📸 Screenshots
 
+### Kanban Board
+![Kanban](./screenshots/kanban-board.png)
+
 ### Login Page
 ![Login](./screenshots/login.png)
 

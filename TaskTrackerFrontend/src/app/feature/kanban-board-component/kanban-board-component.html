@@ -1,0 +1,38 @@
+<h2 class="title">🗓️ Kanban Board</h2>
+
+<div class="board" *ngIf="!loading">
+  <div class="column" *ngFor="let col of kanbanColumns">
+    <h3>{{ col.title }}</h3>
+
+    <div
+      cdkDropList
+      [id]="col.status.toString()"
+      [cdkDropListData]="col.tasks"
+      [cdkDropListConnectedTo]="getConnectedLists()"
+      (cdkDropListDropped)="drop($event, col.status)"
+      class="task-list"
+    >
+      <div class="task-card" *ngFor="let task of col.tasks; trackBy: trackByTaskId" cdkDrag>
+        <div class="task-title">{{ task.title }}</div>
+
+        <div class="task-desc" *ngIf="task.description">
+          {{ task.description }}
+        </div>
+
+        <div class="task-assignee">
+          <span class="avatar">
+            {{ task.assignedTo?.[0] || '?' }}
+          </span>
+          {{ task.assignedTo || 'Unassigned' }}
+        </div>
+
+        <div class="task-time" [title]="task.updatedAt | date: 'medium'">
+          <!--  Updated: {{ task.updatedAt | date: 'short' }} -->
+          🕒 Updated {{ task.updatedAt | timeAgo }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="loading" class="loading">Loading...</div>

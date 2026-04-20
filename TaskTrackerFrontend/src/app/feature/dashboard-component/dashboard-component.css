@@ -62,11 +62,11 @@
   background: #22c55e;
 }
 
-.card.clickable {
+.clickable {
   cursor: pointer;
   transition: 0.2s;
 }
-.card.clickable:hover {
+.clickable:hover {
   transform: translateY(-3px);
 }
 

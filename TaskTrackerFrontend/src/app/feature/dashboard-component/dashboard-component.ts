@@ -17,6 +17,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
+import { Task } from '../../core/models/Task';
 
 Chart.register(ChartDataLabels);
 
@@ -42,9 +43,9 @@ export interface TaskStats {
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
   // Observable instead array
-  tasks$!: Observable<any[]>;
+  tasks$!: Observable<Task[]>;
 
-  recentTasks$!: Observable<any[]>;
+  recentTasks$!: Observable<Task[]>;
 
   // Statistics
   stats$!: Observable<TaskStats>;
@@ -85,18 +86,18 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           // Only shown if there is data
           if (tasks?.length) {
             this.snackBar.open(tasks?.length + ' Tasks loaded', 'Close', {
-              duration: 2000
+              duration: 2000,
             });
           } else {
             this.snackBar.open('No Task found', 'OK', {
-              duration: 2000
+              duration: 2000,
             });
           }
         },
         error: (err) => {
-           this.snackBar.open('Error: ' + err, 'Close', {
-              duration: 2000
-            });
+          this.snackBar.open('Error: ' + err, 'Close', {
+            duration: 2000,
+          });
         },
       }),
       shareReplay(1), // avoid multiple api calls
@@ -107,7 +108,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         tasks
           .slice()
           .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
-          .slice(0, 8)
+          .slice(0, 8),
       ),
     );
     this.stats$ = this.tasks$.pipe(
@@ -212,5 +213,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     if (percent < 50) return 'progress-medium';
     //if (percent < 70) return 'progress-medium';
     return 'progress-high';
+  }
+
+  toKanbanBoard() {
+    this.router.navigate(['/kanbanboard']);
   }
 }

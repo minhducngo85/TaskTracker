@@ -10,6 +10,7 @@ import { error } from 'console';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TaskStatus } from '../../core/models/TaskStatus';
 import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
+import { Task } from '../../core/models/Task';
 
 @Component({
   selector: 'app-task-component',
@@ -25,7 +26,7 @@ export class TaskComponent implements OnInit {
   statusOptions = Object.values(TaskStatus);
 
   // 🔥 dùng Observable thay vì array
-  tasks$!: Observable<any[]>;
+  tasks$!: Observable<Task[]>;
 
   // show add form
   showForm = false;
