@@ -105,6 +105,7 @@ export class TaskComponent implements OnInit {
       this.filters.status = params['status'] || '';
       this.filters.priority = params['priority']?.toUpperCase() || '';
       this.filters.assignedTo = params['assignedTo'] || '';
+      this.sortValue = params['sort'] || '';
     });
     this.loadAssigneeList();
     this.applyFilter();

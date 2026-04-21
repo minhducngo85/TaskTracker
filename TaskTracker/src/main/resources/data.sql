@@ -68,7 +68,7 @@ INSERT INTO task (title, description, status, priority, assigned_to, created_At,
 VALUES ('Assigned to Me', 'Show my assigned to me taks in dashboard', 'DONE', 'CRITICAL', 'admin', '2026-04-21 16:09:00', '2026-04-21 16:09:00');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
-VALUES ('Task Details component', 'New Angular component for task details', 'DONE', 'LOW', 'mgno', '2026-04-21 16:10:00', '2026-04-21 16:10:00');
+VALUES ('Task Details component', 'New Angular component for task details', 'DONE', 'LOW', 'mngo', '2026-04-21 16:10:00', '2026-04-21 16:10:00');
 
 
 
