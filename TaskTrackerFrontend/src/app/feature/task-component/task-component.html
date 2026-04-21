@@ -52,14 +52,15 @@
       </select>
 
       <!-- Assigned to -->
-      <input
-        type="text"
-        name="assignedTo"
-        [(ngModel)]="newTask.assignedTo"
-        placeholder="Assigned to"
-        required
-        #assignedTo="ngModel"
-      />
+
+
+       <select [(ngModel)]="newTask.assignedTo" #assignedTo="ngModel" name="assignedTo" required>
+        <option>Select Assignee</option>
+        <option *ngFor="let user of assigneeList" [value]="user.username">
+          {{ user.fullname }}
+        </option>
+      </select>
+
       <div class="error" *ngIf="assignedTo.invalid && assignedTo.touched">
         <small>AssignedTo is required</small>
       </div>
@@ -105,6 +106,13 @@
         (change)="applyFilter()"
         placeholder="Search by title..."
       />
+
+      <select [(ngModel)]="filters.assignedTo" (change)="applyFilter()">
+        <option value="">Assignee All</option>
+        <option *ngFor="let user of assigneeList" [value]="user.username">
+          {{ user.fullname }}
+        </option>
+      </select>
 
       <!-- Sorting-->
       <select [(ngModel)]="sortValue" (change)="applyFilter()">
@@ -156,9 +164,9 @@
     <div class="task-footer">
       <div class="assignee">
         <span class="avatar">
-          {{ task.assignedTo?.[0] || '?' }}
+          {{ assigneeFullname(task.assignedTo)[0] || '?' }}
         </span>
-        {{ task.assignedTo || 'Unassigned' }}
+        {{ assigneeFullname(task.assignedTo) || 'Unassigned' }}
       </div>
 
       <div class="task-time" [title]="task.updatedAt | date: 'medium'">
@@ -172,62 +180,11 @@
       <button class="icon-btn" (click)="deleteTask(task.id)">❌</button>
     </div>
   </div>
-  <!-- EDIT MODAL -->
-  <div class="modal-backdrop" *ngIf="editingTask">
-    <div class="modal">
-      <h2><b>Edit Task</b></h2>
-      <hr style="margin-bottom: 10px" />
-      <div class="form-group">
-        <label>Title</label>
-        <input [(ngModel)]="editingTask.title" placeholder="Title" />
-      </div>
-
-      <div class="form-group">
-        <label>Description</label>
-        <textarea
-          [(ngModel)]="editingTask.description"
-          placeholder="Description"
-          rows="5"
-        ></textarea>
-      </div>
-
-      <div class="form-group">
-        <label>Assignee</label>
-        <input [(ngModel)]="editingTask.assignedTo" placeholder="Assignee" />
-      </div>
-
-      <div class="form-group">
-        <label>Status</label>
-        <select [(ngModel)]="editingTask.status">
-          <option *ngFor="let s of statusOptions" [value]="s">
-            {{ getStatusEmoji(s) }} {{ s }}
-          </option>
-        </select>
-      </div>
-
-      <!-- Priority -->
-      <div class="form-group">
-        <label>Priority</label>
-        <select name="priority" [(ngModel)]="editingTask.priority">
-          <option *ngFor="let p of priorityOptions" [value]="p">
-            {{ getPriorityEmoji(p) }} {{ p }}
-          </option>
-        </select>
-      </div>
-
-      <div class="modal-actions">
-        <button class="save-btn" (click)="saveEdit()">💾 Save</button>
-        <button class="clear-btn" (click)="cancelEdit()">❌ Cancel</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- PAGINATOR -->
 <div class="paginator">
-  <button class="page-btn" (click)="prevPage()" [disabled]="page === 0">
-    ← Prev
-  </button>
+  <button class="page-btn" (click)="prevPage()" [disabled]="page === 0">← Prev</button>
 
   <div class="page-center">
     <span class="page-label">Page</span>
@@ -236,9 +193,7 @@
     <span class="page-total">{{ totalPages }}</span>
   </div>
 
-  <button class="page-btn" (click)="nextPage()" [disabled]="page >= totalPages - 1">
-    Next →
-  </button>
+  <button class="page-btn" (click)="nextPage()" [disabled]="page >= totalPages - 1">Next →</button>
 
   <!-- Page size -->
   <select class="page-size" [(ngModel)]="size" (change)="applyFilter()">
@@ -249,12 +204,55 @@
 
   <!-- Go to page -->
   <div class="page-jump">
-    <input
-      type="number"
-      [(ngModel)]="pageInput"
-      min="1"
-      [max]="totalPages"
-    />
+    <input type="number" [(ngModel)]="pageInput" min="1" [max]="totalPages" />
     <button class="go-btn" (click)="goToPage()">Go</button>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-backdrop" *ngIf="editingTask">
+  <div class="modal">
+    <h2><b>Edit Task</b></h2>
+    <hr style="margin-bottom: 10px" />
+    <div class="form-group">
+      <label>Title</label>
+      <input [(ngModel)]="editingTask.title" placeholder="Title" />
+    </div>
+
+    <div class="form-group">
+      <label>Description</label>
+      <textarea [(ngModel)]="editingTask.description" placeholder="Description" rows="5"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Assignee</label>
+      <select [(ngModel)]="editingTask.assignedTo">
+        <option *ngFor="let user of assigneeList" [value]="user.username">
+          {{ user.fullname }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Status</label>
+      <select [(ngModel)]="editingTask.status">
+        <option *ngFor="let s of statusOptions" [value]="s">{{ getStatusEmoji(s) }} {{ s }}</option>
+      </select>
+    </div>
+
+    <!-- Priority -->
+    <div class="form-group">
+      <label>Priority</label>
+      <select name="priority" [(ngModel)]="editingTask.priority">
+        <option *ngFor="let p of priorityOptions" [value]="p">
+          {{ getPriorityEmoji(p) }} {{ p }}
+        </option>
+      </select>
+    </div>
+
+    <div class="modal-actions">
+      <button class="save-btn" (click)="saveEdit()">💾 Save</button>
+      <button class="clear-btn" (click)="cancelEdit()">❌ Cancel</button>
+    </div>
   </div>
 </div>

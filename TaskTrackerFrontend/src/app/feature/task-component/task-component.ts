@@ -13,6 +13,7 @@ import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
 import { Task } from '../../core/models/Task';
 import { TaskFilter } from '../../core/models/TaskFilter';
 import { LoggerService } from '../../core/services/logger-service';
+import { User } from '../../core/models/User';
 
 @Component({
   selector: 'app-task-component',
@@ -29,6 +30,8 @@ export class TaskComponent implements OnInit {
 
   tasks: Task[] = [];
   total: number = 0;
+
+  assigneeList: User[] = [];
 
   // show add form
   showForm = false;
@@ -62,7 +65,7 @@ export class TaskComponent implements OnInit {
 
   // Filter panel opened
   isFilterOpen: boolean = true;
-  
+
   /**
    *
    * @param taskService Constructor to inject dependencies
@@ -78,7 +81,7 @@ export class TaskComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar,
-    private logger : LoggerService
+    private logger: LoggerService,
   ) {
     this.logger.context = 'TaskComponent';
     this.logger.log('Constructor');
@@ -137,6 +140,14 @@ export class TaskComponent implements OnInit {
       this.snackBar.open(`${this.tasks?.length} / ${this.total} Tasks loaded`, 'Close', {
         duration: 2000,
       });
+    });
+
+    // read assignee list
+    this.taskService.getAssigneeList().subscribe({
+      next: (users) => {
+        this.assigneeList = users;
+      },
+      error: (err) => this.logger.error('Error to get assignee list', err),
     });
   }
 
@@ -264,7 +275,7 @@ export class TaskComponent implements OnInit {
         this.applyFilter();
         this.cdr.detectChanges(); // trigger ui update
       },
-      error: (err: any) => console.error(err),
+      error: (err: any) => this.logger.error(err.toString()),
     });
   }
 
@@ -357,12 +368,26 @@ export class TaskComponent implements OnInit {
     }
   }
 
+  /** goToPage listener in paginator */
   pageInput = 1;
-
   goToPage() {
     if (this.pageInput >= 1 && this.pageInput <= this.totalPages) {
       this.page = this.pageInput - 1;
       this.loadTasks();
     }
+  }
+
+  /**
+   * Helper method to get assignee fullname
+   */
+  assigneeFullname(username?: string): string {
+    if (username) {
+      const user = this.assigneeList.find((u) => u.username === username);
+      if (user) {
+        return user.fullname;
+      }
+      return username;
+    }
+    return 'Undefined';
   }
 }

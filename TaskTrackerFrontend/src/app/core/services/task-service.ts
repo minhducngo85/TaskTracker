@@ -4,6 +4,7 @@ import { environment } from '../../../environments/environment';
 import { Task } from '../models/Task';
 import { Observable } from 'rxjs';
 import { PageResponse } from '../models/PageResponse';
+import { User } from '../models/User';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +20,10 @@ export class TaskService {
 
   getTasks(params: any): Observable<PageResponse<Task>> {
     return this.http.get<PageResponse<Task>>(this.api, { params });
+  }
+
+  getAssigneeList() {
+    return this.http.get<User[]>(`${this.api}/options/assignee`);
   }
 
   getStats(){

@@ -1,12 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UserService } from '../../core/services/user-service';
 import { CommonModule } from '@angular/common';
+import { User } from '../../core/models/User';
 
-export interface User {
-  id: number;
-  username: string;
-  role: string;
-}
 
 @Component({
   selector: 'app-admin',

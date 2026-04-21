@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.minhduc.tasktracker.dto.TaskFilterRequest;
 import com.minhduc.tasktracker.dto.TaskStatisticsResponse;
+import com.minhduc.tasktracker.dto.UserResponse;
 import com.minhduc.tasktracker.entity.Task;
 import com.minhduc.tasktracker.entity.TaskPriority;
+import com.minhduc.tasktracker.entity.User;
 import com.minhduc.tasktracker.service.TaskService;
+import com.minhduc.tasktracker.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +34,8 @@ import lombok.extern.slf4j.Slf4j;
 public class TaskController {
 
 	private final TaskService taskService;
+	
+	private final UserService userService;
 
 	@GetMapping("/all")
 	public List<Task> getAllTasks(@RequestParam(required = false) TaskPriority priority) {
@@ -52,6 +57,18 @@ public class TaskController {
 		return taskService.getTasks(filter, page, size, sort);
 	}
 	
+	@GetMapping("/options/assignee")
+	public List<UserResponse> getAssigneeList() {
+		log.info("getAssigneeList() called");
+		return userService.getAll().stream().map(user -> {
+			UserResponse res = new UserResponse();
+			res.setFullname(user.getFullname());
+			res.setUsername(user.getUsername());
+			res.setId(user.getId());
+			return res;
+		}).toList();
+	}
+	
 	@GetMapping("/stats")
 	public TaskStatisticsResponse getStats() {
 		return taskService.getStatistics();
@@ -60,6 +77,7 @@ public class TaskController {
 	@PostMapping
 	public Task create(@RequestBody Task task) {
 		log.info("create() called");
+		log.info("Objt to save: {}", task.toString());
 		return taskService.create(task);
 	}
 
