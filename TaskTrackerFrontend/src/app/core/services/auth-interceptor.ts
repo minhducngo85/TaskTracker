@@ -29,6 +29,21 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(modifiedReq).pipe(
     catchError((error) => {
+      // 🚫 Nếu request đã có flag skip → không xử lý nữa
+      if (modifiedReq.headers.get('x-skip-refresh') === 'true') {
+        return throwError(() => error);
+      }
+
+      // 🚫 Nếu là request refresh → logout luôn
+      if (modifiedReq.url.includes('/refresh')) {
+        console.log('Refresh API failed → logout');
+
+        localStorage.clear();
+        router.navigate(['/login']);
+
+        return throwError(() => error);
+      }
+
       if (error.status === 401) {
         console.log('Error 401 → try refresh');
         return authService.refreshToken().pipe(
@@ -38,6 +53,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             const newReq = modifiedReq.clone({
               setHeaders: {
                 Authorization: `Bearer ${newToken}`,
+                'x-skip-refresh': 'true', // 🔥 mark đã retry
               },
             });
 

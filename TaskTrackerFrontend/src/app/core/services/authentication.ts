@@ -43,7 +43,7 @@ export class Authentication {
   refreshToken() {
     const refreshToken = localStorage.getItem('refreshToken');
     this.logger.log(`refreshToken(): ${refreshToken}`);
-    return this.http.post<any>(`${this.api}/refresh`, refreshToken).pipe(
+    return this.http.post<any>(`${this.api}/refresh`, { refreshToken: refreshToken }).pipe(
       tap((res) => {
         this.logger.log(`set new token: ${res.token}`);
         localStorage.setItem('token', res.token);
