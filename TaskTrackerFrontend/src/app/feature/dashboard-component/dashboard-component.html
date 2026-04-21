@@ -66,14 +66,17 @@
                 flag
               </span>
               <span class="task-title">{{ task.title }}</span>
-              <span class="task-assignee">
-                👤 {{ assigneeFullname(task.assignedTo) || 'Unassigned' }}
-              </span>
-              <div class="task-time">
-                <!--  Updated: {{ task.updatedAt | date: 'short' }} -->
-                🕒 Updated {{ task.updatedAt | timeAgo }}
+              <div class="task-footer">
+                <span class="task-assignee">
+                  👤 {{ assigneeFullname(task.assignedTo) || 'Unassigned' }}
+                </span>
+                <div class="task-time">
+                  <!--  Updated: {{ task.updatedAt | date: 'short' }} -->
+                  🕒 Updated {{ task.updatedAt | timeAgo }}
+                </div>
               </div>
             </div>
+
             <div class="task-right">
               <span class="status" [ngClass]="task.status">{{ task.status }}</span>
             </div>
@@ -89,8 +92,8 @@
           <canvas #chartCanvas (click)="onChartClick($event)"></canvas>
         </div>
 
-<!-- My recent Task -->
-         <div class="section clickable" (click)="filterAssignedTo()">
+        <!-- My recent Task -->
+        <div class="section clickable" (click)="filterAssignedTo()">
           <div class="section-title">Assigned to Me</div>
           <div class="task-item" *ngFor="let task of myTasks$ | async">
             <div class="task-left">
@@ -104,9 +107,11 @@
               </span>
               -->
               <span class="task-title">{{ task.title }}</span>
-              <div class="task-time">
-                <!--  Updated: {{ task.updatedAt | date: 'short' }} -->
-                🕒 Updated {{ task.updatedAt | timeAgo }}
+              <div class="task-footer">
+                <div class="task-time">
+                  <!--  Updated: {{ task.updatedAt | date: 'short' }} -->
+                  🕒 Updated {{ task.updatedAt | timeAgo }}
+                </div>
               </div>
             </div>
             <div class="task-right">

@@ -1,6 +1,7 @@
 package com.minhduc.tasktracker.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,6 +26,10 @@ public class UserController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping
 	public List<User> getAllUsers() {
-	    return userService.getAll();
+	    return userService.getAll().stream().map(user -> {
+	        user.setPassword(""); // Feld ändern
+	        return user;
+	    })
+	    .collect(Collectors.toList());
 	}
 }
