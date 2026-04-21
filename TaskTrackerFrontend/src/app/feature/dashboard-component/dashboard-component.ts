@@ -19,6 +19,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
 import { Task } from '../../core/models/Task';
 import { TaskFilter } from '../../core/models/TaskFilter';
+import { LoggerService } from '../../core/services/logger-service';
 
 Chart.register(ChartDataLabels);
 
@@ -63,7 +64,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     priority: '',
     assignedTo: '',
   };
+
+  // Important: wrong sort field causes the http code 401
   sort: string = 'updatedAt,desc';
+  page = 0;
+  size = 8;
 
   @ViewChild('chartCanvas')
   set chartCanvasSetter(canvas: ElementRef<HTMLCanvasElement>) {
@@ -80,11 +85,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private snackBar: MatSnackBar,
+    private logger : LoggerService
   ) {}
 
   ngAfterViewInit(): void {}
 
   ngOnInit(): void {
+    this.logger.context = 'DashboardComponent';
     this.loadTasks();
   }
 
@@ -92,25 +99,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
    * loas tasks from backend and calcualte stats
    */
   loadTasks() {
-    
+    this.logger.log("loadTaks() called!");
     // filtering and sorting at server side
     const params: any = {
-      page: 0,
-      size: 8,
+      page: this.page,
+      size: this.size,
       sort: this.sort,
       ...Object.fromEntries(
         Object.entries(this.filters).filter(([_, v]) => v !== null && v !== undefined && v !== ''),
       ),
     };
-
-    console.log('TOKEN 1:', localStorage.getItem('token'));
-    this.stats$ = this.taskService.getStats().pipe(
-      map((stats) => ({
-        ...stats,
-        completionPercent: stats.total ? Math.round((stats.done / stats.total) * 100) : 0,
-      })),
-      shareReplay(1), // cache result
-    );
 
     this.recentTasks$ = this.taskService.getTasks(params).pipe(
       tap((res) => {
@@ -119,11 +117,18 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       map((res) => res.content),
       tap({
         error: (err) => {
-          console.log('ERROR STATUS:', err.status);
-          console.log('TOKEN 2:', localStorage.getItem('token'));
+          this.logger.error('ERROR STATUS:', err);
         },
       }),
       shareReplay(1),
+    );
+
+    this.stats$ = this.taskService.getStats().pipe(
+      map((stats) => ({
+        ...stats,
+        completionPercent: stats.total ? Math.round((stats.done / stats.total) * 100) : 0,
+      })),
+      shareReplay(1), // cache result
     );
   }
 
@@ -184,7 +189,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     if (points.length) {
       const index = points[0].index;
       const label = this.chart.data.labels?.[index];
-      console.log('Chart clicked: ' + label);
+      this.logger.log('Chart clicked: ' + label);
       this.router.navigate(['/tasks'], {
         queryParams: { priority: label },
         queryParamsHandling: 'merge',

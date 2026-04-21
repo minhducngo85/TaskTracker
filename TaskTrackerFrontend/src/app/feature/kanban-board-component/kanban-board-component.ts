@@ -12,6 +12,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
 import { filter, switchMap } from 'rxjs';
+import { LoggerService } from '../../core/services/logger-service';
 
 @Component({
   selector: 'app-kanban-board-component',
@@ -37,13 +38,18 @@ export class KanbanBoardComponent implements OnInit {
     private taskService: TaskService,
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef,
-  ) {}
+    private logger: LoggerService,
+  ) {
+    // set logger context
+    this.logger.context = 'KanbanBoardComponent';
+  }
 
   ngOnInit(): void {
     this.loadTaks();
   }
 
   loadTaks() {
+    this.logger.log('loadTaks() called!');
     this.taskService.getAllTasks().subscribe({
       next: (tasks) => {
         this.mapTasksToColumns(tasks);
@@ -120,7 +126,7 @@ export class KanbanBoardComponent implements OnInit {
           this.cdr.detectChanges();
         },
         error: (err) => {
-          console.error('Update failed', err);
+          this.logger.error('Update failed', err);
         },
       });
   }
@@ -142,13 +148,13 @@ export class KanbanBoardComponent implements OnInit {
    * @returns
    */
   updateTaskInColumns(updatedTask: Task) {
-    console.log(updatedTask.id);
+    this.logger.log(updatedTask.id.toString());
     for (const col of this.kanbanColumns) {
       const index = col.tasks.findIndex((t) => t.id === updatedTask.id);
-      console.log('index=', index);
+      this.logger.log('index=', index);
       if (index !== -1) {
         col.tasks[index] = updatedTask;
-        return; // tìm thấy rồi → stop
+        return;
       }
     }
   }

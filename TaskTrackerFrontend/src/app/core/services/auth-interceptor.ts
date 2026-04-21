@@ -5,7 +5,7 @@ import { error } from 'console';
 import { catchError, throwError } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  console.log('Interceptor chạy');
+  //console.log('Interceptor chạy');
   const router = inject(Router);
   let token: string | null = null;
 

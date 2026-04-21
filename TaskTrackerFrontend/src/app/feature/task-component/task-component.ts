@@ -12,6 +12,7 @@ import { TaskStatus } from '../../core/models/TaskStatus';
 import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
 import { Task } from '../../core/models/Task';
 import { TaskFilter } from '../../core/models/TaskFilter';
+import { LoggerService } from '../../core/services/logger-service';
 
 @Component({
   selector: 'app-task-component',
@@ -61,7 +62,7 @@ export class TaskComponent implements OnInit {
 
   // Filter panel opened
   isFilterOpen: boolean = true;
-
+  
   /**
    *
    * @param taskService Constructor to inject dependencies
@@ -77,16 +78,18 @@ export class TaskComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar,
+    private logger : LoggerService
   ) {
-    console.log('Constructor');
-    this.loadTasks();
+    this.logger.context = 'TaskComponent';
+    this.logger.log('Constructor');
+    //this.loadTasks();
   }
 
   /**
    * on init
    */
   ngOnInit(): void {
-    console.log('ngOnInit');
+    this.logger.log('ngOnInit');
 
     if (window.innerWidth <= 768) {
       this.isFilterOpen = false; // mobile collapse
@@ -100,6 +103,7 @@ export class TaskComponent implements OnInit {
   }
 
   loadTasks() {
+    this.logger.log('loadTaks() called!');
     // get all task for filter and search at client
     // this.tasks$ = this.taskService.getAllTasks().pipe(
     //   tap({
