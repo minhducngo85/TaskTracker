@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
 import { filter, switchMap } from 'rxjs';
 import { LoggerService } from '../../core/services/logger-service';
+import { TaskFilter } from '../../core/models/TaskFilter';
 
 @Component({
   selector: 'app-kanban-board-component',
@@ -22,8 +23,10 @@ import { LoggerService } from '../../core/services/logger-service';
   styleUrl: './kanban-board-component.css',
 })
 export class KanbanBoardComponent implements OnInit {
+  // Loadin indicator
   loading = true;
 
+  // Kanban coloumns
   kanbanColumns: {
     status: TaskStatus;
     title: string;
@@ -33,6 +36,19 @@ export class KanbanBoardComponent implements OnInit {
     { status: TaskStatus.IN_PROGRESS, title: 'In Progress', tasks: [] },
     { status: TaskStatus.DONE, title: 'Done', tasks: [] },
   ];
+
+  // filter and search
+  filters: TaskFilter = {
+    title: '',
+    status: '',
+    priority: '',
+    assignedTo: '',
+  };
+
+  // Important: wrong sort field causes the http code 401
+  sort: string = 'updatedAt,desc';
+  page = 0;
+  size = 100;
 
   constructor(
     private taskService: TaskService,
@@ -50,10 +66,25 @@ export class KanbanBoardComponent implements OnInit {
 
   loadTaks() {
     this.logger.log('loadTaks() called!');
-    this.taskService.getAllTasks().subscribe({
-      next: (tasks) => {
-        this.mapTasksToColumns(tasks);
+
+    this.logger.log('loadTaks() called!');
+    // filtering and sorting at server side
+    const params: any = {
+      page: this.page,
+      size: this.size,
+      sort: this.sort,
+      ...Object.fromEntries(
+        Object.entries(this.filters).filter(([_, v]) => v !== null && v !== undefined && v !== ''),
+      ),
+    };
+
+    this.taskService.getTasks(params).subscribe({
+      next: (res) => {
+        this.mapTasksToColumns(res.content);
         this.loading = false;
+        this.snackBar.open(`${res.content.length} / ${res.totalElements} Tasks loaded`, 'Close', {
+          duration: 1000,
+        });
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -64,6 +95,9 @@ export class KanbanBoardComponent implements OnInit {
     });
   }
 
+  /**
+   * map task list to kanban columns
+   */
   mapTasksToColumns(tasks: Task[]) {
     this.kanbanColumns.forEach((col) => {
       col.tasks = tasks

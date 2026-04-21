@@ -40,7 +40,7 @@
 
       <br />
       <!-- Status -->
-      <select name="status" [(ngModel)]="newTask.status">
+      <select name="status" [(ngModel)]="newTask.status" disabled="true" style="display: none;">
         <option *ngFor="let s of statusOptions" [value]="s">{{ getStatusEmoji(s) }} {{ s }}</option>
       </select>
 

@@ -85,7 +85,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private snackBar: MatSnackBar,
-    private logger : LoggerService
+    private logger: LoggerService,
   ) {}
 
   ngAfterViewInit(): void {}
@@ -99,7 +99,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
    * loas tasks from backend and calcualte stats
    */
   loadTasks() {
-    this.logger.log("loadTaks() called!");
+    this.logger.log('loadTaks() called!');
     // filtering and sorting at server side
     const params: any = {
       page: this.page,
@@ -163,8 +163,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
               size: 12,
             },
             formatter: (value, context) => {
+              const data = context.chart.data.datasets[0].data as number[];
+              const total = data.reduce((a, b) => a + b, 0);
+              const percent = total ? ((value / total) * 100).toFixed(0) : 0;
               const label = context.chart.data.labels?.[context.dataIndex];
-              return `${label}: ${value}`;
+              return `${value} (${percent}%)`;
             },
           },
         },
@@ -216,5 +219,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   toKanbanBoard() {
     this.router.navigate(['/kanbanboard']);
+  }
+
+  calculatePercentage(value: number, total: number) {
+    return total ? ((value / total) * 100).toFixed(0) : 0;
   }
 }

@@ -138,7 +138,7 @@ export class TaskComponent implements OnInit {
       this.total = res.totalElements;
       this.cdr.detectChanges(); // trigger ui update
       this.snackBar.open(`${this.tasks?.length} / ${this.total} Tasks loaded`, 'Close', {
-        duration: 2000,
+        duration: 1000,
       });
     });
 
@@ -146,6 +146,7 @@ export class TaskComponent implements OnInit {
     this.taskService.getAssigneeList().subscribe({
       next: (users) => {
         this.assigneeList = users;
+        this.cdr.detectChanges(); // trigger ui update
       },
       error: (err) => this.logger.error('Error to get assignee list', err),
     });

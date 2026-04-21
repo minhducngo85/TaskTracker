@@ -56,7 +56,13 @@ INSERT INTO task (title, description, status, priority, assigned_to, created_At,
 VALUES ('Option/ Assignee List api', 'New API to fetch all assignee list from database', 'TODO', 'CRITICAL', 'mngo', '2026-04-21 01:08:00', '2026-04-21 01:08:00');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
-VALUES ('Task List - Assignee Dropbox', 'Update frontend page Task list to use dropbox for assignee field', 'TODO', 'CRITICAL', 'mngo', '2026-04-21 02:09:00', '2026-04-21 02:09:00');
+VALUES ('Task List - Assignee Dropbox', 'Update frontend page Task list to use dropbox for assignee field', 'TODO', 'MEDIUM', 'mngo', '2026-04-21 02:09:00', '2026-04-21 02:09:00');
+
+INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
+VALUES ('Logger Service', 'Singlton Logger object with levels: log, info, debug, warn and error', 'DONE', 'CRITICAL', 'mngo', '2026-04-21 16:09:00', '2026-04-21 16:09:00');
+
+INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
+VALUES ('Logger Service Context', 'Extend logger service with context. The context can be set from other services', 'IN_PROGRESS', 'CRITICAL', 'mngo', '2026-04-21 16:09:00', '2026-04-21 16:09:00');
 
 
 DELETE FROM users;
