@@ -5,13 +5,20 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.minhduc.tasktracker.controller.exceptionhandling.ResourceNotFoundException;
+import com.minhduc.tasktracker.dto.TaskFilterRequest;
+import com.minhduc.tasktracker.dto.TaskStatisticsResponse;
 import com.minhduc.tasktracker.entity.Task;
 import com.minhduc.tasktracker.entity.TaskPriority;
 import com.minhduc.tasktracker.entity.TaskStatus;
 import com.minhduc.tasktracker.repository.TaskRepository;
+import com.minhduc.tasktracker.specification.TaskSpecification;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +33,44 @@ public class TaskService {
 	 * @return all task form db
 	 */
 	public List<Task> getAll() {
-		return taskRepository.findAll();
+		return taskRepository.findAll(Sort.by("createdAt").descending());
+	}
+	
+	public TaskStatisticsResponse getStatistics() {
+		TaskStatisticsResponse stats = new TaskStatisticsResponse();
+		stats.setTotal(taskRepository.count());
+		stats.setCritical(taskRepository.countByPriority(TaskPriority.CRITICAL));
+		stats.setHigh(taskRepository.countByPriority(TaskPriority.HIGH));
+		stats.setMedium(taskRepository.countByPriority(TaskPriority.MEDIUM));
+		stats.setLow(taskRepository.countByPriority(TaskPriority.LOW));
+		
+		stats.setTodo(taskRepository.countByStatus(TaskStatus.TODO));
+		stats.setInProgress(taskRepository.countByStatus(TaskStatus.IN_PROGRESS));
+		stats.setDone(taskRepository.countByStatus(TaskStatus.DONE));
+		
+		return stats;
+	}
+
+	/**
+	 * 
+	 * @param filter
+	 * @param page
+	 * @param size
+	 * @param sort
+	 * @return
+	 */
+	public Page<Task> getTasks(TaskFilterRequest filter, int page, int size, String[] sort) {
+
+		// ✅ parse sort
+		String sortField = sort[0];
+		String sortDir = sort.length > 1 ? sort[1] : "asc";
+
+		Sort.Direction direction = sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+		Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortField));
+
+		// Call repository
+		return taskRepository.findAll(TaskSpecification.filter(filter), pageable);
 	}
 
 	/**
@@ -48,7 +92,7 @@ public class TaskService {
 	 * @return
 	 */
 	public Task update(Long id, Task updated) {
-		log.info("Updated Obj={}", updated.toString());
+		log.info("Updated Req={}", updated.toString());
 		Task task = taskRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
 		task.setTitle(updated.getTitle());
@@ -57,7 +101,9 @@ public class TaskService {
 		task.setStatus(updated.getStatus());
 		task.setPriority(updated.getPriority());
 		task.setUpdatedAt(Instant.now());
-		return taskRepository.save(task);
+		Task updatedObj = taskRepository.save(task);
+		log.info("Updated Res={}", updatedObj.toString());
+		return updatedObj;
 	}
 
 	public void delete(Long id) {

@@ -9,7 +9,6 @@ import { KanbanBoardComponent } from './feature/kanban-board-component/kanban-bo
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-
   { path: 'login', component: Login },
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'kanbanboard', component: KanbanBoardComponent, canActivate: [authGuard] },

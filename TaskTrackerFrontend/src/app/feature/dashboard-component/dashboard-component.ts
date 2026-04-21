@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
 import { Task } from '../../core/models/Task';
+import { TaskFilter } from '../../core/models/TaskFilter';
 
 Chart.register(ChartDataLabels);
 
@@ -45,6 +46,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // Observable instead array
   tasks$!: Observable<Task[]>;
 
+  total: number = 0;
+
   recentTasks$!: Observable<Task[]>;
 
   // Statistics
@@ -52,6 +55,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   // Priority chart
   private chartCanvas!: ElementRef<HTMLCanvasElement>;
+
+  // filter and search
+  filters: TaskFilter = {
+    title: '',
+    status: '',
+    priority: '',
+    assignedTo: '',
+  };
+  sort: string = 'updatedAt,desc';
 
   @ViewChild('chartCanvas')
   set chartCanvasSetter(canvas: ElementRef<HTMLCanvasElement>) {
@@ -80,56 +92,38 @@ export class DashboardComponent implements OnInit, AfterViewInit {
    * loas tasks from backend and calcualte stats
    */
   loadTasks() {
-    this.tasks$ = this.taskService.getTasks().pipe(
-      tap({
-        next: (tasks) => {
-          // Only shown if there is data
-          if (tasks?.length) {
-            this.snackBar.open(tasks?.length + ' Tasks loaded', 'Close', {
-              duration: 2000,
-            });
-          } else {
-            this.snackBar.open('No Task found', 'OK', {
-              duration: 2000,
-            });
-          }
-        },
-        error: (err) => {
-          this.snackBar.open('Error: ' + err, 'Close', {
-            duration: 2000,
-          });
-        },
-      }),
-      shareReplay(1), // avoid multiple api calls
-    );
-
-    this.recentTasks$ = this.tasks$.pipe(
-      map((tasks) =>
-        tasks
-          .slice()
-          .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
-          .slice(0, 8),
+    
+    // filtering and sorting at server side
+    const params: any = {
+      page: 0,
+      size: 8,
+      sort: this.sort,
+      ...Object.fromEntries(
+        Object.entries(this.filters).filter(([_, v]) => v !== null && v !== undefined && v !== ''),
       ),
-    );
-    this.stats$ = this.tasks$.pipe(
-      map((tasks) => {
-        const total = tasks.length;
-        const done = tasks.filter((t) => t.status === TaskStatus.DONE).length;
+    };
 
-        return {
-          total: tasks.length,
-          todo: tasks.filter((t) => t.status === TaskStatus.TODO).length,
-          inProgress: tasks.filter((t) => t.status === TaskStatus.IN_PROGRESS).length,
-          done: tasks.filter((t) => t.status === TaskStatus.DONE).length,
-
-          critical: tasks.filter((t) => t.priority === TaskPriority.CRITICAL).length,
-          high: tasks.filter((t) => t.priority === TaskPriority.HIGH).length,
-          medium: tasks.filter((t) => t.priority === TaskPriority.MEDIUM).length,
-          low: tasks.filter((t) => t.priority === TaskPriority.LOW).length,
-          completionPercent: total ? Math.round((done / total) * 100) : 0,
-        };
-      }),
+    console.log('TOKEN 1:', localStorage.getItem('token'));
+    this.stats$ = this.taskService.getStats().pipe(
+      map((stats) => ({
+        ...stats,
+        completionPercent: stats.total ? Math.round((stats.done / stats.total) * 100) : 0,
+      })),
       shareReplay(1), // cache result
+    );
+
+    this.recentTasks$ = this.taskService.getTasks(params).pipe(
+      tap((res) => {
+        this.total = res.totalElements;
+      }),
+      map((res) => res.content),
+      tap({
+        error: (err) => {
+          console.log('ERROR STATUS:', err.status);
+          console.log('TOKEN 2:', localStorage.getItem('token'));
+        },
+      }),
+      shareReplay(1),
     );
   }
 

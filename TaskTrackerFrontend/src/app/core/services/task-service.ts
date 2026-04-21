@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Task } from '../models/Task';
-
+import { Observable } from 'rxjs';
+import { PageResponse } from '../models/PageResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +13,16 @@ export class TaskService {
 
   constructor(private http: HttpClient) {}
 
-  getTasks() {
-    return this.http.get<any[]>(this.api);
+  getAllTasks() {
+    return this.http.get<any[]>(`${this.api}/all`);
+  }
+
+  getTasks(params: any): Observable<PageResponse<Task>> {
+    return this.http.get<PageResponse<Task>>(this.api, { params });
+  }
+
+  getStats(){
+    return this.http.get<any>(`${this.api}/stats`);
   }
 
   addTask(task: any) {
@@ -28,7 +37,7 @@ export class TaskService {
     return this.http.put(`${this.api}/${id}`, task);
   }
 
-  getTask(id : number) {
+  getTask(id: number) {
     return this.http.get<Task>(`${this.api}/${id}`);
   }
 }

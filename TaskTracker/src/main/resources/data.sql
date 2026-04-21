@@ -26,7 +26,7 @@ INSERT INTO task (title, description, status, priority, assigned_to, created_At,
 VALUES ('Intergate Keycloak', 'Implement and integrate ODIC authentication with Keycloak', 'TODO', 'MEDIUM', 'Minh Duc', '2026-04-20 11:10:25', '2026-04-20 11:10:25');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
-VALUES ('Paginator', 'Backend: GET /tasks?page=0&size=10. Frontend: next / prev', 'IN_PROGRESS', 'MEDIUM', 'Minh Duc', '2026-04-18 11:01:25', '2026-04-18 11:01:25');
+VALUES ('Paginator', 'Backend: GET /tasks?page=0&size=10. Frontend: next / prev', 'DONE', 'MEDIUM', 'Minh Duc', '2026-04-18 11:01:25', '2026-04-18 11:01:25');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Due Date and Overdue', 'Add due date to task and highlight', 'IN_PROGRESS', 'HIGH', 'Minh Duc', '2026-04-20 11:04:25', '2026-04-20 11:04:25');
@@ -47,7 +47,10 @@ INSERT INTO task (title, description, status, priority, assigned_to, created_At,
 VALUES ('Task Comments', 'Implement feature "Task comments"', 'TODO', 'LOW', 'Lucas Ngo', '2026-04-20 11:02:50', '2026-04-20 11:02:50');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
-VALUES ('Deep sorting and filtering', 'Parse filter and sort value in url and perform sorting & filtering at server side.', 'TODO', 'HIGH', 'Mia Ngo', '2026-04-20 12:08:00', '2026-04-20 12:08:00');
+VALUES ('Deep sorting and filtering', 'Parse filter and sort value in url and perform sorting & filtering at server side.', 'DONE', 'HIGH', 'Mia Ngo', '2026-04-20 12:08:00', '2026-04-20 12:08:00');
+
+INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
+VALUES ('Refresh token', 'Extend JWT authentication with refresh token. Frontend: auto renew new token 5 minute before expiration', 'TODO', 'HIGH', 'Minh Duc', '2026-04-21 00:08:00', '2026-04-21 00:08:00');
 
 DELETE FROM users;
 

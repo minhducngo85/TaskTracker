@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TaskStatus } from '../../core/models/TaskStatus';
 import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
 import { Task } from '../../core/models/Task';
+import { TaskFilter } from '../../core/models/TaskFilter';
 
 @Component({
   selector: 'app-task-component',
@@ -25,8 +26,8 @@ export class TaskComponent implements OnInit {
   // Priority Options
   statusOptions = Object.values(TaskStatus);
 
-  // 🔥 dùng Observable thay vì array
-  tasks$!: Observable<Task[]>;
+  tasks: Task[] = [];
+  total: number = 0;
 
   // show add form
   showForm = false;
@@ -41,9 +42,16 @@ export class TaskComponent implements OnInit {
   };
 
   // filter and search
-  filterValue = '';
-  filterPriorityValue = '';
-  searchValue = '';
+  filters: TaskFilter = {
+    title: '',
+    status: '',
+    priority: '',
+    assignedTo: '',
+  };
+
+  // paginator
+  page = 0;
+  size = 10;
 
   // Sorting
   sortValue = '';
@@ -85,28 +93,47 @@ export class TaskComponent implements OnInit {
     }
 
     this.route.queryParams.subscribe((params) => {
-      this.filterValue = params['status'] || '';
-      this.filterPriorityValue = params['priority']?.toUpperCase() || '';
+      this.filters.status = params['status'] || '';
+      this.filters.priority = params['priority']?.toUpperCase() || '';
     });
     this.applyFilter();
   }
 
   loadTasks() {
-    this.tasks$ = this.taskService.getTasks().pipe(
-      tap({
-        next: (tasks) => {
-          // this.snackBar.open(tasks?.length + ' Tasks loaded', 'Close', {
-          //   duration: 2000,
-          // });
-        },
-        error: (err) => {
-          this.snackBar.open('Error: ' + err, 'Close', {
-            duration: 2000,
-          });
-        },
-      }),
-      shareReplay(1),
-    );
+    // get all task for filter and search at client
+    // this.tasks$ = this.taskService.getAllTasks().pipe(
+    //   tap({
+    //     next: (tasks) => {
+    //       // this.snackBar.open(tasks?.length + ' Tasks loaded', 'Close', {
+    //       //   duration: 2000,
+    //       // });
+    //     },
+    //     error: (err) => {
+    //       this.snackBar.open('Error: ' + err, 'Close', {
+    //         duration: 2000,
+    //       });
+    //     },
+    //   }),
+    //   shareReplay(1),
+    // );
+
+    // filtering and sorting at server side
+    const params: any = {
+      page: this.page,
+      size: this.size,
+      sort: this.sortValue,
+      ...Object.fromEntries(
+        Object.entries(this.filters).filter(([_, v]) => v !== null && v !== undefined && v !== ''),
+      ),
+    };
+    this.taskService.getTasks(params).subscribe((res) => {
+      this.tasks = res.content;
+      this.total = res.totalElements;
+      this.cdr.detectChanges(); // trigger ui update
+      this.snackBar.open(`${this.tasks?.length} / ${this.total} Tasks loaded`, 'Close', {
+        duration: 2000,
+      });
+    });
   }
 
   toggleForm() {
@@ -161,54 +188,58 @@ export class TaskComponent implements OnInit {
    *
    */
   applyFilter() {
-    this.tasks$ = this.taskService.getTasks().pipe(
-      map((tasks) => {
-        // Copy task to void mutable array while sorting
-        let result = [...tasks];
+    this.page = 0;
+    this.loadTasks();
 
-        // Filter status
-        if (this.filterValue) {
-          result = result.filter((t) => t.status === this.filterValue);
-        }
+    // FIlter code by client side
+    // this.tasks$ = this.taskService.getAllTasks().pipe(
+    //   map((tasks) => {
+    //     // Copy task to void mutable array while sorting
+    //     let result = [...tasks];
 
-        // Filter priority
-        if (this.filterPriorityValue) {
-          result = result.filter((t) => t.priority === this.filterPriorityValue);
-        }
+    //     // Filter status
+    //     if (this.filters.status) {
+    //       result = result.filter((t) => t.status === this.filters.status);
+    //     }
 
-        // Search by title
-        if (this.searchValue) {
-          result = result.filter((t) =>
-            t.title.toLowerCase().includes(this.searchValue.toLowerCase()),
-          );
-        }
+    //     // Filter priority
+    //     if (this.filters.priority) {
+    //       result = result.filter((t) => t.priority === this.filters.priority);
+    //     }
 
-        // sorting
-        if (this.sortValue === 'asc') {
-          result = result.sort((a, b) => {
-            return a.title.localeCompare(b.title);
-          });
-        } else if (this.sortValue === 'desc') {
-          result = result.sort((a, b) => {
-            return b.title.localeCompare(a.title);
-          });
-        } else if (this.sortValue === 'updatedAtAsc') {
-          result = result.sort((a, b) => {
-            return a.updatedAt.localeCompare(b.updatedAt);
-          });
-        } else if (this.sortValue === 'updatedAtDesc') {
-          result = result.sort((a, b) => {
-            return b.updatedAt.localeCompare(a.updatedAt);
-          });
-        }
+    //     // Search by title
+    //     if (this.filters.title) {
+    //       result = result.filter((t) =>
+    //         t.title.toLowerCase().includes(this.filters.title.toLowerCase()),
+    //       );
+    //     }
 
-        // show snack bar
-        this.snackBar.open(result?.length + ' Task(s) found!', 'Close', {
-          duration: 2000,
-        });
-        return result;
-      }),
-    );
+    //     // sorting
+    //     if (this.sortValue === 'asc') {
+    //       result = result.sort((a, b) => {
+    //         return a.title.localeCompare(b.title);
+    //       });
+    //     } else if (this.sortValue === 'desc') {
+    //       result = result.sort((a, b) => {
+    //         return b.title.localeCompare(a.title);
+    //       });
+    //     } else if (this.sortValue === 'updatedAtAsc') {
+    //       result = result.sort((a, b) => {
+    //         return a.updatedAt.localeCompare(b.updatedAt);
+    //       });
+    //     } else if (this.sortValue === 'updatedAtDesc') {
+    //       result = result.sort((a, b) => {
+    //         return b.updatedAt.localeCompare(a.updatedAt);
+    //       });
+    //     }
+
+    //     // show snack bar
+    //     this.snackBar.open(result?.length + ' Task(s) found!', 'Close', {
+    //       duration: 2000,
+    //     });
+    //     return result;
+    //   }),
+    // );
   }
 
   /** start edit */
@@ -226,7 +257,7 @@ export class TaskComponent implements OnInit {
     this.taskService.updateTask(this.editingTask.id, this.editingTask).subscribe({
       next: () => {
         this.editingTask = null;
-        this.loadTasks();
+        this.applyFilter();
         this.cdr.detectChanges(); // trigger ui update
       },
       error: (err: any) => console.error(err),
@@ -290,9 +321,9 @@ export class TaskComponent implements OnInit {
 
   clearFilter() {
     // filter and search
-    this.filterValue = '';
-    this.filterPriorityValue = '';
-    this.searchValue = '';
+    this.filters.status = '';
+    this.filters.priority = '';
+    this.filters.title = '';
 
     // Sorting
     this.sortValue = '';
@@ -301,5 +332,33 @@ export class TaskComponent implements OnInit {
 
   toggleFilter() {
     this.isFilterOpen = !this.isFilterOpen;
+  }
+
+  /** paginator */
+  get totalPages(): number {
+    return Math.ceil(this.total / this.size);
+  }
+
+  nextPage() {
+    if (this.page < this.totalPages - 1) {
+      this.page++;
+      this.loadTasks();
+    }
+  }
+
+  prevPage() {
+    if (this.page > 0) {
+      this.page--;
+      this.loadTasks();
+    }
+  }
+
+  pageInput = 1;
+
+  goToPage() {
+    if (this.pageInput >= 1 && this.pageInput <= this.totalPages) {
+      this.page = this.pageInput - 1;
+      this.loadTasks();
+    }
   }
 }

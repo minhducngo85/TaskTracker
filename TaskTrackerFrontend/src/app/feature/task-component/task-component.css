@@ -389,7 +389,7 @@ button:active {
 
 /* ===== FOOTER ===== */
 .task-footer {
-  margin-top: 10px;
+  margin-top: 5px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -397,8 +397,8 @@ button:active {
 
 /* ===== AVATAR ===== */
 .avatar {
-  width: 26px;
-  height: 26px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: #3b82f6;
   color: white;
@@ -489,4 +489,90 @@ button:active {
 
 .priority-low {
   color: #22c55e; /* green */
+}
+
+/** Pagionator*/
+.paginator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+/* buttons */
+.page-btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #1976d2;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: #125ea8;
+  transform: translateY(-1px);
+}
+
+.page-btn:disabled {
+  background: #d0d0d0;
+  cursor: not-allowed;
+}
+
+/* page info */
+.page-center {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.page-current {
+  background: #1976d2;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.page-total {
+  color: #555;
+}
+
+/* select */
+.page-size {
+  padding: 5px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* jump input */
+.page-jump {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.page-jump input {
+  width: 50px;
+  padding: 4px;
+  text-align: center;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* go button */
+.go-btn {
+  padding: 5px 10px;
+  border: none;
+  background: #1976d2;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.go-btn:hover {
+  background: #125ea8;
 }

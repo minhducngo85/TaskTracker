@@ -85,13 +85,13 @@
   <div class="border-content" *ngIf="isFilterOpen">
     <div class="filter-bar">
       <!-- Status filter-->
-      <select [(ngModel)]="filterValue" (change)="applyFilter()">
+      <select [(ngModel)]="filters.status" (change)="applyFilter()">
         <option value="">Status All</option>
         <option *ngFor="let s of statusOptions" [value]="s">{{ getStatusEmoji(s) }} {{ s }}</option>
       </select>
 
       <!-- Priority Filter -->
-      <select [(ngModel)]="filterPriorityValue" (change)="applyFilter()">
+      <select [(ngModel)]="filters.priority" (change)="applyFilter()">
         <option value="">Priority All</option>
         <option *ngFor="let p of priorityOptions" [value]="p">
           {{ getPriorityEmoji(p) }} {{ p }}
@@ -101,7 +101,7 @@
       <!-- Search by name-->
       <input
         type="text"
-        [(ngModel)]="searchValue"
+        [(ngModel)]="filters.title"
         (change)="applyFilter()"
         placeholder="Search by title..."
       />
@@ -109,10 +109,10 @@
       <!-- Sorting-->
       <select [(ngModel)]="sortValue" (change)="applyFilter()">
         <option value="">Sort (Default)</option>
-        <option value="asc">Title ↑</option>
-        <option value="desc">Title ↓</option>
-        <option value="updatedAtAsc">Updated at ↑</option>
-        <option value="updatedAtDesc">Updated at ↓</option>
+        <option value="title,asc">Title ↑</option>
+        <option value="title,desc">Title ↓</option>
+        <option value="updatedAt,asc">Updated at ↑</option>
+        <option value="updatedAt,desc">Updated at ↓</option>
       </select>
 
       <button (click)="clearFilter()" class="clear-btn">❌ Clear</button>
@@ -122,11 +122,10 @@
 
 <div style="margin-bottom: 10px"></div>
 <div class="task-grid">
-  <div class="task-card" [ngClass]="'status-'+task.status" *ngFor="let task of tasks$ | async">
+  <div class="task-card" [ngClass]="'status-' + task.status" *ngFor="let task of tasks">
     <div class="task-main">
       <!-- LEFT -->
       <div class="task-left">
-
         <span class="task-title">{{ task.title }}</span>
 
         <span
@@ -136,7 +135,7 @@
           flag
         </span>
 
-         <span class="status-badge" [ngClass]="task.status">
+        <span class="status-badge" [ngClass]="task.status">
           {{ task.status }}
         </span>
       </div>
@@ -173,7 +172,6 @@
       <button class="icon-btn" (click)="deleteTask(task.id)">❌</button>
     </div>
   </div>
-
   <!-- EDIT MODAL -->
   <div class="modal-backdrop" *ngIf="editingTask">
     <div class="modal">
@@ -222,5 +220,41 @@
         <button class="clear-btn" (click)="cancelEdit()">❌ Cancel</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- PAGINATOR -->
+<div class="paginator">
+  <button class="page-btn" (click)="prevPage()" [disabled]="page === 0">
+    ← Prev
+  </button>
+
+  <div class="page-center">
+    <span class="page-label">Page</span>
+    <span class="page-current">{{ page + 1 }}</span>
+    <span class="page-sep">/</span>
+    <span class="page-total">{{ totalPages }}</span>
+  </div>
+
+  <button class="page-btn" (click)="nextPage()" [disabled]="page >= totalPages - 1">
+    Next →
+  </button>
+
+  <!-- Page size -->
+  <select class="page-size" [(ngModel)]="size" (change)="applyFilter()">
+    <option [value]="5">5</option>
+    <option [value]="10">10</option>
+    <option [value]="20">20</option>
+  </select>
+
+  <!-- Go to page -->
+  <div class="page-jump">
+    <input
+      type="number"
+      [(ngModel)]="pageInput"
+      min="1"
+      [max]="totalPages"
+    />
+    <button class="go-btn" (click)="goToPage()">Go</button>
   </div>
 </div>

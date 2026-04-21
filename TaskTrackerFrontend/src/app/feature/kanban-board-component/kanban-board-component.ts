@@ -44,7 +44,7 @@ export class KanbanBoardComponent implements OnInit {
   }
 
   loadTaks() {
-    this.taskService.getTasks().subscribe({
+    this.taskService.getAllTasks().subscribe({
       next: (tasks) => {
         this.mapTasksToColumns(tasks);
         this.loading = false;
@@ -110,12 +110,14 @@ export class KanbanBoardComponent implements OnInit {
         switchMap((value) => this.taskService.updateTask(task.id, task)),
       )
       .subscribe({
-        next: () => {
-          if (showLog) console.log('Task updated', task);
+        next: (updated) => {
+          if (showLog) console.log('Task updated', updated);
           // show snack bar
           this.snackBar.open(`Knanban board updated!`, 'Close', {
             duration: 2000,
           });
+          this.updateTaskInColumns(<Task>updated);
+          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error('Update failed', err);
@@ -132,5 +134,22 @@ export class KanbanBoardComponent implements OnInit {
 
   getConnectedLists(): string[] {
     return this.kanbanColumns.map((c) => c.status);
+  }
+
+  /**
+   * to update the kanaban board with new update obj
+   * @param updatedTask
+   * @returns
+   */
+  updateTaskInColumns(updatedTask: Task) {
+    console.log(updatedTask.id);
+    for (const col of this.kanbanColumns) {
+      const index = col.tasks.findIndex((t) => t.id === updatedTask.id);
+      console.log('index=', index);
+      if (index !== -1) {
+        col.tasks[index] = updatedTask;
+        return; // tìm thấy rồi → stop
+      }
+    }
   }
 }

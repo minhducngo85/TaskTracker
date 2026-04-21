@@ -2,6 +2,7 @@ package com.minhduc.tasktracker.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.minhduc.tasktracker.dto.TaskFilterRequest;
+import com.minhduc.tasktracker.dto.TaskStatisticsResponse;
 import com.minhduc.tasktracker.entity.Task;
 import com.minhduc.tasktracker.entity.TaskPriority;
 import com.minhduc.tasktracker.service.TaskService;
@@ -29,13 +32,29 @@ public class TaskController {
 
 	private final TaskService taskService;
 
-	@GetMapping
-	public List<Task> getTasks(@RequestParam(required = false) TaskPriority priority) {
-		log.info("getTask() called");
+	@GetMapping("/all")
+	public List<Task> getAllTasks(@RequestParam(required = false) TaskPriority priority) {
+		log.info("getAllTasks() called");
 		if (priority != null) {
 			return taskService.findByPriority(priority);
 		}
 		return taskService.getAll();
+	}
+	
+	@GetMapping
+	public Page<Task> getTasks(TaskFilterRequest filter, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "createdAt,desc") String[] sort) {
+		log.info("getTasks() called");
+		log.info("Filters: {}", filter.toString());
+		log.info("sort: {}", String.join(",", sort));
+		log.info("page: {}", page);
+		log.info("size: {}", size);
+		return taskService.getTasks(filter, page, size, sort);
+	}
+	
+	@GetMapping("/stats")
+	public TaskStatisticsResponse getStats() {
+		return taskService.getStatistics();
 	}
 
 	@PostMapping
