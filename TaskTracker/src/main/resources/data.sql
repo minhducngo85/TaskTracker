@@ -11,7 +11,7 @@ INSERT INTO task (title, description, status, priority, assigned_to, created_At,
 VALUES ('Deployment on VPS', 'Configure nginx and deploy the frontend and backend in a VPS', 'DONE', 'HIGH', 'mngo', '2026-04-20 11:00:25', '2026-04-20 11:00:25');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
-VALUES ('Dashboard', 'Dashboard with number of DONE/TODO/IN_PROGRESS and chart. Using chart.js', 'TODO', 'HIGH', 'lucas', '2026-04-20 11:01:25', '2026-04-20 11:01:25');
+VALUES ('Dashboard', 'Dashboard with number of DONE/TODO/IN_PROGRESS and chart. Using chart.js', 'TODO', 'HIGH', 'admin', '2026-04-20 11:01:25', '2026-04-20 11:01:25');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Priority Function', 'Extend Task with Priority (Critial, high, medim, low) including backend and front end side.', 'TODO', 'HIGH', 'lucas', '2026-04-20 09:00:25', '2026-04-20 09:00:25');
@@ -23,7 +23,7 @@ INSERT INTO task (title, description, status, priority, assigned_to, created_At,
 VALUES ('Database Management', 'Modifying a database schema by adding a deleted_at column for soft-delete functionality', 'IN_PROGRESS', 'HIGH', 'mngo', '2026-04-20 11:05:25', '2026-04-20 11:05:25');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
-VALUES ('Intergate Keycloak', 'Implement and integrate ODIC authentication with Keycloak', 'TODO', 'MEDIUM', 'mngo', '2026-04-20 11:10:25', '2026-04-20 11:10:25');
+VALUES ('Intergate Keycloak', 'Implement and integrate ODIC authentication with Keycloak', 'TODO', 'MEDIUM', '', '2026-04-20 11:10:25', '2026-04-20 11:10:25');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Paginator', 'Backend: GET /tasks?page=0&size=10. Frontend: next / prev', 'DONE', 'MEDIUM', 'user', '2026-04-18 11:01:25', '2026-04-18 11:01:25');
@@ -56,13 +56,16 @@ INSERT INTO task (title, description, status, priority, assigned_to, created_At,
 VALUES ('Option/ Assignee List api', 'New API to fetch all assignee list from database', 'TODO', 'CRITICAL', 'mngo', '2026-04-21 01:08:00', '2026-04-21 01:08:00');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
-VALUES ('Task List - Assignee Dropbox', 'Update frontend page Task list to use dropbox for assignee field', 'TODO', 'MEDIUM', 'mngo', '2026-04-21 02:09:00', '2026-04-21 02:09:00');
+VALUES ('Task List - Assignee Dropbox', 'Update frontend page Task list to use dropbox for assignee field', 'TODO', 'MEDIUM', 'admin', '2026-04-21 02:09:00', '2026-04-21 02:09:00');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Logger Service', 'Singlton Logger object with levels: log, info, debug, warn and error', 'DONE', 'CRITICAL', 'mngo', '2026-04-21 16:09:00', '2026-04-21 16:09:00');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Logger Service Context', 'Extend logger service with context. The context can be set from other services', 'IN_PROGRESS', 'CRITICAL', 'mngo', '2026-04-21 16:09:00', '2026-04-21 16:09:00');
+
+INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
+VALUES ('Assigned to Me', 'Show my assigned to me taks in dashboard', 'DONE', 'CRITICAL', 'admin', '2026-04-21 16:09:00', '2026-04-21 16:09:00');
 
 
 DELETE FROM users;

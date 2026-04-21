@@ -22,6 +22,9 @@ import { User } from '../../core/models/User';
   styleUrl: './task-component.css',
 })
 export class TaskComponent implements OnInit {
+  // Loading indicator
+  loading = true;
+
   // Priority Options
   priorityOptions = Object.values(TaskPriority);
 
@@ -101,10 +104,28 @@ export class TaskComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.filters.status = params['status'] || '';
       this.filters.priority = params['priority']?.toUpperCase() || '';
+      this.filters.assignedTo = params['assignedTo'] || '';
     });
+    this.loadAssigneeList();
     this.applyFilter();
   }
 
+  loadAssigneeList() {
+     // read assignee list
+    this.taskService.getAssigneeList().subscribe({
+      next: (users) => {
+        this.assigneeList = users;
+        this.cdr.detectChanges(); // trigger ui update
+      },
+      error: (err) => {
+        this.logger.error('Error to get assignee list', err);
+        this.snackBar.open(`Error to get assignee list`, 'Close', {
+          duration: 1000,
+        });
+        this.cdr.detectChanges();
+      },
+    });
+  }
   loadTasks() {
     this.logger.log('loadTaks() called!');
     // get all task for filter and search at client
@@ -133,22 +154,23 @@ export class TaskComponent implements OnInit {
         Object.entries(this.filters).filter(([_, v]) => v !== null && v !== undefined && v !== ''),
       ),
     };
-    this.taskService.getTasks(params).subscribe((res) => {
-      this.tasks = res.content;
-      this.total = res.totalElements;
-      this.cdr.detectChanges(); // trigger ui update
-      this.snackBar.open(`${this.tasks?.length} / ${this.total} Tasks loaded`, 'Close', {
-        duration: 1000,
-      });
-    });
-
-    // read assignee list
-    this.taskService.getAssigneeList().subscribe({
-      next: (users) => {
-        this.assigneeList = users;
+    this.taskService.getTasks(params).subscribe({
+      next: (res) => {
+        this.tasks = res.content;
+        this.total = res.totalElements;
+        this.loading = false;
+        this.snackBar.open(`${this.tasks?.length} / ${this.total} Tasks loaded`, 'Close', {
+          duration: 1000,
+        });
         this.cdr.detectChanges(); // trigger ui update
       },
-      error: (err) => this.logger.error('Error to get assignee list', err),
+      error: (err) => {
+        this.logger.error('Error to get task list', err);
+        this.snackBar.open(`Error to get task list`, 'Close', {
+          duration: 1000,
+        });
+        this.cdr.detectChanges();
+      },
     });
   }
 
@@ -204,6 +226,7 @@ export class TaskComponent implements OnInit {
    *
    */
   applyFilter() {
+    this.loading = true;
     this.page = 0;
     this.loadTasks();
 
@@ -340,6 +363,7 @@ export class TaskComponent implements OnInit {
     this.filters.status = '';
     this.filters.priority = '';
     this.filters.title = '';
+    this.filters.assignedTo = '';
 
     // Sorting
     this.sortValue = '';
@@ -389,6 +413,6 @@ export class TaskComponent implements OnInit {
       }
       return username;
     }
-    return 'Undefined';
+    return '';
   }
 }

@@ -20,6 +20,8 @@ import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
 import { Task } from '../../core/models/Task';
 import { TaskFilter } from '../../core/models/TaskFilter';
 import { LoggerService } from '../../core/services/logger-service';
+import { User } from '../../core/models/User';
+import { Authentication } from '../../core/services/authentication';
 
 Chart.register(ChartDataLabels);
 
@@ -44,15 +46,21 @@ export interface TaskStats {
   styleUrl: './dashboard-component.css',
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
+  // Loading indicator
+  loading = true;
+
   // Observable instead array
   tasks$!: Observable<Task[]>;
 
   total: number = 0;
 
   recentTasks$!: Observable<Task[]>;
+  myTasks$!: Observable<Task[]>;
 
   // Statistics
   stats$!: Observable<TaskStats>;
+
+  assigneeList: User[] = [];
 
   // Priority chart
   private chartCanvas!: ElementRef<HTMLCanvasElement>;
@@ -68,7 +76,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // Important: wrong sort field causes the http code 401
   sort: string = 'updatedAt,desc';
   page = 0;
-  size = 8;
+  size = 10;
 
   @ViewChild('chartCanvas')
   set chartCanvasSetter(canvas: ElementRef<HTMLCanvasElement>) {
@@ -86,19 +94,80 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private router: Router,
     private snackBar: MatSnackBar,
     private logger: LoggerService,
+    private auth: Authentication,
   ) {}
 
   ngAfterViewInit(): void {}
 
   ngOnInit(): void {
     this.logger.context = 'DashboardComponent';
-    this.loadTasks();
+    this.loadRecentTasks();
+    this.loadAssigneeList();
+    this.loadMyTasks();
+  }
+
+  loadAssigneeList() {
+    // read assignee list
+    this.taskService.getAssigneeList().subscribe({
+      next: (users) => {
+        this.assigneeList = users;
+        this.cdr.detectChanges(); // trigger ui update
+      },
+      error: (err) => {
+        this.logger.error('Error to get assignee list', err);
+        this.snackBar.open(`Error to get assignee list`, 'Close', {
+          duration: 1000,
+        });
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  loadMyTasks() {
+    this.logger.log(`loadMyTasks() called! Username=${this.auth.getUsername()}`);
+
+    const myTasksFilters: TaskFilter = {
+      title: '',
+      status: '',
+      priority: '',
+      assignedTo: this.auth.getUsername() || '',
+    };
+
+    // filtering and sorting at server side
+    const params: any = {
+      page: this.page,
+      size: 5,
+      sort: this.sort,
+      ...Object.fromEntries(
+        Object.entries(myTasksFilters).filter(
+          ([_, v]) => v !== null && v !== undefined && v !== '',
+        ),
+      ),
+    };
+
+    this.myTasks$ = this.taskService.getTasks(params).pipe(
+      tap((res) => {
+        this.total = res.totalElements;
+        this.logger.info(`My tasks: ${this.total}`);
+      }),
+      map((res) => res.content),
+      tap({
+        error: (err) => {
+          this.logger.error('ERROR STATUS:', err);
+          this.snackBar.open(`Error to get task list`, 'Close', {
+            duration: 1000,
+          });
+          this.cdr.detectChanges();
+        },
+      }),
+      shareReplay(1),
+    );
   }
 
   /**
-   * loas tasks from backend and calcualte stats
+   * loads tasks from backend and calcualte stats
    */
-  loadTasks() {
+  loadRecentTasks() {
     this.logger.log('loadTaks() called!');
     // filtering and sorting at server side
     const params: any = {
@@ -118,16 +187,35 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       tap({
         error: (err) => {
           this.logger.error('ERROR STATUS:', err);
+          this.snackBar.open(`Error to get task list`, 'Close', {
+            duration: 1000,
+          });
+          this.cdr.detectChanges();
         },
       }),
       shareReplay(1),
     );
 
     this.stats$ = this.taskService.getStats().pipe(
+      tap({
+        next: () => {
+          this.loading = false;
+          this.cdr.detectChanges();
+          this.logger.info(`Loading done!`);
+        },
+        error: (err) => {
+          this.logger.error('ERROR STATUS:', err);
+          this.snackBar.open(`Error: ${err.message}`, 'Close', {
+            duration: 3000,
+          });
+          this.cdr.detectChanges();
+        },
+      }),
       map((stats) => ({
         ...stats,
         completionPercent: stats.total ? Math.round((stats.done / stats.total) * 100) : 0,
       })),
+
       shareReplay(1), // cache result
     );
   }
@@ -211,6 +299,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   *
+   * @param status show my tasks
+   */
+  filterAssignedTo() {
+    this.router.navigate(['/tasks'], {
+      queryParams: { assignedTo: this.auth.getUsername() },
+    });
+  }
+
   progressColorClass(percent: number): string {
     if (percent < 50) return 'progress-medium';
     //if (percent < 70) return 'progress-medium';
@@ -223,5 +321,19 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   calculatePercentage(value: number, total: number) {
     return total ? ((value / total) * 100).toFixed(0) : 0;
+  }
+
+  /**
+   * Helper method to get assignee fullname
+   */
+  assigneeFullname(username?: string): string {
+    if (username) {
+      const user = this.assigneeList.find((u) => u.username === username);
+      if (user) {
+        return user.fullname;
+      }
+      return username;
+    }
+    return 'Undefined';
   }
 }

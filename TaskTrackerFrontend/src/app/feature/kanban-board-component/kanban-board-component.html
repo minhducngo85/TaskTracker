@@ -1,5 +1,6 @@
 <h2 class="title">🗓️ Kanban Board</h2>
 
+<div *ngIf="loading" class="loading">Loading...</div>
 <div class="board" *ngIf="!loading">
   <div class="column" *ngFor="let col of kanbanColumns">
     <h3>
@@ -25,9 +26,9 @@
         <div class="task-footer">
           <div class="task-assignee">
             <span class="avatar">
-              {{ task.assignedTo?.[0] || '?' }}
+              {{ assigneeFullname(task.assignedTo)[0] || '?' }}
             </span>
-            {{ task.assignedTo || 'Unassigned' }}
+            {{ assigneeFullname(task.assignedTo) || 'Unassigned' }}
           </div>
 
           <div class="task-time" [title]="task.updatedAt | date: 'medium'">
@@ -40,4 +41,3 @@
   </div>
 </div>
 
-<div *ngIf="loading" class="loading">Loading...</div>

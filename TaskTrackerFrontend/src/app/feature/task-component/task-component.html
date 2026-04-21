@@ -1,258 +1,272 @@
 <h2 class="title">📋 Task List</h2>
 
-<!-- Add button -->
-<button class="add-btn" (click)="toggleForm()">+ Add Task</button>
+<div *ngIf="loading" class="loading">Loading...</div>
+<div *ngIf="!loading">
+  <!-- Add button -->
+  <button class="add-btn" (click)="toggleForm()">+ Add Task</button>
 
-<!-- Form add task -->
-<!-- Form -->
-<div class="border-box" *ngIf="showForm">
-  <div class="border-title">+ Add new Task</div>
+  <!-- Form add task -->
+  <!-- Form -->
+  <div class="border-box" *ngIf="showForm">
+    <div class="border-title">+ Add new Task</div>
 
-  <div class="border-content">
-    <form *ngIf="showForm" #taskForm="ngForm" (ngSubmit)="addTask(taskForm)" class="task-form">
-      <!-- Title -->
-      <input
-        type="text"
-        name="title"
-        [(ngModel)]="newTask.title"
-        placeholder="Title"
-        required
-        minlength="3"
-        #title="ngModel"
-      />
-      <div class="error" *ngIf="title.invalid && title.touched">
-        <small *ngIf="title.errors?.['required']">Title is required</small>
-        <small *ngIf="title.errors?.['minlength']">Min 3 characters</small>
-      </div>
-      <br />
-      <!-- Description -->
-      <input
-        type="text"
-        name="description"
-        [(ngModel)]="newTask.description"
-        placeholder="Description"
-        required
-        #desc="ngModel"
-      />
-      <div class="error" *ngIf="desc.invalid && desc.touched">
-        <small>Description is required</small>
-      </div>
+    <div class="border-content">
+      <form *ngIf="showForm" #taskForm="ngForm" (ngSubmit)="addTask(taskForm)" class="task-form">
+        <!-- Title -->
+        <input
+          type="text"
+          name="title"
+          [(ngModel)]="newTask.title"
+          placeholder="Title"
+          required
+          minlength="3"
+          #title="ngModel"
+        />
+        <div class="error" *ngIf="title.invalid && title.touched">
+          <small *ngIf="title.errors?.['required']">Title is required</small>
+          <small *ngIf="title.errors?.['minlength']">Min 3 characters</small>
+        </div>
+        <br />
+        <!-- Description -->
+        <input
+          type="text"
+          name="description"
+          [(ngModel)]="newTask.description"
+          placeholder="Description"
+          required
+          #desc="ngModel"
+        />
+        <div class="error" *ngIf="desc.invalid && desc.touched">
+          <small>Description is required</small>
+        </div>
 
-      <br />
-      <!-- Status -->
-      <select name="status" [(ngModel)]="newTask.status" disabled="true" style="display: none;">
-        <option *ngFor="let s of statusOptions" [value]="s">{{ getStatusEmoji(s) }} {{ s }}</option>
-      </select>
+        <br />
+        <!-- Status -->
+        <select name="status" [(ngModel)]="newTask.status" disabled="true" style="display: none">
+          <option *ngFor="let s of statusOptions" [value]="s">
+            {{ getStatusEmoji(s) }} {{ s }}
+          </option>
+        </select>
 
-      <!-- Priority -->
-      <select name="priority" [(ngModel)]="newTask.priority">
-        <option *ngFor="let p of priorityOptions" [value]="p">
-          {{ getPriorityEmoji(p) }} {{ p }}
-        </option>
-      </select>
+        <!-- Priority -->
+        <select name="priority" [(ngModel)]="newTask.priority">
+          <option *ngFor="let p of priorityOptions" [value]="p">
+            {{ getPriorityEmoji(p) }} {{ p }}
+          </option>
+        </select>
 
-      <!-- Assigned to -->
+        <!-- Assigned to -->
 
+        <select [(ngModel)]="newTask.assignedTo" #assignedTo="ngModel" name="assignedTo">
+          <option value="">Select Assignee</option>
+          <option *ngFor="let user of assigneeList" [value]="user.username">
+            {{ user.fullname }}
+          </option>
+        </select>
 
-       <select [(ngModel)]="newTask.assignedTo" #assignedTo="ngModel" name="assignedTo" required>
-        <option>Select Assignee</option>
-        <option *ngFor="let user of assigneeList" [value]="user.username">
-          {{ user.fullname }}
-        </option>
-      </select>
-
-      <div class="error" *ngIf="assignedTo.invalid && assignedTo.touched">
-        <small>AssignedTo is required</small>
-      </div>
-      <br />
-      <!-- Buttons -->
-      <div class="form-actions">
-        <button class="save-btn" type="submit" [disabled]="taskForm.invalid">💾 Save</button>
-        <span style="padding: 5px"></span>
-        <button class="clear-btn" (click)="toggleForm()">❌ Cancel</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<div class="border-box">
-  <div class="border-title" (click)="toggleFilter()">
-    Filter & Sort
-    <span class="toggle-icon">
-      {{ isFilterOpen ? '▲' : '▼' }}
-    </span>
-  </div>
-
-  <div class="border-content" *ngIf="isFilterOpen">
-    <div class="filter-bar">
-      <!-- Status filter-->
-      <select [(ngModel)]="filters.status" (change)="applyFilter()">
-        <option value="">Status All</option>
-        <option *ngFor="let s of statusOptions" [value]="s">{{ getStatusEmoji(s) }} {{ s }}</option>
-      </select>
-
-      <!-- Priority Filter -->
-      <select [(ngModel)]="filters.priority" (change)="applyFilter()">
-        <option value="">Priority All</option>
-        <option *ngFor="let p of priorityOptions" [value]="p">
-          {{ getPriorityEmoji(p) }} {{ p }}
-        </option>
-      </select>
-
-      <!-- Search by name-->
-      <input
-        type="text"
-        [(ngModel)]="filters.title"
-        (change)="applyFilter()"
-        placeholder="Search by title..."
-      />
-
-      <select [(ngModel)]="filters.assignedTo" (change)="applyFilter()">
-        <option value="">Assignee All</option>
-        <option *ngFor="let user of assigneeList" [value]="user.username">
-          {{ user.fullname }}
-        </option>
-      </select>
-
-      <!-- Sorting-->
-      <select [(ngModel)]="sortValue" (change)="applyFilter()">
-        <option value="">Sort (Default)</option>
-        <option value="title,asc">Title ↑</option>
-        <option value="title,desc">Title ↓</option>
-        <option value="updatedAt,asc">Updated at ↑</option>
-        <option value="updatedAt,desc">Updated at ↓</option>
-      </select>
-
-      <button (click)="clearFilter()" class="clear-btn">❌ Clear</button>
+        <div class="error" *ngIf="assignedTo.invalid && assignedTo.touched">
+          <small>AssignedTo is required</small>
+        </div>
+        <br />
+        <!-- Buttons -->
+        <div class="form-actions">
+          <button class="save-btn" type="submit" [disabled]="taskForm.invalid">💾 Save</button>
+          <span style="padding: 5px"></span>
+          <button class="clear-btn" (click)="toggleForm()">❌ Cancel</button>
+        </div>
+      </form>
     </div>
   </div>
-</div>
 
-<div style="margin-bottom: 10px"></div>
-<div class="task-grid">
-  <div class="task-card" [ngClass]="'status-' + task.status" *ngFor="let task of tasks">
-    <div class="task-main">
-      <!-- LEFT -->
-      <div class="task-left">
-        <span class="task-title">{{ task.title }}</span>
+  <div class="border-box">
+    <div class="border-title" (click)="toggleFilter()">
+      Filter & Sort
+      <span class="toggle-icon">
+        {{ isFilterOpen ? '▲' : '▼' }}
+      </span>
+    </div>
 
-        <span
-          class="material-icons priority-icon"
-          [ngClass]="'priority-' + task.priority.toLowerCase()"
-        >
-          flag
-        </span>
+    <div class="border-content" *ngIf="isFilterOpen">
+      <div class="filter-bar">
+        <!-- Status filter-->
+        <select [(ngModel)]="filters.status" (change)="applyFilter()">
+          <option value="">Status All</option>
+          <option *ngFor="let s of statusOptions" [value]="s">
+            {{ getStatusEmoji(s) }} {{ s }}
+          </option>
+        </select>
 
-        <span class="status-badge" [ngClass]="task.status">
-          {{ task.status }}
-        </span>
+        <!-- Priority Filter -->
+        <select [(ngModel)]="filters.priority" (change)="applyFilter()">
+          <option value="">Priority All</option>
+          <option *ngFor="let p of priorityOptions" [value]="p">
+            {{ getPriorityEmoji(p) }} {{ p }}
+          </option>
+        </select>
+
+        <!-- Search by name-->
+        <input
+          type="text"
+          [(ngModel)]="filters.title"
+          (change)="applyFilter()"
+          placeholder="Search by title..."
+        />
+
+        <select [(ngModel)]="filters.assignedTo" (change)="applyFilter()">
+          <option value="">Assignee All</option>
+          <option *ngFor="let user of assigneeList" [value]="user.username">
+            {{ user.fullname }}
+          </option>
+        </select>
+
+        <!-- Sorting-->
+        <select [(ngModel)]="sortValue" (change)="applyFilter()">
+          <option value="">Sort (Default)</option>
+          <option value="title,asc">Title ↑</option>
+          <option value="title,desc">Title ↓</option>
+          <option value="updatedAt,asc">Updated at ↑</option>
+          <option value="updatedAt,desc">Updated at ↓</option>
+        </select>
+
+        <button (click)="clearFilter()" class="clear-btn">❌ Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-bottom: 10px"></div>
+  <div class="task-grid">
+    <div class="task-card" [ngClass]="'status-' + task.status" *ngFor="let task of tasks">
+      <div class="task-main">
+        <!-- LEFT -->
+        <div class="task-left">
+          <span class="task-title">{{ task.title }}</span>
+
+          <span
+            class="material-icons priority-icon"
+            [ngClass]="'priority-' + task.priority.toLowerCase()"
+          >
+            flag
+          </span>
+
+          <span class="status-badge" [ngClass]="task.status">
+            {{ task.status }}
+          </span>
+        </div>
+
+        <!--RIGHT-->
+        <div class="task-actions">
+          <button class="icon-btn" (click)="startEdit(task)" style="margin-right: 5px">✏️</button>
+          <button class="icon-btn" (click)="deleteTask(task.id)">❌</button>
+        </div>
       </div>
 
-      <!--RIGHT-->
-      <div class="task-actions">
+      <!-- DESCRIPTION -->
+      <div class="task-desc">
+        {{ task.description }}
+      </div>
+
+      <!-- FOOTER -->
+      <div class="task-footer">
+        <div class="assignee">
+          <span class="avatar">
+            {{ assigneeFullname(task.assignedTo)[0] || '?' }}
+          </span>
+          {{ assigneeFullname(task.assignedTo) || 'Unassigned' }}
+        </div>
+
+        <div class="task-time" [title]="task.updatedAt | date: 'medium'">
+          <!--  Updated: {{ task.updatedAt | date: 'short' }} -->
+          🕒 Updated {{ task.updatedAt | timeAgo }}
+        </div>
+      </div>
+
+      <div class="task-actions-mobile">
         <button class="icon-btn" (click)="startEdit(task)" style="margin-right: 5px">✏️</button>
         <button class="icon-btn" (click)="deleteTask(task.id)">❌</button>
       </div>
     </div>
+  </div>
 
-    <!-- DESCRIPTION -->
-    <div class="task-desc">
-      {{ task.description }}
+  <!-- PAGINATOR -->
+  <div class="paginator">
+    <button class="page-btn" (click)="prevPage()" [disabled]="page === 0">← Prev</button>
+
+    <div class="page-center">
+      <span class="page-label">Page</span>
+      <span class="page-current">{{ page + 1 }}</span>
+      <span class="page-sep">/</span>
+      <span class="page-total">{{ totalPages }}</span>
     </div>
 
-    <!-- FOOTER -->
-    <div class="task-footer">
-      <div class="assignee">
-        <span class="avatar">
-          {{ assigneeFullname(task.assignedTo)[0] || '?' }}
-        </span>
-        {{ assigneeFullname(task.assignedTo) || 'Unassigned' }}
+    <button class="page-btn" (click)="nextPage()" [disabled]="page >= totalPages - 1">
+      Next →
+    </button>
+
+    <!-- Page size -->
+    <select class="page-size" [(ngModel)]="size" (change)="applyFilter()">
+      <option [value]="5">5</option>
+      <option [value]="10">10</option>
+      <option [value]="20">20</option>
+    </select>
+
+    <!-- Go to page -->
+    <div class="page-jump">
+      <input type="number" [(ngModel)]="pageInput" min="1" [max]="totalPages" />
+      <button class="go-btn" (click)="goToPage()">Go</button>
+    </div>
+  </div>
+
+  <!-- EDIT MODAL -->
+  <div class="modal-backdrop" *ngIf="editingTask">
+    <div class="modal">
+      <h2><b>Edit Task</b></h2>
+      <hr style="margin-bottom: 10px" />
+      <div class="form-group">
+        <label>Title</label>
+        <input [(ngModel)]="editingTask.title" placeholder="Title" />
       </div>
 
-      <div class="task-time" [title]="task.updatedAt | date: 'medium'">
-        <!--  Updated: {{ task.updatedAt | date: 'short' }} -->
-        🕒 Updated {{ task.updatedAt | timeAgo }}
+      <div class="form-group">
+        <label>Description</label>
+        <textarea
+          [(ngModel)]="editingTask.description"
+          placeholder="Description"
+          rows="5"
+        ></textarea>
       </div>
-    </div>
 
-    <div class="task-actions-mobile">
-      <button class="icon-btn" (click)="startEdit(task)" style="margin-right: 5px">✏️</button>
-      <button class="icon-btn" (click)="deleteTask(task.id)">❌</button>
-    </div>
-  </div>
-</div>
+      <div class="form-group">
+        <label>Assignee</label>
+        <select [(ngModel)]="editingTask.assignedTo">
+          <option *ngFor="let user of assigneeList" [value]="user.username">
+            {{ user.fullname }}
+          </option>
+        </select>
+      </div>
 
-<!-- PAGINATOR -->
-<div class="paginator">
-  <button class="page-btn" (click)="prevPage()" [disabled]="page === 0">← Prev</button>
+      <div class="form-group">
+        <label>Status</label>
+        <select [(ngModel)]="editingTask.status">
+          <option *ngFor="let s of statusOptions" [value]="s">
+            {{ getStatusEmoji(s) }} {{ s }}
+          </option>
+        </select>
+      </div>
 
-  <div class="page-center">
-    <span class="page-label">Page</span>
-    <span class="page-current">{{ page + 1 }}</span>
-    <span class="page-sep">/</span>
-    <span class="page-total">{{ totalPages }}</span>
-  </div>
+      <!-- Priority -->
+      <div class="form-group">
+        <label>Priority</label>
+        <select name="priority" [(ngModel)]="editingTask.priority">
+          <option *ngFor="let p of priorityOptions" [value]="p">
+            {{ getPriorityEmoji(p) }} {{ p }}
+          </option>
+        </select>
+      </div>
 
-  <button class="page-btn" (click)="nextPage()" [disabled]="page >= totalPages - 1">Next →</button>
-
-  <!-- Page size -->
-  <select class="page-size" [(ngModel)]="size" (change)="applyFilter()">
-    <option [value]="5">5</option>
-    <option [value]="10">10</option>
-    <option [value]="20">20</option>
-  </select>
-
-  <!-- Go to page -->
-  <div class="page-jump">
-    <input type="number" [(ngModel)]="pageInput" min="1" [max]="totalPages" />
-    <button class="go-btn" (click)="goToPage()">Go</button>
-  </div>
-</div>
-
-<!-- EDIT MODAL -->
-<div class="modal-backdrop" *ngIf="editingTask">
-  <div class="modal">
-    <h2><b>Edit Task</b></h2>
-    <hr style="margin-bottom: 10px" />
-    <div class="form-group">
-      <label>Title</label>
-      <input [(ngModel)]="editingTask.title" placeholder="Title" />
-    </div>
-
-    <div class="form-group">
-      <label>Description</label>
-      <textarea [(ngModel)]="editingTask.description" placeholder="Description" rows="5"></textarea>
-    </div>
-
-    <div class="form-group">
-      <label>Assignee</label>
-      <select [(ngModel)]="editingTask.assignedTo">
-        <option *ngFor="let user of assigneeList" [value]="user.username">
-          {{ user.fullname }}
-        </option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>Status</label>
-      <select [(ngModel)]="editingTask.status">
-        <option *ngFor="let s of statusOptions" [value]="s">{{ getStatusEmoji(s) }} {{ s }}</option>
-      </select>
-    </div>
-
-    <!-- Priority -->
-    <div class="form-group">
-      <label>Priority</label>
-      <select name="priority" [(ngModel)]="editingTask.priority">
-        <option *ngFor="let p of priorityOptions" [value]="p">
-          {{ getPriorityEmoji(p) }} {{ p }}
-        </option>
-      </select>
-    </div>
-
-    <div class="modal-actions">
-      <button class="save-btn" (click)="saveEdit()">💾 Save</button>
-      <button class="clear-btn" (click)="cancelEdit()">❌ Cancel</button>
+      <div class="modal-actions">
+        <button class="save-btn" (click)="saveEdit()">💾 Save</button>
+        <button class="clear-btn" (click)="cancelEdit()">❌ Cancel</button>
+      </div>
     </div>
   </div>
 </div>

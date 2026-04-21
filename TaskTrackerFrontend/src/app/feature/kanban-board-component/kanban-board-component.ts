@@ -14,6 +14,7 @@ import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
 import { filter, switchMap } from 'rxjs';
 import { LoggerService } from '../../core/services/logger-service';
 import { TaskFilter } from '../../core/models/TaskFilter';
+import { User } from '../../core/models/User';
 
 @Component({
   selector: 'app-kanban-board-component',
@@ -23,7 +24,7 @@ import { TaskFilter } from '../../core/models/TaskFilter';
   styleUrl: './kanban-board-component.css',
 })
 export class KanbanBoardComponent implements OnInit {
-  // Loadin indicator
+  // Loading indicator
   loading = true;
 
   // Kanban coloumns
@@ -50,6 +51,8 @@ export class KanbanBoardComponent implements OnInit {
   page = 0;
   size = 100;
 
+  assigneeList: User[] = [];
+
   constructor(
     private taskService: TaskService,
     private snackBar: MatSnackBar,
@@ -62,6 +65,24 @@ export class KanbanBoardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTaks();
+    this.loadAssigneeList();
+  }
+
+  loadAssigneeList() {
+    // read assignee list
+    this.taskService.getAssigneeList().subscribe({
+      next: (users) => {
+        this.assigneeList = users;
+        this.cdr.detectChanges(); // trigger ui update
+      },
+      error: (err) => {
+        this.logger.error('Error to get assignee list', err);
+        this.snackBar.open(`Error to get assignee list`, 'Close', {
+          duration: 1000,
+        });
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   loadTaks() {
@@ -88,9 +109,10 @@ export class KanbanBoardComponent implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        this.snackBar.open('Error: ' + err, 'Close', {
+        this.snackBar.open('Error: ' + err.toString(), 'Close', {
           duration: 2000,
         });
+        this.cdr.detectChanges();
       },
     });
   }
@@ -191,5 +213,19 @@ export class KanbanBoardComponent implements OnInit {
         return;
       }
     }
+  }
+
+  /**
+   * Helper method to get assignee fullname
+   */
+  assigneeFullname(username?: string): string {
+    if (username) {
+      const user = this.assigneeList.find((u) => u.username === username);
+      if (user) {
+        return user.fullname;
+      }
+      return username;
+    }
+    return 'Undefined';
   }
 }

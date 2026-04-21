@@ -5,6 +5,11 @@
   font-size: 20px;
 }
 
+.loading {
+  text-align: center;
+  padding: 40px;
+}
+
 .dashboard {
   padding: 16px;
   font-family: Arial, sans-serif;

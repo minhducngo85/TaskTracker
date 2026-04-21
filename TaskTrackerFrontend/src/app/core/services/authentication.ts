@@ -53,7 +53,6 @@ export class Authentication {
   getRole(): string | null {
     const token = this.getToken();
     if (!token) return null;
-
     const payload = JSON.parse(atob(token.split('.')[1]));
     //console.log(payload);
     return payload.role;
@@ -65,5 +64,18 @@ export class Authentication {
 
   isLoggedIn(): boolean {
     return !!this.getToken();
+  }
+
+  getUsername(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      // tuỳ backend bạn đặt field gì
+      return payload.sub || payload.username || payload.email || null;
+    } catch (e) {
+      return null;
+    }
   }
 }
