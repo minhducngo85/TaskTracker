@@ -344,6 +344,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }
       return username;
     }
-    return 'Undefined';
+    return '';
   }
 }

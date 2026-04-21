@@ -226,6 +226,6 @@ export class KanbanBoardComponent implements OnInit {
       }
       return username;
     }
-    return 'Undefined';
+    return '';
   }
 }

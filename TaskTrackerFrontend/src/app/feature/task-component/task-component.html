@@ -144,6 +144,7 @@
           <span
             class="material-icons priority-icon"
             [ngClass]="'priority-' + task.priority.toLowerCase()"
+            [attr.title]="task.priority"
           >
             flag
           </span>
@@ -168,9 +169,7 @@
       <!-- FOOTER -->
       <div class="task-footer">
         <div class="assignee">
-          <span class="avatar">
-            {{ assigneeFullname(task.assignedTo)[0] || '?' }}
-          </span>
+          👤
           {{ assigneeFullname(task.assignedTo) || 'Unassigned' }}
         </div>
 

@@ -112,7 +112,7 @@ export class TaskComponent implements OnInit {
   }
 
   loadAssigneeList() {
-     // read assignee list
+    // read assignee list
     this.taskService.getAssigneeList().subscribe({
       next: (users) => {
         this.assigneeList = users;
@@ -355,7 +355,7 @@ export class TaskComponent implements OnInit {
       case 'IN_PROGRESS':
         return '🟠';
       default:
-        return '⚪';
+        return '⚫️';
     }
   }
 
@@ -385,6 +385,12 @@ export class TaskComponent implements OnInit {
       this.page++;
       this.loadTasks();
     }
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }, 100); // 👈 important
   }
 
   prevPage() {
@@ -392,6 +398,12 @@ export class TaskComponent implements OnInit {
       this.page--;
       this.loadTasks();
     }
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }, 100); // 👈 important
   }
 
   /** goToPage listener in paginator */
@@ -401,6 +413,12 @@ export class TaskComponent implements OnInit {
       this.page = this.pageInput - 1;
       this.loadTasks();
     }
+   setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }, 100);
   }
 
   /**

@@ -55,16 +55,49 @@
 
 /* Colors */
 .card.total {
-  background: #3b82f6;
+  background: white;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+  border-left: 6px solid transparent;
+  border-left-color: #327cf3;
+    background-color: #4589f7;
 }
+
 .card.todo {
-  background: #6b7280;
+  background: white;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+  border-left: 6px solid transparent;
+  border-left-color: #606672;
+  background-color: #7a8292;
 }
 .card.progress {
-  background: #f59e0b;
+  background: white;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+  border-left: 6px solid transparent;
+  border-left-color: #f59e0b;
+  background-color: #fab236 ;
 }
 .card.done {
-  background: #22c55e;
+  background: white;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+  border-left: 6px solid transparent;
+  border-left-color: #26b45a;
+  background-color: #22c55e ;
 }
 
 .clickable {
@@ -212,7 +245,6 @@ canvas {
   }
 }
 
-
 /* ===== TASK ITEM DESGIN ===== */
 .task-card {
   background: white;
@@ -272,7 +304,7 @@ canvas {
 /* Mobile Breaek new line */
 @media (max-width: 1024px) {
   .task-footer {
-    flex-basis: 100%;   /* 👈 force new line */
+    flex-basis: 100%; /* 👈 force new line */
     display: flex;
     margin-top: 4px;
   }
@@ -322,6 +354,3 @@ canvas {
   background: #22c55e;
   color: white;
 }
-
-
-
