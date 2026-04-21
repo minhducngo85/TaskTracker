@@ -3,6 +3,7 @@ import { Injectable, signal } from '@angular/core';
 import { tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Route, Router } from '@angular/router';
+import { LoggerService } from './logger-service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,10 @@ export class Authentication {
   constructor(
     private http: HttpClient,
     private router: Router,
-  ) {}
+    private logger: LoggerService,
+  ) {
+    this.logger.context = 'Authentication';
+  }
 
   /**
    *
@@ -27,9 +31,33 @@ export class Authentication {
         if (typeof window !== 'undefined') {
           // console.log(res.token);
           localStorage.setItem('token', res.token);
+          localStorage.setItem('refreshToken', res.refreshToken);
+          // console.log(res.token);
+          //this.logger.log(res.token);
+          //this.logger.log(res.refreshToken);
         }
       }),
     );
+  }
+
+  refreshToken() {
+    const refreshToken = localStorage.getItem('refreshToken');
+    this.logger.log(`refreshToken(): ${refreshToken}`);
+    return this.http.post<any>(`${this.api}/refresh`, refreshToken).pipe(
+      tap((res) => {
+        this.logger.log(`set new token: ${res.token}`);
+        localStorage.setItem('token', res.token);
+      }),
+    );
+  }
+
+  isTokenExpired(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp * 1000 < Date.now();
+    } catch {
+      return true;
+    }
   }
 
   /**
@@ -50,6 +78,10 @@ export class Authentication {
     this.router.navigate(['/login']);
   }
 
+  /**
+   *
+   * @returns returns role from access token
+   */
   getRole(): string | null {
     const token = this.getToken();
     if (!token) return null;

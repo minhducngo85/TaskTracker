@@ -115,6 +115,9 @@
                 </span>
                 <span class="task-title">{{ task.title }}</span>
                 <div class="task-footer">
+                  <span class="task-assignee">
+                    👤 {{ assigneeFullname(task.assignedTo) || 'Unassigned' }}
+                  </span>
                   <div class="task-time">
                     <!--  Updated: {{ task.updatedAt | date: 'short' }} -->
                     🕒 Updated {{ task.updatedAt | timeAgo }}

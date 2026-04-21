@@ -59,17 +59,19 @@ INSERT INTO task (title, description, status, priority, assigned_to, created_At,
 VALUES ('Task List - Assignee Dropbox', 'Update frontend page Task list to use dropbox for assignee field', 'TODO', 'MEDIUM', 'admin', '2026-04-21 02:09:00', '2026-04-21 02:09:00');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
-VALUES ('Logger Service', 'Singlton Logger object with levels: log, info, debug, warn and error', 'DONE', 'CRITICAL', 'mngo', '2026-04-21 16:09:00', '2026-04-21 16:09:00');
+VALUES ('Logger Service', 'Singleton Logger object with levels: log, info, debug, warn and error', 'DONE', 'CRITICAL', 'mngo', '2026-04-21 16:09:00', '2026-04-21 16:09:00');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Logger Service Context', 'Extend logger service with context. The context can be set from other services', 'IN_PROGRESS', 'CRITICAL', 'mngo', '2026-04-21 16:09:00', '2026-04-21 16:09:00');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
-VALUES ('Assigned to Me', 'Show my assigned to me taks in dashboard', 'DONE', 'CRITICAL', 'admin', '2026-04-21 16:09:00', '2026-04-21 16:09:00');
+VALUES ('Assigned to Me', 'Show assigned to me tasks in dashboard', 'DONE', 'CRITICAL', 'admin', '2026-04-21 16:09:00', '2026-04-21 16:09:00');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
-VALUES ('Task Details component', 'New Angular component for task details', 'DONE', 'LOW', 'mngo', '2026-04-21 16:10:00', '2026-04-21 16:10:00');
+VALUES ('Task Details component', 'New Angular component for task details', 'DONE', 'MEDIUM', 'mngo', '2026-04-21 16:10:00', '2026-04-21 16:10:00');
 
+INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
+VALUES ('Tags feature', 'Each task can hava multiple tags', 'TODO', 'LOW', 'mngo', '2026-04-21 23:10:00', '2026-04-21 23:10:00');
 
 
 DELETE FROM users;

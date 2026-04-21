@@ -67,7 +67,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   // filter and search
   filters: TaskFilter = {
-    title: '',
+    keyword: '',
     status: '',
     priority: '',
     assignedTo: '',
@@ -95,12 +95,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private snackBar: MatSnackBar,
     private logger: LoggerService,
     private auth: Authentication,
-  ) {}
+  ) {
+    this.logger.context = 'DashboardComponent';
+  }
 
   ngAfterViewInit(): void {}
 
   ngOnInit(): void {
-    this.logger.context = 'DashboardComponent';
+    this.logger.log('ngOnInit(): void');
     this.loadRecentTasks();
     this.loadAssigneeList();
     this.loadMyTasks();
@@ -127,7 +129,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.logger.log(`loadMyTasks() called! Username=${this.auth.getUsername()}`);
 
     const myTasksFilters: TaskFilter = {
-      title: '',
+      keyword: '',
       status: '',
       priority: '',
       assignedTo: this.auth.getUsername() || '',

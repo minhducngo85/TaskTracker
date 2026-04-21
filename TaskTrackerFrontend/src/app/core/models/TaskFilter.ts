@@ -1,5 +1,5 @@
 export interface TaskFilter {
-  title?: string;
+  keyword?: string;
   status?: string;
   priority?: string;
   assignedTo?: string;

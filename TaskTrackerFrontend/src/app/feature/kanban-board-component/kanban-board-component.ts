@@ -40,7 +40,7 @@ export class KanbanBoardComponent implements OnInit {
 
   // filter and search
   filters: TaskFilter = {
-    title: '',
+    keyword: '',
     status: '',
     priority: '',
     assignedTo: '',
@@ -64,11 +64,13 @@ export class KanbanBoardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.logger.log('ngOnInit(): void');
     this.loadTaks();
     this.loadAssigneeList();
   }
 
   loadAssigneeList() {
+    this.logger.log('loadAssigneeList() called!');
     // read assignee list
     this.taskService.getAssigneeList().subscribe({
       next: (users) => {
@@ -86,8 +88,6 @@ export class KanbanBoardComponent implements OnInit {
   }
 
   loadTaks() {
-    this.logger.log('loadTaks() called!');
-
     this.logger.log('loadTaks() called!');
     // filtering and sorting at server side
     const params: any = {

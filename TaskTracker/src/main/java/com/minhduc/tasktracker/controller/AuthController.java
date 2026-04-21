@@ -1,5 +1,8 @@
 package com.minhduc.tasktracker.controller;
 
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +27,14 @@ public class AuthController {
 	@PostMapping("/login")
 	public LoginResponse login(@RequestBody LoginRequest request) {
 		log.info("Login called!");
-		String token = authService.login(request);
-		return new LoginResponse(token);
+		return authService.login(request);
+	}
+	
+	@PostMapping("/refresh")
+	public ResponseEntity<?> refreshToken(@RequestBody String refreshToken) {
+		log.info("Refresh token called!");
+	    String newAccessToken = authService.refreshToken(refreshToken);
+	    log.info("Return OK");
+	    return ResponseEntity.ok(Map.of("token", newAccessToken));
 	}
 }

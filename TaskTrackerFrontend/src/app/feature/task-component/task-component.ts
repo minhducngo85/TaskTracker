@@ -50,7 +50,7 @@ export class TaskComponent implements OnInit {
 
   // filter and search
   filters: TaskFilter = {
-    title: '',
+    keyword: '',
     status: '',
     priority: '',
     assignedTo: '',
@@ -363,7 +363,7 @@ export class TaskComponent implements OnInit {
     // filter and search
     this.filters.status = '';
     this.filters.priority = '';
-    this.filters.title = '';
+    this.filters.keyword = '';
     this.filters.assignedTo = '';
 
     // Sorting
