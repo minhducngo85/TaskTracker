@@ -57,10 +57,10 @@
           </div>
         </div>
 
-        <div class="section clickable" (click)="sortTaksByUpdated()">
+        <div class="section" >
           <div class="section-title">⏲ Recent Tasks</div>
           <div
-            class="task-card"
+            class="task-card clickable" (click)="goToDetail(task.id)"
             [ngClass]="'status-' + task.status"
             *ngFor="let task of recentTasks$ | async"
           >
@@ -97,10 +97,10 @@
         </div>
 
         <!-- My recent Task -->
-        <div class="section clickable" (click)="filterAssignedTo()">
+        <div class="section clickable" >
           <div class="section-title">🙋‍♂️ Assigned to Me</div>
           <div
-            class="task-card"
+            class="task-card clickable" (click)="goToDetail(task.id)"
             [ngClass]="'status-' + task.status"
             *ngFor="let task of myTasks$ | async"
           >

@@ -1,17 +1,33 @@
+DELETE FROM task_tags;
 DELETE FROM task;
 
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Build Backend', ' Implementing a REST API endpoint to retrieve user/task data in JSON format', 'DONE', 'CRITICAL', 'mngo', '2026-04-20 11:02:25', '2026-04-20 11:02:25');
+INSERT INTO task_tags (task_id, tag)
+VALUES 
+((SELECT MAX(id) FROM task), 'backend'),
+((SELECT MAX(id) FROM task), 'spring boot');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Build Frontend', 'Building a search bar component with Angular, including styling and autocomplete functionality', 'DONE', 'CRITICAL', 'mngo', '2026-04-20 11:02:20', '2026-04-20 11:02:20');
+INSERT INTO task_tags (task_id, tag)
+VALUES 
+((SELECT MAX(id) FROM task), 'frontend');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Deployment on VPS', 'Configure nginx and deploy the frontend and backend in a VPS', 'DONE', 'HIGH', 'mngo', '2026-04-20 11:00:25', '2026-04-20 11:00:25');
+INSERT INTO task_tags (task_id, tag)
+VALUES 
+((SELECT MAX(id) FROM task), 'deployment'),
+((SELECT MAX(id) FROM task), 'vps');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Dashboard', 'Dashboard with number of DONE/TODO/IN_PROGRESS and chart. Using chart.js', 'TODO', 'HIGH', 'admin', '2026-04-20 11:01:25', '2026-04-20 11:01:25');
+INSERT INTO task_tags (task_id, tag)
+VALUES 
+((SELECT MAX(id) FROM task), 'dashboard');
+
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Priority Function', 'Extend Task with Priority (Critial, high, medim, low) including backend and front end side.', 'TODO', 'HIGH', 'lucas', '2026-04-20 09:00:25', '2026-04-20 09:00:25');
@@ -56,23 +72,40 @@ INSERT INTO task (title, description, status, priority, assigned_to, created_At,
 VALUES ('Option/ Assignee List api', 'New API to fetch all assignee list from database', 'TODO', 'CRITICAL', 'mngo', '2026-04-21 01:08:00', '2026-04-21 01:08:00');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
-VALUES ('Task List - Assignee Dropbox', 'Update frontend page Task list to use dropbox for assignee field', 'TODO', 'MEDIUM', 'admin', '2026-04-21 02:09:00', '2026-04-21 02:09:00');
+VALUES ('Task List - Assignee Dropdown', 'Update frontend page Task list to use dropdown for assignee field', 'TODO', 'MEDIUM', 'admin', '2026-04-21 02:09:00', '2026-04-21 02:09:00');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Logger Service', 'Singleton Logger object with levels: log, info, debug, warn and error', 'DONE', 'CRITICAL', 'mngo', '2026-04-21 16:09:00', '2026-04-21 16:09:00');
+INSERT INTO task_tags (task_id, tag)
+VALUES 
+((SELECT MAX(id) FROM task), 'logger');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Logger Service Context', 'Extend logger service with context. The context can be set from other services', 'IN_PROGRESS', 'CRITICAL', 'mngo', '2026-04-21 16:09:00', '2026-04-21 16:09:00');
+INSERT INTO task_tags (task_id, tag)
+VALUES 
+((SELECT MAX(id) FROM task), 'logger context'),
+((SELECT MAX(id) FROM task), 'logger');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Assigned to Me', 'Show assigned to me tasks in dashboard', 'DONE', 'CRITICAL', 'admin', '2026-04-21 16:09:00', '2026-04-21 16:09:00');
+INSERT INTO task_tags (task_id, tag)
+VALUES 
+((SELECT MAX(id) FROM task), 'free tag');
+
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Task Details component', 'New Angular component for task details', 'DONE', 'MEDIUM', 'mngo', '2026-04-21 16:10:00', '2026-04-21 16:10:00');
+INSERT INTO task_tags (task_id, tag)
+VALUES 
+((SELECT MAX(id) FROM task), 'angular material');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
-VALUES ('Tags feature', 'Each task can hava multiple tags', 'TODO', 'LOW', 'mngo', '2026-04-21 23:10:00', '2026-04-21 23:10:00');
-
+VALUES ('Tags feature', 'Each task can have multiple tags', 'TODO', 'LOW', 'admin', '2026-04-21 23:10:00', '2026-04-21 23:10:00');
+INSERT INTO task_tags (task_id, tag)
+VALUES 
+((SELECT MAX(id) FROM task), 'tag feature'),
+((SELECT MAX(id) FROM task), 'angular material');
 
 DELETE FROM users;
 

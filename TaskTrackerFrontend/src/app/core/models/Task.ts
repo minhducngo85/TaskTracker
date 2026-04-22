@@ -10,6 +10,7 @@ export interface Task {
     assignedTo?: string;
     createdAt:string;
     updatedAt:string;
+    tags:string[];
 
     // Position in Kanban board
     position?: number;

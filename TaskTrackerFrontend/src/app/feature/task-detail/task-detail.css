@@ -1,0 +1,186 @@
+.title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.clickable {
+  cursor: pointer;
+  transition: 0.2s;
+}
+.page {
+  padding: 0px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.back {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* CARD */
+.task-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* TITLE */
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top h1 {
+  font-size: 22px;
+  margin: 0;
+}
+
+/* META */
+.meta {
+  margin: 12px 0;
+  display: flex;
+  gap: 10px;
+}
+
+/* SECTION */
+.section {
+  margin-top: 20px;
+}
+
+.section h4 {
+  margin-bottom: 6px;
+  color: #888;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+/* FOOTER */
+.footer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-start;
+  font-size: 13px;
+  gap: 20px;
+  color: #888;
+}
+
+/* ACTIONS */
+.actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn.edit {
+  background: #1677ff;
+  color: white;
+}
+
+.btn.delete {
+  background: #ff4d4f;
+  color: white;
+}
+
+/* ===== STATUS && PRIORITY ===== */
+.status-badge {
+  font-size: 13px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.status-badge.DONE {
+  background: #22c55e;
+  color: white;
+}
+
+.status-badge.TODO {
+  background: #64748b;
+  color: white;
+}
+
+.status-badge.IN_PROGRESS {
+  background: #f59e0b;
+  color: white;
+}
+
+.status-badge.CRITICAL {
+  background: #b91c1c;
+  color: white;
+}
+
+.status-badge.HIGH {
+  background: #c2410c;
+  color: white;
+}
+
+.status-badge.MEDIUM {
+  background: #a16207;
+  color: white;
+}
+
+.status-badge.LOW {
+  background: #166534;
+  color: white;
+}
+
+/* === Tag ===*/
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px;
+  border: 1px dashed transparent;
+  cursor: pointer;
+  align-items: center;
+}
+
+.tags:hover {
+  border-color: #ccc;
+}
+
+.tag {
+  background: #eee;
+  padding: 4px 12px;
+  border-radius: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.tag button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.tags input {
+  border: none;
+  outline: none;
+  min-width: 120px;
+}
+
+.add-tag {
+  color: #888;
+  display: inline-flex;
+  align-items: center;
+}

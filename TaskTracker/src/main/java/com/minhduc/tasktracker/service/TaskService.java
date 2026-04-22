@@ -1,8 +1,6 @@
 package com.minhduc.tasktracker.service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -10,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.minhduc.tasktracker.controller.exceptionhandling.ResourceNotFoundException;
 import com.minhduc.tasktracker.dto.TaskFilterRequest;
@@ -91,6 +90,7 @@ public class TaskService {
 	 * @param updated
 	 * @return
 	 */
+	@Transactional
 	public Task update(Long id, Task updated) {
 		log.info("Updated Req={}", updated.toString());
 		Task task = taskRepository.findById(id)
@@ -101,6 +101,10 @@ public class TaskService {
 		task.setStatus(updated.getStatus());
 		task.setPriority(updated.getPriority());
 		task.setUpdatedAt(Instant.now());
+		task.getTags().clear();
+		if (updated.getTags() != null) {
+		    task.getTags().addAll(updated.getTags());
+		}
 		Task updatedObj = taskRepository.save(task);
 		log.info("Updated Res={}", updatedObj.toString());
 		return updatedObj;

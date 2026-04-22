@@ -383,7 +383,7 @@ button:active {
 /* ===== DESCRIPTION ===== */
 .task-desc {
   margin-top: 6px;
-  font-size: 13px;
+  font-size: 14px;
   color: #64748b;
 }
 
@@ -465,7 +465,8 @@ button:active {
   }
 
   .task-actions-mobile {
-    display: flex;
+    /** display: flex; */
+    display: none;
     /** shift to right*/
     justify-content: flex-end;
     width: 100%;
@@ -580,4 +581,39 @@ button:active {
 
 .go-btn:hover {
   background: #125ea8;
+}
+
+
+/* === Tag ===*/
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 5px 0px;
+  border: 1px dashed transparent;
+  cursor: pointer;
+  align-items: center;
+}
+
+.tags:hover {
+  border-color: #ccc;
+}
+
+.tag {
+  background: #eee;
+  padding: 4px 12px;
+  border-radius: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+
+.clickable {
+  cursor: pointer;
+  transition: 0.2s;
+}
+.clickable:hover {
+  transform: translateY(-3px);
 }

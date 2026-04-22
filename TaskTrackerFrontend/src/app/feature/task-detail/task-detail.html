@@ -1,0 +1,75 @@
+<div *ngIf="loading">Loading...</div>
+<h2 class="title">📑 Task Detail</h2>
+<div class="page">
+  <div class="page-header">
+    <button class="back" (click)="goBack()">← Back</button>
+  </div>
+
+  <div class="content">
+    <div class="task-card" *ngIf="!loading && task">
+      <!-- TITLE + STATUS -->
+      <div class="top">
+        <h1>{{ task.title }}</h1>
+      </div>
+
+      <!-- META LINE -->
+      <div class="meta">
+        <span class="status-badge" [ngClass]="task.status">{{ task.status }}</span>
+        <span class="status-badge" [ngClass]="task.priority">{{ task.priority }}</span>
+      </div>
+
+      <div class="section">
+        <h4>Assignee</h4>
+        <span class="priority">👤 {{ assigneeFullname(task.assignedTo) || 'Unassigned' }}</span>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="section">
+        <h4>Description</h4>
+        <p>{{ task.description }}</p>
+      </div>
+
+      <!-- TAGS -->
+      <div class="section">
+        <h4>Tags</h4>
+        <div class="tags" (click)="startEditTags()">
+          <!-- display mode -->
+          <ng-container *ngIf="!editingTags">
+            <span class="tag" *ngFor="let tag of task.tags">{{ tag }}</span>
+            <span class="add-tag">+ Add tag</span>
+          </ng-container>
+
+          <!-- edit mode -->
+          <ng-container *ngIf="editingTags">
+            <span class="tag" *ngFor="let tag of task.tags">
+              {{ tag }}
+              <button (click)="removeTag(tag); inputRef.blur(); $event.stopPropagation()">×</button>
+            </span>
+
+            <input
+              #inputRef
+              [(ngModel)]="tagInput"
+              (keydown.enter)="addTag()"
+              (keydown.backspace)="onBackspace()"
+              (blur)="stopEditTags()"
+              placeholder="Type and press Enter"
+              autofocus
+            />
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- DATES -->
+      <div class="footer">
+        <span>📅 Created: {{ task.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+        <span>🔄 Updated: {{ task.updatedAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="actions">
+        <button class="btn edit" (click)="openEditDialog()">Edit</button>
+        <button class="btn delete" (click)="deleteTask()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

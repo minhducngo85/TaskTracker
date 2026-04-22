@@ -1,0 +1,45 @@
+<h2 mat-dialog-title style="margin-bottom: 10px">Edit Task</h2>
+
+<div mat-dialog-content class="form" style="padding: 10px 20px">
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>Title</mat-label>
+    <input matInput [(ngModel)]="task.title" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full" >
+    <mat-label>Description</mat-label>
+    <textarea matInput [(ngModel)]="task.description" rows="5"></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>Assigned To</mat-label>
+    <mat-select [(ngModel)]="task.assignedTo">
+      <mat-option *ngFor="let user of assigneeList" [value]="user.username">
+        {{ user.fullname }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>Status</mat-label>
+    <mat-select [(ngModel)]="task.status">
+      <mat-option *ngFor="let s of statusOptions" [value]="s">
+        {{ getStatusEmoji(s) }} {{ s }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>Priority</mat-label>
+    <mat-select [(ngModel)]="task.priority">
+      <mat-option *ngFor="let s of priorityOptions" [value]="s">
+        {{ getPriorityEmoji(s) }} {{ s }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions align="end" style="padding: 0px 30px 15px 0px;">
+  <button mat-button (click)="close()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="save()">Save</button>
+</div>

@@ -12,9 +12,10 @@ Live Demo: http://82.165.51.255/
 ## ✨ Features
 
 - 🔐 Authentication with JWT
+- 🔄 Refresh token to renew access token
 - 👤 User roles: Admin & user
 - 📝 CRUD Task (Create, Read, Update, Delete)
-- 🔍 Filter & Search
+- 🔍 Filter/Search and paginator
 - 📉 Dashboard: statistics, chart and recent tasks
 - 📋 Kanban Board: interactive Kanban board with drag-and-drop (Angular CDK)
 - 👤 Assign tasks to users
@@ -30,6 +31,16 @@ Live Demo: http://82.165.51.255/
 - 🌐 Clean REST API design
 - 📱 Responsive UI
 - 📲 Mobile-optimized layout (Kanban swipe / horizontal scroll)
+
+## ✨ To-do Features
+- Due date
+- real time: sync kanabn between users using websocket
+- audit log/ history:  Task updated by Minh at 14:32 Status changed from TODO → DONE
+- task comments and mention user (@john) in comment
+- Offline-first: cache task and sync when it becomes online
+- OIDC with keycloak
+- File upload: save file local or in S3
+- notification system :Notification {id, userId, message, isRead}. to trigger assign task, comment
 
 ## 🛠 Tech Stack
 
@@ -92,6 +103,7 @@ npm install chartjs-plugin-datalabels
 ### Angular Material
 ``` 
 npm install @angular/material
+ng add @angular/material
 ```
 to use snackbar
 

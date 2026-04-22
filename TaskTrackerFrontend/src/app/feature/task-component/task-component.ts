@@ -413,7 +413,7 @@ export class TaskComponent implements OnInit {
       this.page = this.pageInput - 1;
       this.loadTasks();
     }
-   setTimeout(() => {
+    setTimeout(() => {
       window.scrollTo({
         top: 0,
         behavior: 'smooth',
@@ -433,5 +433,9 @@ export class TaskComponent implements OnInit {
       return username;
     }
     return '';
+  }
+
+  goToDetail(id: number) {
+    this.router.navigate(['/tasks', id]);
   }
 }

@@ -321,6 +321,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   *
+   * @param status show all task sorting by updatedAt
+   */
+ goToDetail(id: number) {
+    this.router.navigate(['/tasks', id]);
+  }
+
   progressColorClass(percent: number): string {
     if (percent < 50) return 'progress-medium';
     //if (percent < 70) return 'progress-medium';

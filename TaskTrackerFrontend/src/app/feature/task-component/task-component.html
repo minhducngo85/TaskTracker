@@ -135,7 +135,12 @@
 
   <div style="margin-bottom: 10px"></div>
   <div class="task-grid">
-    <div class="task-card" [ngClass]="'status-' + task.status" *ngFor="let task of tasks">
+    <div
+      class="task-card clickable"
+      [ngClass]="'status-' + task.status"
+      *ngFor="let task of tasks"
+      (click)="goToDetail(task.id)"
+    >
       <div class="task-main">
         <!-- LEFT -->
         <div class="task-left">
@@ -155,7 +160,7 @@
         </div>
 
         <!--RIGHT-->
-        <div class="task-actions">
+        <div class="task-actions" style="display: none">
           <button class="icon-btn" (click)="startEdit(task)" style="margin-right: 5px">✏️</button>
           <button class="icon-btn" (click)="deleteTask(task.id)">❌</button>
         </div>
@@ -164,6 +169,13 @@
       <!-- DESCRIPTION -->
       <div class="task-desc">
         {{ task.description }}
+      </div>
+
+      <div class="tags">
+        <!-- display mode -->
+        <ng-container>
+          <span class="tag" *ngFor="let tag of task.tags">{{ tag }}</span>
+        </ng-container>
       </div>
 
       <!-- FOOTER -->

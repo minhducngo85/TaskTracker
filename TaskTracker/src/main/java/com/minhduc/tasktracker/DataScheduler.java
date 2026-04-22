@@ -16,7 +16,7 @@ public class DataScheduler {
 
 	 private final DataSource dataSource;
 	 
-	@Scheduled(fixedRate = 12 * 60 * 60 * 1000) // data reset after every 12 hours
+	//@Scheduled(fixedRate = 12 * 60 * 60 * 1000) // data reset after every 12 hours
 	public void runSqlFile() {
 		log.info("runSqlFile()");
 	    ResourceDatabasePopulator populator =

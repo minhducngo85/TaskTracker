@@ -39,7 +39,7 @@ export class TaskService {
   }
 
   updateTask(id: number, task: any) {
-    return this.http.put(`${this.api}/${id}`, task);
+    return this.http.put<Task>(`${this.api}/${id}`, task);
   }
 
   getTask(id: number) {
