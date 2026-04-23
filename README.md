@@ -370,6 +370,9 @@ docker-compose up --build
 ### Task List
 ![Task List](./screenshots/task-list.png)
 
+### Task Detail
+![Task List](./screenshots/task-detail.png)
+
 ### Create Task
 ![Create Task](./screenshots/add-task.png)
 

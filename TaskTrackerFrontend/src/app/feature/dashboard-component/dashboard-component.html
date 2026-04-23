@@ -60,7 +60,7 @@
         <div class="section">
           <div class="section-title">🔥 Top Tags</div>
           <div class="tag-list">
-            <div class="tag-item" *ngFor="let t of topTags" (click)="filterByTag(t.tag)">
+            <div class="tag-item clickable" *ngFor="let t of topTags" (click)="filterByTag(t.tag)">
               <span class="tag">{{ t.tag }}</span>
               <span class="count">({{ t.count }})</span>
             </div>

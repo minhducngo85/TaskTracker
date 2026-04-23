@@ -19,6 +19,7 @@ import com.minhduc.tasktracker.dto.TaskFilterRequest;
 import com.minhduc.tasktracker.dto.TaskStatisticsResponse;
 import com.minhduc.tasktracker.dto.UserResponse;
 import com.minhduc.tasktracker.entity.Task;
+import com.minhduc.tasktracker.entity.TaskHistory;
 import com.minhduc.tasktracker.entity.TaskPriority;
 import com.minhduc.tasktracker.service.TaskService;
 import com.minhduc.tasktracker.service.UserService;
@@ -46,6 +47,14 @@ public class TaskController {
 		return taskService.getAll();
 	}
 
+	@GetMapping("/{taskId}/history")
+	public Page<TaskHistory> getHistory(@PathVariable Long taskId, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "5") int size) {
+		log.info("getHistory() called");
+		return taskService.getHistory(taskId, page, size);
+	}
+
+	
 	@GetMapping
 	public Page<Task> getTasks(TaskFilterRequest filter, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "createdAt,desc") String[] sort) {

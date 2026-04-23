@@ -15,6 +15,8 @@ import { Location } from '@angular/common';
 import { debounceTime, Subject } from 'rxjs';
 import { TaskComment } from '../../core/models/TaskComment';
 import { QuillModule } from 'ngx-quill';
+import { TaskHistory } from '../../core/models/TaskHistory';
+import { MatTabsModule } from '@angular/material/tabs';
 
 /**
  * @author Minh Duc Ngo
@@ -22,7 +24,15 @@ import { QuillModule } from 'ngx-quill';
 @Component({
   standalone: true,
   selector: 'app-task-detail',
-  imports: [CommonModule, FormsModule, MatDialogModule, MatButtonModule, QuillModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    QuillModule,
+    MatTabsModule,
+    TimeAgoPipe
+],
   templateUrl: './task-detail.html',
   styleUrl: './task-detail.css',
 })
@@ -39,8 +49,11 @@ export class TaskDetail implements OnInit {
   comments: TaskComment[] = [];
   // comments: paginator
   page = 0;
-  size = 8;
+  size = 10;
   totalPages = 0;
+
+
+  
 
   newComment = '';
   commentLoading = false;
@@ -54,6 +67,29 @@ export class TaskDetail implements OnInit {
     ],
   };
 
+  // history
+  history: TaskHistory[] = [];
+  historyPage = 0;
+  totalHistoryPages = 0;
+
+  // the selected task id
+  taskId!: Number;
+
+  /** History or comment */
+  selectedTabIndex = 0;
+
+  /**
+   * inject DJ in constructor
+   *
+   * @param taskService
+   * @param cdr
+   * @param route
+   * @param router
+   * @param logger
+   * @param snackBar
+   * @param dialog
+   * @param location
+   */
   constructor(
     private taskService: TaskService,
     private cdr: ChangeDetectorRef,
@@ -69,9 +105,19 @@ export class TaskDetail implements OnInit {
 
   ngOnInit(): void {
     this.logger.log('ngOnInit(): void called!');
+    this.taskId = Number(this.route.snapshot.paramMap.get('id'));
+
+    // get current active tab
+    const savedIndex = sessionStorage.getItem('taskDetailActiveTab');
+    if (savedIndex !== null) {
+      this.selectedTabIndex = +savedIndex;
+    }
+
+    // load data form backend
     this.loadTaskDetail();
     this.loadAssigneeList();
     this.loadComments();
+    this.loadHistory();
 
     // init debounce for save tag
     this.saveTags$.pipe(debounceTime(2000)).subscribe(() => {
@@ -86,6 +132,16 @@ export class TaskDetail implements OnInit {
         },
         error: (err) => console.error(err),
       });
+    });
+  }
+
+  loadHistory() {
+    this.logger.info('loadHistory() called.');
+    this.taskService.getHistory(this.taskId, this.historyPage, this.size).subscribe((res) => {
+      this.history = res.content;
+      this.totalHistoryPages = res.totalPages;
+      this.logger.info(JSON.stringify(this.history));
+      this.cdr.detectChanges();
     });
   }
 
@@ -114,6 +170,21 @@ export class TaskDetail implements OnInit {
     if (this.page > 0) {
       this.page--;
       this.loadComments();
+    }
+  }
+
+  
+  nextHistoryPage() {
+    if (this.historyPage < this.totalHistoryPages - 1) {
+      this.historyPage++;
+      this.loadHistory();
+    }
+  }
+
+  prevHistoryPage() {
+    if (this.historyPage > 0) {
+      this.historyPage--;
+      this.loadHistory();
     }
   }
 
@@ -183,6 +254,7 @@ export class TaskDetail implements OnInit {
       if (result) {
         this.taskService.updateTask(result.id, result).subscribe((updated) => {
           this.task = updated; // update UI ngay
+          this.loadHistory();
           this.snackBar.open('Task updated', 'OK', { duration: 2000 });
           this.cdr.detectChanges();
         });
@@ -296,5 +368,11 @@ export class TaskDetail implements OnInit {
       complete: () => (this.commentLoading = false),
       error: () => (this.commentLoading = false),
     });
+  }
+
+  onTabChange(event: any) {
+    console.log('Selected tab index:', event.index);
+    const index = event.index;
+    sessionStorage.setItem('taskDetailActiveTab', index.toString());
   }
 }

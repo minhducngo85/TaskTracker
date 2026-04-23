@@ -185,25 +185,22 @@
   align-items: center;
 }
 
-
 /** Comment */
 .comments-section {
   margin-top: 20px;
-   background: #fff;
-    padding: 24px;
+  background: #fff;
+  padding: 24px;
   border-radius: 16px;
- 
+
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
 }
 
-
-
 .comment {
   border: 1px solid #eee;
-  
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 10px;
+
+  border-radius: 10px;
+  padding: 5px 10px;
+  margin-bottom: 5px;
 }
 
 .comment-header {
@@ -232,7 +229,6 @@
   margin-right: 2px;
   margin-left: 2px;
 }
-
 
 /** Post comment btn*/
 .comment-input {
@@ -326,7 +322,6 @@
   }
 }
 
-
 /** PAginator */
 /** Pagionator*/
 .paginator {
@@ -413,4 +408,25 @@
 
 .go-btn:hover {
   background: #125ea8;
+}
+
+/* tab */
+
+::ng-deep .mat-mdc-tab {
+  min-width: 100px;
+  font-size: 14px;
+  padding: 10px;
+}
+
+::ng-deep .mat-mdc-tab-group {
+  background: white;
+  border-radius: 10px;
+}
+
+::ng-deep .mat-mdc-tab-body {
+  padding: 10px 20px;
+}
+
+::ng-deep .mat-mdc-tab.mdc-tab--active {
+  color: #4caf50;
 }

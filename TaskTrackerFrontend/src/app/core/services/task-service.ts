@@ -59,6 +59,10 @@ export class TaskService {
     return this.http.get<any>(`${this.api}/${taskId}/comments?page=${page}&size=${size}`);
   }
 
+  getHistory(taskId:Number, page : number, size : number){
+    return this.http.get<any>(`${this.api}/${taskId}/history?page=${page}&size=${size}`);
+  }
+
   addComment(taskId:Number, content: string) {
     return this.http.post<TaskComment[]>(`${this.api}/${taskId}/comments`, {content : content});
   }

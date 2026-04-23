@@ -25,7 +25,7 @@ import lombok.ToString;
 
 @Entity
 @Data
-@ToString(exclude = { "description" })
+@ToString(exclude = { "description","comments"  })
 public class Task {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

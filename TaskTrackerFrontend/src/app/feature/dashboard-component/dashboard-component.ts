@@ -78,7 +78,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // Important: wrong sort field causes the http code 401
   sort: string = 'updatedAt,desc';
   page = 0;
-  size = 10;
+  size = 6;
 
   @ViewChild('chartCanvas')
   set chartCanvasSetter(canvas: ElementRef<HTMLCanvasElement>) {

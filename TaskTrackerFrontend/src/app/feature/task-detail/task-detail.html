@@ -69,54 +69,91 @@
       <!-- ACTIONS -->
       <div class="actions">
         <button class="btn edit" (click)="openEditDialog()">Edit</button>
-        <button class="btn delete" (click)="deleteTask()">Delete</button>
+        <button class="btn delete" (click)="deleteTask()" style="display: none;">Delete</button>
       </div>
     </div>
 
-    <div class="comments-section">
-      <div class="top" style="margin-bottom: 20px">
-        <h1>Comments</h1>
-      </div>
-
-      <!-- List comments -->
-      <div class="comment" *ngFor="let c of comments">
-        <div class="comment-header">
-          <span class="avatar">
-            {{ assigneeFullname(c.createdByFullName)[0] || '?' }}
-          </span>
-          <span > {{ c.createdByFullName }}</span>
-          <span> - 📅 {{ c.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+    <mat-tab-group
+      (selectedTabChange)="onTabChange($event)"
+      [selectedIndex]="selectedTabIndex"
+      style="margin-top: 15px"
+    >
+      <mat-tab label="Comments">
+        <!-- List comments -->
+        <div class="comment" *ngFor="let c of comments">
+          <div class="comment-header">
+            <span class="avatar">
+              {{ c.createdByFullName[0] || '?' }}
+            </span>
+            <span> {{ c.createdByFullName }}</span>
+            <span> - 🕒 wrote {{ c.createdAt | timeAgo }}</span>
+          </div>
+          <div class="comment-content" [innerHTML]="c.content"></div>
         </div>
-        <div class="comment-content" [innerHTML]="c.content"></div>
-      </div>
-      <div class="paginator" *ngIf="totalPages > 1">
-        <button (click)="prevPage()" class="page-btn" [disabled]="page === 0">← Prev</button>
+        <div class="paginator" *ngIf="totalPages > 1">
+          <button (click)="prevPage()" class="page-btn" [disabled]="page === 0">← Prev</button>
 
-        <div class="page-center">
-          <span class="page-label">Page</span>
-          <span class="page-current">{{ page + 1 }}</span>
-          <span class="page-sep">/</span>
-          <span class="page-total">{{ totalPages }}</span>
+          <div class="page-center">
+            <span class="page-label">Page</span>
+            <span class="page-current">{{ page + 1 }}</span>
+            <span class="page-sep">/</span>
+            <span class="page-total">{{ totalPages }}</span>
+          </div>
+          <button (click)="nextPage()" class="page-btn" [disabled]="page >= totalPages - 1">
+            Next →
+          </button>
         </div>
-        <button (click)="nextPage()" class="page-btn" [disabled]="page >= totalPages - 1">
-          Next →
-        </button>
-      </div>
 
-      <!-- Add comment -->
-      <div class="comment-input">
-        <quill-editor
-          [(ngModel)]="newComment"
-          [modules]="quillConfig"
-          placeholder="Write a comment..."
-          class="editor"
-        ></quill-editor>
+        <!-- Add comment -->
+        <div class="comment-input">
+          <quill-editor
+            [(ngModel)]="newComment"
+            [modules]="quillConfig"
+            placeholder="Write a comment..."
+            class="editor"
+          ></quill-editor>
 
-        <button class="post-btn" [disabled]="!newComment.trim() || loading" (click)="addComment()">
-          <span *ngIf="!commentLoading">➤ Post Comment</span>
-          <span *ngIf="commentLoading" class="spinner"></span>
-        </button>
-      </div>
-    </div>
+          <button
+            class="post-btn"
+            [disabled]="!newComment.trim() || loading"
+            (click)="addComment()"
+          >
+            <span *ngIf="!commentLoading">➤ Post Comment</span>
+            <span *ngIf="commentLoading" class="spinner"></span>
+          </button>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="History">
+        <div *ngFor="let h of history" class="comment">
+          <div class="comment-header">
+            <span class="avatar">
+              {{ h.changedByFullName[0] || '?' }}
+            </span>
+            <span> {{ h.changedByFullName }}</span>
+            <span> -  🕒 changed {{ h.changedAt | timeAgo }}</span>
+          </div>
+          <div class="comment-content">
+            <b>{{ h.field }} from</b>
+            <span class="old"> {{ h.oldValue }}</span> <b> to </b>
+            <span class="new">{{ h.newValue }}</span>
+          </div>
+        </div>
+
+        <div class="paginator" *ngIf="totalHistoryPages > 1">
+          <button (click)="prevHistoryPage()" class="page-btn" [disabled]="historyPage === 0">← Prev</button>
+
+          <div class="page-center">
+            <span class="page-label">Page</span>
+            <span class="page-current">{{ historyPage + 1 }}</span>
+            <span class="page-sep">/</span>
+            <span class="page-total">{{ totalHistoryPages }}</span>
+          </div>
+          <button (click)="nextHistoryPage()" class="page-btn" [disabled]="page >= totalHistoryPages - 1">
+            Next →
+          </button>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </div>
 </div>

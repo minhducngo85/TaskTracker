@@ -14,6 +14,8 @@ import org.springframework.data.jpa.repository.Query;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long>, JpaSpecificationExecutor<Task> {
+	
+	
 	List<Task> findByStatus(TaskStatus status);
 
 	List<Task> findByPriority(TaskPriority priority);
