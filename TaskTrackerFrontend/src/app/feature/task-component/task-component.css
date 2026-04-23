@@ -341,6 +341,16 @@ button:active {
   border-left: 4px solid transparent;
 }
 
+.task-title {
+  font-size: 15px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  background: #e3eafc;
+  color: #000000;
+  display: inline-block;
+
+}
+
 /* DONE */
 .task-card.status-DONE {
   border-left-color: #22c55e;
@@ -375,10 +385,7 @@ button:active {
   gap: 8px;
 }
 
-.task-title {
-  font-weight: 600;
-  font-size: 15px;
-}
+
 
 /* ===== DESCRIPTION ===== */
 .task-desc {
@@ -638,4 +645,7 @@ button:active {
 .tag-item:hover {
   background: #f3f4f6;
 }
+
+
+
 

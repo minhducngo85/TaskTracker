@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
 import { TaskService } from '../../core/services/task-service';
@@ -17,6 +17,8 @@ import { TaskComment } from '../../core/models/TaskComment';
 import { QuillModule } from 'ngx-quill';
 import { TaskHistory } from '../../core/models/TaskHistory';
 import { MatTabsModule } from '@angular/material/tabs';
+import { TaskPriority } from '../../core/models/TaskPriority';
+import { TaskStatus } from '../../core/models/TaskStatus';
 
 /**
  * @author Minh Duc Ngo
@@ -31,16 +33,20 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatButtonModule,
     QuillModule,
     MatTabsModule,
-    TimeAgoPipe
-],
+    TimeAgoPipe,
+  ],
   templateUrl: './task-detail.html',
   styleUrl: './task-detail.css',
 })
 export class TaskDetail implements OnInit {
   // the selected task
   task?: Task;
-
   assigneeList: User[] = [];
+  // Priority Options
+  priorityOptions = Object.values(TaskPriority);
+
+  // Priority Options
+  statusOptions = Object.values(TaskStatus);
 
   // loading indicator
   loading = true;
@@ -51,9 +57,6 @@ export class TaskDetail implements OnInit {
   page = 0;
   size = 10;
   totalPages = 0;
-
-
-  
 
   newComment = '';
   commentLoading = false;
@@ -126,9 +129,8 @@ export class TaskDetail implements OnInit {
       this.taskService.updateTask(this.task.id, this.task).subscribe({
         next: (res) => {
           this.task = res;
-          this.snackBar.open(`Tags updated!`, 'Close', {
-            duration: 2000,
-          });
+          this.loadHistory();
+          this.cdr.detectChanges();
         },
         error: (err) => console.error(err),
       });
@@ -173,7 +175,6 @@ export class TaskDetail implements OnInit {
     }
   }
 
-  
   nextHistoryPage() {
     if (this.historyPage < this.totalHistoryPages - 1) {
       this.historyPage++;
@@ -346,11 +347,10 @@ export class TaskDetail implements OnInit {
   stopEditTags() {
     this.editingTags = false;
     if (!this.task) return;
-    this.taskService.updateTask(this.task.id, this.task).subscribe(() =>
-      this.snackBar.open(`Tags updated!`, 'Close', {
-        duration: 2000,
-      }),
-    );
+    this.taskService.updateTask(this.task.id, this.task).subscribe(() => {
+      this.loadHistory();
+      this.cdr.detectChanges();
+    });
   }
 
   addComment() {
@@ -374,5 +374,61 @@ export class TaskDetail implements OnInit {
     console.log('Selected tab index:', event.index);
     const index = event.index;
     sessionStorage.setItem('taskDetailActiveTab', index.toString());
+  }
+
+  // change status dropdown
+  showStatusMenu = false;
+
+  toggleStatusMenu() {
+    this.showStatusMenu = !this.showStatusMenu;
+  }
+
+  changeStatus(status: TaskStatus) {
+    this.logger.log('changeStatus2() called');
+    this.showStatusMenu = false;
+    if (!this.task) return;
+    if (status === this.task.status) return;
+
+    const updated = { ...this.task, status: status };
+
+    this.taskService.updateTask(this.task.id, updated).subscribe((task) => {
+      this.task = task;
+      this.loadHistory();
+      this.cdr.detectChanges();
+    });
+  }
+
+  // change priority dropdown
+  showPriorityMenu = false;
+
+  togglePriorityMenu() {
+    this.showPriorityMenu = !this.showStatusMenu;
+  }
+
+  changePriority(priority: TaskPriority) {
+    this.logger.log('changePriority() called');
+    this.showPriorityMenu = false;
+    if (!this.task) return;
+    if (priority === this.task.priority) return;
+
+    const updated = { ...this.task, priority: priority };
+
+    this.taskService.updateTask(this.task.id, updated).subscribe((task) => {
+      this.task = task;
+      this.loadHistory();
+      this.cdr.detectChanges();
+    });
+  }
+
+  /**
+   *
+   * @param event mouse click of status and priority dropdown -> close menu
+   */
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    if (!(event.target as HTMLElement).closest('.status-wrapper')) {
+      this.showPriorityMenu = false;
+      this.showStatusMenu = false;
+    }
   }
 }

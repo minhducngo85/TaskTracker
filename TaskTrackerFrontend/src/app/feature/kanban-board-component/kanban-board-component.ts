@@ -132,10 +132,13 @@ export class KanbanBoardComponent implements OnInit {
      DRAG & DROP
   ======================= */
   drop(event: CdkDragDrop<Task[]>, newStatus: TaskStatus) {
+    this.logger.log('drop event called!');
     if (event.previousContainer === event.container) {
       // same column
+      this.logger.log('same column');
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
+      this.logger.log('across columns');
       // move across columns
       transferArrayItem(
         event.previousContainer.data,
@@ -157,14 +160,13 @@ export class KanbanBoardComponent implements OnInit {
   updatePositions(tasks: Task[]) {
     tasks.forEach((task, index) => {
       task.position = index;
-      this.updateTask(task, false);
     });
   }
 
   /* =======================
      BACKEND SYNC
   ======================= */
-  updateTask(task: Task, showLog: boolean = true) {
+  updateTask(task: Task) {
     this.taskService
       .getTask(task.id)
       .pipe(
@@ -173,7 +175,7 @@ export class KanbanBoardComponent implements OnInit {
       )
       .subscribe({
         next: (updated) => {
-          if (showLog) console.log('Task updated', updated);
+           this.logger.log('Task updated', updated);
           // show snack bar
           this.snackBar.open(`Knanban board updated!`, 'Close', {
             duration: 2000,

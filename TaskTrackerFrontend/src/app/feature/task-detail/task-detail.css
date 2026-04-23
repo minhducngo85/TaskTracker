@@ -34,6 +34,18 @@
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
 }
 
+.task-title {
+  font-size: 15px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  background: #e3eafc;
+  color: #000000;
+  display: inline-block;
+  margin-bottom: 8px;
+
+}
+
+
 /* TITLE */
 .top {
   display: flex;
@@ -101,8 +113,8 @@
 
 /* ===== STATUS && PRIORITY ===== */
 .status-badge {
-  font-size: 13px;
-  padding: 2px 8px;
+  font-size: 12px;
+  padding: 3px 8px;
   border-radius: 10px;
   font-weight: 500;
 }
@@ -429,4 +441,45 @@
 
 ::ng-deep .mat-mdc-tab.mdc-tab--active {
   color: #4caf50;
+}
+
+
+.status-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.status-btn {
+  border: none;
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+}
+
+
+.arrow {
+  margin-left: 6px;
+  font-size: 12px;
+}
+
+.status-menu {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  overflow: hidden;
+  z-index: 10;
+}
+
+.status-option {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.status-option:hover {
+  background: #f5f5f5;
 }

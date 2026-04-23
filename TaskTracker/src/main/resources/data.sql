@@ -1,3 +1,4 @@
+DELETE FROM task_history;
 DELETE FROM task_tags;
 DELETE FROM task_comment;
 DELETE FROM task;
@@ -267,6 +268,29 @@ VALUES
 ((SELECT MAX(id) FROM task), 'admin', 'Admin', '2026-04-23 12:46:00', '2026-04-22 23:15:00', 'Nice feature, very useful for searching!'),
 ((SELECT MAX(id) FROM task), 'mngo', 'Minh Ngo', '2026-04-23 12:20:00', '2026-04-22 23:20:00', 'Maybe we should have search fucntion by multiple tags?'),
 ((SELECT MAX(id) FROM task), 'lucas', 'Lucas Ngo', '2026-04-23 12:25:00', '2026-04-22 23:25:00', 'UI looks greate 👍');
+
+INSERT INTO task_history (task_id, field, old_value, new_value, changed_by, changed_by_full_name, changed_at)
+VALUES
+-- status changes
+((SELECT MAX(id) FROM task), 'status', 'TODO', 'IN_PROGRESS', 'admin' , 'Admin', '2026-04-23 20:37:00'),
+((SELECT MAX(id) FROM task), 'status', 'IN_PROGRESS', 'DONE', 'admin','Admin', '2026-04-23 20:37:30'),
+((SELECT MAX(id) FROM task), 'status', 'DONE', 'IN_PROGRESS', 'admin','Admin', '2026-04-23 20:38:00'),
+((SELECT MAX(id) FROM task), 'status', 'IN_PROGRESS', 'TODO', 'mngo','Minh Ngo', '2026-04-23 20:38:30'),
+((SELECT MAX(id) FROM task), 'status', 'TODO', 'IN_PROGRESS', 'admin','Admin', '2026-04-23 20:39:00'),
+
+-- priority changes
+((SELECT MAX(id) FROM task), 'priority', 'HIGH', 'MEDIUM', 'admin','Admin', '2026-04-23 20:38:10'),
+((SELECT MAX(id) FROM task), 'priority', 'MEDIUM', 'HIGH', 'mngo','Minh Ngo', '2026-04-23 20:38:20'),
+
+-- description change
+((SELECT MAX(id) FROM task), 'description','Paginator for comment section and with load more buttons',
+ 'Paginator for comment section and with load more buttons 2', 'admin', 'Admin', '2026-04-23 20:21:00'),
+
+-- tags change
+((SELECT MAX(id) FROM task), 'tags',
+ 'paginator,comment,frontend',
+ 'paginator,comment,frontend,today',
+ 'mngo', 'Minh Ngo', '2026-04-23 20:06:00');
 
 DELETE FROM users;
 

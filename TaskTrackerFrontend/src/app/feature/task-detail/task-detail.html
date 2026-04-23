@@ -15,8 +15,35 @@
 
       <!-- META LINE -->
       <div class="meta">
-        <span class="status-badge" [ngClass]="task.status">{{ task.status }}</span>
-        <span class="status-badge" [ngClass]="task.priority">{{ task.priority }}</span>
+        <div class="status-wrapper">
+          <button class="status-badge" [ngClass]="task.status" (click)="toggleStatusMenu()">
+            {{ task.status }}
+            <span class="arrow">▼</span>
+          </button>
+
+          <div class="status-menu" *ngIf="showStatusMenu">
+            <div *ngFor="let s of statusOptions" (click)="changeStatus(s)" class="status-option">
+              {{ s }}
+            </div>
+          </div>
+        </div>
+
+        <div class="status-wrapper">
+          <button class="status-badge" [ngClass]="task.priority" (click)="togglePriorityMenu()">
+            {{ task.priority }}
+            <span class="arrow">▼</span>
+          </button>
+
+          <div class="status-menu" *ngIf="showPriorityMenu">
+            <div
+              *ngFor="let s of priorityOptions"
+              (click)="changePriority(s)"
+              class="status-option"
+            >
+              {{ s }}
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="section">
@@ -69,7 +96,7 @@
       <!-- ACTIONS -->
       <div class="actions">
         <button class="btn edit" (click)="openEditDialog()">Edit</button>
-        <button class="btn delete" (click)="deleteTask()" style="display: none;">Delete</button>
+        <button class="btn delete" (click)="deleteTask()" style="display: none">Delete</button>
       </div>
     </div>
 
@@ -124,14 +151,14 @@
         </div>
       </mat-tab>
 
-      <mat-tab label="History">
+      <mat-tab label="Change History">
         <div *ngFor="let h of history" class="comment">
           <div class="comment-header">
             <span class="avatar">
-              {{ h.changedByFullName[0] || '?' }}
+              {{ h.changedByFullName ? h.changedByFullName[0] : h.changedBy[0] }}
             </span>
-            <span> {{ h.changedByFullName }}</span>
-            <span> -  🕒 changed {{ h.changedAt | timeAgo }}</span>
+            <span> {{ h.changedByFullName ? h.changedByFullName : h.changedBy }}</span>
+            <span> - 🕒 changed {{ h.changedAt | timeAgo }}</span>
           </div>
           <div class="comment-content">
             <b>{{ h.field }} from</b>
@@ -141,7 +168,9 @@
         </div>
 
         <div class="paginator" *ngIf="totalHistoryPages > 1">
-          <button (click)="prevHistoryPage()" class="page-btn" [disabled]="historyPage === 0">← Prev</button>
+          <button (click)="prevHistoryPage()" class="page-btn" [disabled]="historyPage === 0">
+            ← Prev
+          </button>
 
           <div class="page-center">
             <span class="page-label">Page</span>
@@ -149,7 +178,11 @@
             <span class="page-sep">/</span>
             <span class="page-total">{{ totalHistoryPages }}</span>
           </div>
-          <button (click)="nextHistoryPage()" class="page-btn" [disabled]="page >= totalHistoryPages - 1">
+          <button
+            (click)="nextHistoryPage()"
+            class="page-btn"
+            [disabled]="page >= totalHistoryPages - 1"
+          >
             Next →
           </button>
         </div>
