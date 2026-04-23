@@ -209,14 +209,14 @@
 .comment-header {
   display: flex;
   justify-content: flex-start;
-  font-size: 14px;
+  font-size: 13px;
   gap: 5px;
   color: #888;
 }
 
 .comment-content {
   padding: 5px 0px;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .avatar {
@@ -259,7 +259,7 @@
 
 ::ng-deep .ql-container {
   border: 1px solid #eee;
-  font-size: 14px;
+  font-size: 13px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
@@ -336,11 +336,12 @@
   gap: 5px;
   margin: 20px 0;
   flex-wrap: wrap;
+  font-size: 13px;
 }
 
 /* buttons */
 .page-btn {
-  padding: 6px 14px;
+  padding: 3px 8px;
   border: none;
   border-radius: 8px;
   background: #1976d2;

@@ -84,12 +84,12 @@
           <span class="avatar">
             {{ assigneeFullname(c.createdByFullName)[0] || '?' }}
           </span>
-          <span style="font-weight: bold"> {{ c.createdByFullName }}</span>
+          <span > {{ c.createdByFullName }}</span>
           <span> - 📅 {{ c.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
         </div>
         <div class="comment-content" [innerHTML]="c.content"></div>
       </div>
-      <div class="paginator" *ngIf="!comments">
+      <div class="paginator" *ngIf="totalPages > 1">
         <button (click)="prevPage()" class="page-btn" [disabled]="page === 0">← Prev</button>
 
         <div class="page-center">
