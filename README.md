@@ -28,6 +28,8 @@ Live Demo: http://82.165.51.255/
   - HIGH
   - MEDIUM
   - LOW
+- 📊 Task change history (audit log)
+- 💬 Task comments with pagination / Collaboration: discussion per tag
 - 🌐 Clean REST API design
 - 📱 Responsive UI
 - 📲 Mobile-optimized layout (Kanban swipe / horizontal scroll)
@@ -394,3 +396,7 @@ docker-compose up --build
 
 ### Admin
 ![Admin](./screenshots/admin.png)
+
+
+## 👨‍💻 Author
+Minh Duc Ngo
