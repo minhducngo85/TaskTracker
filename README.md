@@ -107,6 +107,13 @@ ng add @angular/material
 ```
 to use snackbar
 
+style.css: @import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+### quill for tich text
+```
+npm install ngx-quill quill
+```
+style.css: @import 'quill/dist/quill.snow.css';
 ### Angular CDK for Drag & Drop
 ``` 
 npm install @angular/cdk

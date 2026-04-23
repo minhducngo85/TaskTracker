@@ -4,6 +4,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -16,6 +19,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.ToString;
 
@@ -48,6 +52,10 @@ public class Task {
 	@CollectionTable(name = "task_tags", joinColumns = @JoinColumn(name = "task_id"))
 	@Column(name = "tag")
 	private List<String> tags = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference // ignore json loop if it is used as DTO
+	private List<TaskComment> comments = new ArrayList<>();
 
 	/** duplicate tag */
 	public void setTags(List<String> tags) {

@@ -20,7 +20,6 @@ import com.minhduc.tasktracker.dto.TaskStatisticsResponse;
 import com.minhduc.tasktracker.dto.UserResponse;
 import com.minhduc.tasktracker.entity.Task;
 import com.minhduc.tasktracker.entity.TaskPriority;
-import com.minhduc.tasktracker.entity.User;
 import com.minhduc.tasktracker.service.TaskService;
 import com.minhduc.tasktracker.service.UserService;
 

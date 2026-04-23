@@ -13,13 +13,16 @@ import { EditTaskDialog } from '../edit-task-dialog/edit-task-dialog';
 import { User } from '../../core/models/User';
 import { Location } from '@angular/common';
 import { debounceTime, Subject } from 'rxjs';
+import { TaskComment } from '../../core/models/TaskComment';
+import { QuillModule } from 'ngx-quill';
 
 /**
  * @author Minh Duc Ngo
  */
 @Component({
+  standalone: true,
   selector: 'app-task-detail',
-  imports: [CommonModule, FormsModule, MatDialogModule, MatButtonModule],
+  imports: [CommonModule, FormsModule, MatDialogModule, MatButtonModule, QuillModule],
   templateUrl: './task-detail.html',
   styleUrl: './task-detail.css',
 })
@@ -31,6 +34,25 @@ export class TaskDetail implements OnInit {
 
   // loading indicator
   loading = true;
+
+  // comments
+  comments: TaskComment[] = [];
+  // comments: paginator
+  page = 0;
+  size = 8;
+  totalPages = 0;
+
+  newComment = '';
+  commentLoading = false;
+
+  quillConfig = {
+    toolbar: [
+      ['bold', 'italic'],
+      ['code-block'],
+      ['emoji'], // cần plugin nếu muốn thật
+      ['link'],
+    ],
+  };
 
   constructor(
     private taskService: TaskService,
@@ -49,6 +71,7 @@ export class TaskDetail implements OnInit {
     this.logger.log('ngOnInit(): void called!');
     this.loadTaskDetail();
     this.loadAssigneeList();
+    this.loadComments();
 
     // init debounce for save tag
     this.saveTags$.pipe(debounceTime(2000)).subscribe(() => {
@@ -66,7 +89,39 @@ export class TaskDetail implements OnInit {
     });
   }
 
+  /**
+   * laod task comments
+   */
+  loadComments() {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.logger.info('loadComment() called.');
+    this.taskService.getComments(id, this.page, this.size).subscribe((res) => {
+      this.comments = res.content;
+      this.totalPages = res.totalPages;
+      this.logger.info(JSON.stringify(this.comments));
+      this.cdr.detectChanges();
+    });
+  }
+
+  nextPage() {
+    if (this.page < this.totalPages - 1) {
+      this.page++;
+      this.loadComments();
+    }
+  }
+
+  prevPage() {
+    if (this.page > 0) {
+      this.page--;
+      this.loadComments();
+    }
+  }
+
+  /**
+   * to load assignee list
+   */
   loadAssigneeList() {
+    this.logger.info('loadAssigneeList() called.');
     // read assignee list
     this.taskService.getAssigneeList().subscribe({
       next: (users) => {
@@ -224,5 +279,22 @@ export class TaskDetail implements OnInit {
         duration: 2000,
       }),
     );
+  }
+
+  addComment() {
+    if (!this.newComment || this.newComment === '<p><br></p>') return;
+
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.commentLoading = true;
+
+    this.taskService.addComment(id, this.newComment).subscribe({
+      next: () => {
+        this.page = 0;
+        this.newComment = ''; // clear editor
+        this.loadComments(); // 🔥 reload comments
+      },
+      complete: () => (this.commentLoading = false),
+      error: () => (this.commentLoading = false),
+    });
   }
 }

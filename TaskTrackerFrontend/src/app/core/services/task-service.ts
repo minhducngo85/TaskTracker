@@ -5,6 +5,7 @@ import { Task } from '../models/Task';
 import { Observable } from 'rxjs';
 import { PageResponse } from '../models/PageResponse';
 import { User } from '../models/User';
+import { TaskComment } from '../models/TaskComment';
 
 @Injectable({
   providedIn: 'root',
@@ -52,5 +53,13 @@ export class TaskService {
 
   getTopTags(){
     return this.http.get<any[]>(`${this.api}/tags/top?limit=20`);
+  }
+
+  getComments(taskId:Number, page : number, size : number){
+    return this.http.get<any>(`${this.api}/${taskId}/comments?page=${page}&size=${size}`);
+  }
+
+  addComment(taskId:Number, content: string) {
+    return this.http.post<TaskComment[]>(`${this.api}/${taskId}/comments`, {content : content});
   }
 }

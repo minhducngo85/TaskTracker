@@ -1,4 +1,5 @@
 DELETE FROM task_tags;
+DELETE FROM task_comment;
 DELETE FROM task;
 
 
@@ -166,6 +167,18 @@ VALUES
 ((SELECT MAX(id) FROM task), 'tag'),
 ((SELECT MAX(id) FROM task), 'angular material');
 
+INSERT INTO task_comment (task_id, created_by, created_by_full_name, created_at, updated_at, content)
+VALUES
+((SELECT MAX(id) FROM task), 'admin', 'Admin', '2026-04-22 23:15:00', '2026-04-22 23:15:00', 'Nice feature, very useful for searching!'),
+((SELECT MAX(id) FROM task), 'mngo', 'Minh Ngo', '2026-04-22 23:20:00', '2026-04-22 23:20:00', 'Maybe we should have search fucntion by multiple tags?'),
+((SELECT MAX(id) FROM task), 'lucas', 'Lucas Ngo', '2026-04-22 23:25:00', '2026-04-22 23:25:00', 'UI looks greate 👍');
+
+INSERT INTO task_comment (task_id, created_by, created_by_full_name, created_at, updated_at, content)
+VALUES
+((SELECT MAX(id) FROM task), 'admin', 'Admin', '2026-04-22 23:15:00', '2026-04-22 23:15:00', 'Nice feature, very useful for searching!'),
+((SELECT MAX(id) FROM task), 'mngo', 'Minh Ngo', '2026-04-22 23:20:00', '2026-04-22 23:20:00', 'Maybe we should have search fucntion by multiple tags?'),
+((SELECT MAX(id) FROM task), 'lucas', 'Lucas Ngo', '2026-04-22 23:25:00', '2026-04-22 23:25:00', 'UI looks greate 👍');
+
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Top Tags', 'Top tags in dashboard', 'DONE', 'CRITICAL', 'admin', '2026-04-22 23:10:00', '2026-04-22 23:10:00');
 INSERT INTO task_tags (task_id, tag)
@@ -174,12 +187,30 @@ VALUES
 ((SELECT MAX(id) FROM task), 'backend'),
 ((SELECT MAX(id) FROM task), 'tags');
 
+INSERT INTO task_comment (task_id, created_by, created_by_full_name, created_at, updated_at, content)
+VALUES
+((SELECT MAX(id) FROM task), 'admin', 'Admin', '2026-04-22 23:15:00', '2026-04-22 23:15:00', 'Nice feature, very useful for searching!'),
+((SELECT MAX(id) FROM task), 'mngo', 'Minh Ngo', '2026-04-22 23:20:00', '2026-04-22 23:20:00', 'Maybe we should have search fucntion by multiple tags?'),
+((SELECT MAX(id) FROM task), 'lucas', 'Lucas Ngo', '2026-04-22 23:25:00', '2026-04-22 23:25:00', 'UI looks greate 👍');
+
+INSERT INTO task_comment (task_id, created_by, created_by_full_name, created_at, updated_at, content)
+VALUES
+((SELECT MAX(id) FROM task), 'admin', 'Admin', '2026-04-22 23:15:00', '2026-04-22 23:15:00', 'Nice feature, very useful for analytics!'),
+((SELECT MAX(id) FROM task), 'mngo', 'Minh Ngo', '2026-04-22 23:20:00', '2026-04-22 23:20:00', 'Maybe we should add pagination for tags?'),
+((SELECT MAX(id) FROM task), 'lucas', 'Lucas Ngo', '2026-04-22 23:25:00', '2026-04-22 23:25:00', 'UI looks clean 👍');
+
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Task Historiy', 'Task history feature for auditing', 'TODO', 'LOW', 'admin', '2026-04-22 23:15:00', '2026-04-22 23:15:00');
 INSERT INTO task_tags (task_id, tag)
 VALUES 
 ((SELECT MAX(id) FROM task), 'backend'),
 ((SELECT MAX(id) FROM task), 'history');
+
+INSERT INTO task_comment (task_id, created_by, created_by_full_name, created_at, updated_at, content)
+VALUES
+((SELECT MAX(id) FROM task), 'admin', 'Admin', '2026-04-22 23:15:00', '2026-04-22 23:15:00', 'Nice feature, very useful for searching!'),
+((SELECT MAX(id) FROM task), 'mngo', 'Minh Ngo', '2026-04-22 23:20:00', '2026-04-22 23:20:00', 'Maybe we should have search fucntion by multiple tags?'),
+((SELECT MAX(id) FROM task), 'lucas', 'Lucas Ngo', '2026-04-22 23:25:00', '2026-04-22 23:25:00', 'UI looks greate 👍');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('File Upload', 'Task can have multiple attachments', 'IN_PROGRESS', 'HIGH', 'mngo', '2026-04-23 08:10:00', '2026-04-22 08:10:00');
@@ -189,6 +220,12 @@ VALUES
 ((SELECT MAX(id) FROM task), 'attachment'),
 ((SELECT MAX(id) FROM task), 'frontend');
 
+INSERT INTO task_comment (task_id, created_by, created_by_full_name, created_at, updated_at, content)
+VALUES
+((SELECT MAX(id) FROM task), 'admin', 'Admin', '2026-04-22 23:15:00', '2026-04-22 23:15:00', 'Nice feature, very useful for searching!'),
+((SELECT MAX(id) FROM task), 'mngo', 'Minh Ngo', '2026-04-22 23:20:00', '2026-04-22 23:20:00', 'Maybe we should have search fucntion by multiple tags?'),
+((SELECT MAX(id) FROM task), 'lucas', 'Lucas Ngo', '2026-04-22 23:25:00', '2026-04-22 23:25:00', 'UI looks greate 👍');
+
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Tag autocomplete', 'by entering tag, the suggestion box mus tbe appeared', 'TODO', 'HIGH', 'mngo', '2026-04-23 08:10:00', '2026-04-22 08:10:00');
 INSERT INTO task_tags (task_id, tag)
@@ -196,6 +233,40 @@ VALUES
 ((SELECT MAX(id) FROM task), 'autocomplete'),
 ((SELECT MAX(id) FROM task), 'frontend');
 
+INSERT INTO task_comment (task_id, created_by, created_by_full_name, created_at, updated_at, content)
+VALUES
+((SELECT MAX(id) FROM task), 'admin', 'Admin', '2026-04-22 23:15:00', '2026-04-22 23:15:00', 'Nice feature, very useful for searching!'),
+((SELECT MAX(id) FROM task), 'mngo', 'Minh Ngo', '2026-04-22 23:20:00', '2026-04-22 23:20:00', 'Maybe we should have search fucntion by multiple tags?'),
+((SELECT MAX(id) FROM task), 'lucas', 'Lucas Ngo', '2026-04-22 23:25:00', '2026-04-22 23:25:00', 'UI looks greate 👍');
+
+INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
+VALUES ('Comment paginator', 'Paginator for comment section and with load more buttons', 'TODO', 'HIGH', 'admin', '2026-04-23 12:10:00', '2026-04-23 12:10:00');
+INSERT INTO task_tags (task_id, tag)
+VALUES 
+((SELECT MAX(id) FROM task), 'paginator'),
+((SELECT MAX(id) FROM task), 'comment'),
+((SELECT MAX(id) FROM task), 'frontend');
+
+INSERT INTO task_comment (task_id, created_by, created_by_full_name, created_at, updated_at, content)
+VALUES
+((SELECT MAX(id) FROM task), 'admin', 'Admin', '2026-04-23 12:15:00', '2026-04-22 23:15:00', 'Nice feature, very useful for searching!'),
+((SELECT MAX(id) FROM task), 'mngo', 'Minh Ngo', '2026-04-23 12:20:00', '2026-04-22 23:20:00', 'Maybe we should have search fucntion by multiple tags?'),
+((SELECT MAX(id) FROM task), 'lucas', 'Lucas Ngo', '2026-04-23 12:25:00', '2026-04-22 23:25:00', 'UI looks greate 👍'),
+((SELECT MAX(id) FROM task), 'admin', 'Admin', '2026-04-23 12:30:00', '2026-04-22 23:15:00', 'Nice feature, very useful for searching!'),
+((SELECT MAX(id) FROM task), 'mngo', 'Minh Ngo', '2026-04-23 12:35:00', '2026-04-22 23:20:00', 'Maybe we should have search fucntion by multiple tags?'),
+((SELECT MAX(id) FROM task), 'lucas', 'Lucas Ngo', '2026-04-23 12:36:00', '2026-04-22 23:25:00', 'UI looks greate 👍'),
+((SELECT MAX(id) FROM task), 'admin', 'Admin', '2026-04-23 12:37:00', '2026-04-22 23:15:00', 'Nice feature, very useful for searching!'),
+((SELECT MAX(id) FROM task), 'mngo', 'Minh Ngo', '2026-04-23 12:38:00', '2026-04-22 23:20:00', 'Maybe we should have search fucntion by multiple tags?'),
+((SELECT MAX(id) FROM task), 'lucas', 'Lucas Ngo', '2026-04-23 12:39:00', '2026-04-22 23:25:00', 'UI looks greate 👍'),
+((SELECT MAX(id) FROM task), 'admin', 'Admin', '2026-04-23 12:40:00', '2026-04-22 23:15:00', 'Nice feature, very useful for searching!'),
+((SELECT MAX(id) FROM task), 'mngo', 'Minh Ngo', '2026-04-23 12:41:00', '2026-04-22 23:20:00', 'Maybe we should have search fucntion by multiple tags?'),
+((SELECT MAX(id) FROM task), 'lucas', 'Lucas Ngo', '2026-04-23 12:42:00', '2026-04-22 23:25:00', 'UI looks greate 👍'),
+((SELECT MAX(id) FROM task), 'admin', 'Admin', '2026-04-23 12:43:00', '2026-04-22 23:15:00', 'Nice feature, very useful for searching!'),
+((SELECT MAX(id) FROM task), 'mngo', 'Minh Ngo', '2026-04-23 12:44:00', '2026-04-22 23:20:00', 'Maybe we should have search fucntion by multiple tags?'),
+((SELECT MAX(id) FROM task), 'lucas', 'Lucas Ngo', '2026-04-23 12:45:00', '2026-04-22 23:25:00', 'UI looks greate 👍'),
+((SELECT MAX(id) FROM task), 'admin', 'Admin', '2026-04-23 12:46:00', '2026-04-22 23:15:00', 'Nice feature, very useful for searching!'),
+((SELECT MAX(id) FROM task), 'mngo', 'Minh Ngo', '2026-04-23 12:20:00', '2026-04-22 23:20:00', 'Maybe we should have search fucntion by multiple tags?'),
+((SELECT MAX(id) FROM task), 'lucas', 'Lucas Ngo', '2026-04-23 12:25:00', '2026-04-22 23:25:00', 'UI looks greate 👍');
 
 DELETE FROM users;
 
