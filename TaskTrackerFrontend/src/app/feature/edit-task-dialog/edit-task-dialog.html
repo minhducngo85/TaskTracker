@@ -11,7 +11,7 @@
     <textarea matInput [(ngModel)]="task.description" rows="5"></textarea>
   </mat-form-field>
 
-  <mat-form-field appearance="outline" class="full">
+  <mat-form-field appearance="outline" class="full" style="display: none;">
     <mat-label>Assigned To</mat-label>
     <mat-select [(ngModel)]="task.assignedTo">
       <mat-option *ngFor="let user of assigneeList" [value]="user.username">
@@ -20,7 +20,7 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field appearance="outline" class="full">
+  <mat-form-field appearance="outline" class="full" style="display: none;">
     <mat-label>Status</mat-label>
     <mat-select [(ngModel)]="task.status">
       <mat-option *ngFor="let s of statusOptions" [value]="s">
@@ -29,7 +29,7 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field appearance="outline" class="full">
+  <mat-form-field appearance="outline" class="full" style="display: none;">
     <mat-label>Priority</mat-label>
     <mat-select [(ngModel)]="task.priority">
       <mat-option *ngFor="let s of priorityOptions" [value]="s">
