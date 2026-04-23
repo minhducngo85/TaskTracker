@@ -25,7 +25,11 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/material-theme.scss", "src/styles.css"],
+            "styles": [
+              "src/material-theme.scss",
+              "node_modules/@ng-select/ng-select/themes/material.theme.css",
+              "src/styles.css"
+            ],
             "security": {
               "allowedHosts": []
             }

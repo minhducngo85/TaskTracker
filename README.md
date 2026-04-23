@@ -119,6 +119,19 @@ style.css: @import 'quill/dist/quill.snow.css';
 npm install @angular/cdk
 ``` 
 
+### Angular ng-select
+```
+npm install @ng-select/ng-select
+```
+
+Angular.jss
+```
+"styles": [
+  "src/material-theme.scss",
+  "node_modules/@ng-select/ng-select/themes/material.theme.css",
+  "src/styles.css"
+]
+```
 ###  toastr - not compatible for angular 21
 ```
 npm install ngx-toastr

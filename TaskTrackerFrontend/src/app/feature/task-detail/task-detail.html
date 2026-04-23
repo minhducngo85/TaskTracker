@@ -48,7 +48,23 @@
 
       <div class="section">
         <h4>Assignee</h4>
-        <span class="priority">👤 {{ assigneeFullname(task.assignedTo) || 'Unassigned' }}</span>
+       
+ <span class="priority clickable assignee-display" *ngIf="!editingAssignee" (click)="startEditAssignee()">👤 {{ assigneeFullname(task.assignedTo) || 'Unassigned' }}</span>
+ <!-- EDIT MODE -->
+  <ng-select
+  #assigneeSelect
+    *ngIf="editingAssignee"
+    class="assignee-select"
+    [items]="assigneeList"
+    bindLabel="fullname"
+    bindValue="username"
+    [ngModel]="task.assignedTo"
+    (ngModelChange)="onAssigneeChange($event)"
+    [searchable]="true"
+    [clearable]="true"
+    placeholder="Assigned to"
+  >
+  </ng-select>
       </div>
 
       <!-- DESCRIPTION -->

@@ -483,3 +483,20 @@
 .status-option:hover {
   background: #f5f5f5;
 }
+
+
+/**  Assignee inline edit*/
+.assignee-display {
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.assignee-display:hover {
+  background: #f5f5f5;
+}
+
+.assignee-select {
+  width: 220px;
+}

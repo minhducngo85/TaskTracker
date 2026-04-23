@@ -19,6 +19,7 @@ import { TaskHistory } from '../../core/models/TaskHistory';
 import { MatTabsModule } from '@angular/material/tabs';
 import { TaskPriority } from '../../core/models/TaskPriority';
 import { TaskStatus } from '../../core/models/TaskStatus';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 /**
  * @author Minh Duc Ngo
@@ -34,6 +35,7 @@ import { TaskStatus } from '../../core/models/TaskStatus';
     QuillModule,
     MatTabsModule,
     TimeAgoPipe,
+    NgSelectModule,
   ],
   templateUrl: './task-detail.html',
   styleUrl: './task-detail.css',
@@ -198,6 +200,7 @@ export class TaskDetail implements OnInit {
     this.taskService.getAssigneeList().subscribe({
       next: (users) => {
         this.assigneeList = users;
+        this.logger.log(JSON.stringify(this.assigneeList));
         this.cdr.detectChanges(); // trigger ui update
       },
       error: (err) => {
@@ -430,5 +433,41 @@ export class TaskDetail implements OnInit {
       this.showPriorityMenu = false;
       this.showStatusMenu = false;
     }
+
+    if (
+      !(event.target as HTMLElement).closest('.assignee-select') &&
+      !(event.target as HTMLElement).closest('.assignee-display') &&
+       !(event.target as HTMLElement).closest('.ng-dropdown-panel') // 👈 FIX
+    ) {
+      this.editingAssignee = false;
+    }
+  }
+
+  onAssigneeChange(newUser: string) {
+    this.logger.log(`onAssigneeChange: ${newUser}`);
+    if (!this.task) return;
+    if (newUser === this.task.assignedTo) return;
+
+    const updated = {
+      ...this.task,
+      assignedTo: newUser,
+    };
+
+     this.logger.log(`onAssigneeChange: $call update api`);
+    this.taskService.updateTask(this.task.id, updated).subscribe((task) => {
+      this.task = task;
+      this.loadHistory();
+      this.cdr.detectChanges();
+    });
+  }
+
+  // edit assignee
+  editingAssignee = false;
+  startEditAssignee() {
+    this.editingAssignee = true;
+  }
+
+  stopEditAssignee() {
+    this.editingAssignee = true;
   }
 }
