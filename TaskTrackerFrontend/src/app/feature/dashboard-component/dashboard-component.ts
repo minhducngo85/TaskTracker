@@ -22,6 +22,7 @@ import { TaskFilter } from '../../core/models/TaskFilter';
 import { LoggerService } from '../../core/services/logger-service';
 import { User } from '../../core/models/User';
 import { Authentication } from '../../core/services/authentication';
+import { TagCount } from '../../core/models/TagCount';
 
 Chart.register(ChartDataLabels);
 
@@ -46,6 +47,7 @@ export interface TaskStats {
   styleUrl: './dashboard-component.css',
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
+
   // Loading indicator
   loading = true;
 
@@ -88,6 +90,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.initChart();
   }
 
+  // top tags
+  topTags: TagCount[] = [];
+
   constructor(
     private taskService: TaskService,
     private cdr: ChangeDetectorRef,
@@ -106,9 +111,20 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.loadRecentTasks();
     this.loadAssigneeList();
     this.loadMyTasks();
+    this.loadTopTags();
   }
 
+  loadTopTags() {
+    this.logger.log('loadTopTags() called!');
+    this.taskService.getTopTags().subscribe((tags) => {
+      this.topTags = tags;
+      this.logger.info(JSON.stringify(this.topTags));
+    });
+  }
+
+  /** Load the assignee list form backend */
   loadAssigneeList() {
+    this.logger.log('loadAssigneeList() called!');
     // read assignee list
     this.taskService.getAssigneeList().subscribe({
       next: (users) => {
@@ -311,7 +327,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-    /**
+  /**
    *
    * @param status show all task sorting by updatedAt
    */
@@ -325,9 +341,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
    *
    * @param status show all task sorting by updatedAt
    */
- goToDetail(id: number) {
+  goToDetail(id: number) {
     this.router.navigate(['/tasks', id]);
   }
+
+  filterByTag(tag: string) {
+  this.router.navigate(['/tasks'], {
+    queryParams: { tag }
+  });
+}
 
   progressColorClass(percent: number): string {
     if (percent < 50) return 'progress-medium';

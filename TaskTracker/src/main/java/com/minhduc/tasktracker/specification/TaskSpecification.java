@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import com.minhduc.tasktracker.dto.TaskFilterRequest;
 import com.minhduc.tasktracker.entity.Task;
 
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 
 public class TaskSpecification {
@@ -31,13 +32,19 @@ public class TaskSpecification {
 			if (req.getPriority() != null) {
 				predicates.add(cb.equal(root.get("priority"), req.getPriority()));
 			}
-			
+
+			// assigned to
 			if (req.getAssignedTo() != null) {
-                predicates.add(cb.like(
-                        cb.lower(root.get("assignedTo")),
-                        "%" + req.getAssignedTo().toLowerCase() + "%"
-                ));
-            }
+				predicates
+						.add(cb.like(cb.lower(root.get("assignedTo")), "%" + req.getAssignedTo().toLowerCase() + "%"));
+			}
+
+			// tags
+			if (req.getTag() != null && !req.getTag().isEmpty()) {
+				Join<Task, String> tags = root.join("tags");
+				predicates.add(cb.equal(cb.lower(tags), req.getTag().toLowerCase()));
+				query.distinct(true); // 🔥 QUAN TRỌNG
+			}
 
 			return cb.and(predicates.toArray(new Predicate[0]));
 		};

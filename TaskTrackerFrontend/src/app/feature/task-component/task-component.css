@@ -583,7 +583,6 @@ button:active {
   background: #125ea8;
 }
 
-
 /* === Tag ===*/
 .tags {
   display: flex;
@@ -595,9 +594,7 @@ button:active {
   align-items: center;
 }
 
-.tags:hover {
-  border-color: #ccc;
-}
+
 
 .tag {
   background: #eee;
@@ -609,11 +606,35 @@ button:active {
   font-size: 13px;
 }
 
-
 .clickable {
   cursor: pointer;
   transition: 0.2s;
 }
 .clickable:hover {
   transform: translateY(-3px);
+}
+
+/** Filter by tags */
+.tag-search-wrapper {
+  position: relative; /* 👈 QUAN TRỌNG */
+  display: inline-block;
+}
+
+.tag-suggestions {
+  position: absolute;
+  top: 100%; /* ngay dưới input */
+  left: 0; /* 👈 fix lệch trái */
+  width: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  z-index: 1000;
+}
+
+.tag-item {
+  padding: 6px;
+  cursor: pointer;
+}
+
+.tag-item:hover {
+  background: #f3f4f6;
 }

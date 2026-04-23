@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.minhduc.tasktracker.controller.exceptionhandling.ResourceNotFoundException;
+import com.minhduc.tasktracker.dto.TagCount;
 import com.minhduc.tasktracker.dto.TaskFilterRequest;
 import com.minhduc.tasktracker.dto.TaskStatisticsResponse;
 import com.minhduc.tasktracker.entity.Task;
@@ -123,5 +124,16 @@ public class TaskService {
 		Task task = taskRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
 		return task;
+	}
+	
+	public List<String> getAllTags(){
+		return taskRepository.findAllUniqueTags();
+	}
+	
+	public List<TagCount> getTopTags(){
+		return taskRepository.findTopTags()
+		        .stream()
+		        .map(obj -> new TagCount((String) obj[0], (Long) obj[1]))
+		        .toList();
 	}
 }

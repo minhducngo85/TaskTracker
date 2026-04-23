@@ -15,4 +15,5 @@ public class TaskFilterRequest {
 	private LocalDate fromDate;
 	private LocalDate toDate;
 	private String assignedTo;
+	private String tag;
 }

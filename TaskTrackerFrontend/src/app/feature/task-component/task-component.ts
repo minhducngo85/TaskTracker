@@ -54,6 +54,7 @@ export class TaskComponent implements OnInit {
     status: '',
     priority: '',
     assignedTo: '',
+    tag: '',
   };
 
   // paginator
@@ -105,10 +106,12 @@ export class TaskComponent implements OnInit {
       this.filters.status = params['status'] || '';
       this.filters.priority = params['priority']?.toUpperCase() || '';
       this.filters.assignedTo = params['assignedTo'] || '';
+      this.filters.tag = params['tag'] || '';
       this.sortValue = params['sort'] || '';
     });
     this.loadAssigneeList();
     this.applyFilter();
+    this.loadTags();
   }
 
   loadAssigneeList() {
@@ -365,6 +368,7 @@ export class TaskComponent implements OnInit {
     this.filters.priority = '';
     this.filters.keyword = '';
     this.filters.assignedTo = '';
+    this.filters.tag = '';
 
     // Sorting
     this.sortValue = '';
@@ -437,5 +441,31 @@ export class TaskComponent implements OnInit {
 
   goToDetail(id: number) {
     this.router.navigate(['/tasks', id]);
+  }
+
+  /** ====== Tag filter */
+  tagInput: string = '';
+  allTags: string[] = []; // tất cả tags
+  filteredTags: string[] = [];
+
+  onTagSearch() {
+    const value = this.tagInput.toLowerCase();
+
+    this.filteredTags = this.allTags.filter((tag) => tag.toLowerCase().includes(value));
+  }
+
+  selectTag(tag: string) {
+    this.filters.tag = tag;
+    this.tagInput = tag;
+    this.filteredTags = [];
+
+    this.applyFilter(); // call backend
+  }
+
+  loadTags() {
+    this.taskService.getAllTags().subscribe((tags) => {
+      this.allTags = tags;
+      this.logger.log(this.allTags.toString());
+    });
   }
 }

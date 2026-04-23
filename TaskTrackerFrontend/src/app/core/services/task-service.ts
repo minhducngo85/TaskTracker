@@ -45,4 +45,12 @@ export class TaskService {
   getTask(id: number) {
     return this.http.get<Task>(`${this.api}/${id}`);
   }
+
+  getAllTags(){
+    return this.http.get<any[]>(`${this.api}/tags`);
+  }
+
+  getTopTags(){
+    return this.http.get<any[]>(`${this.api}/tags/top?limit=20`);
+  }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.minhduc.tasktracker.dto.TagCount;
 import com.minhduc.tasktracker.dto.TaskFilterRequest;
 import com.minhduc.tasktracker.dto.TaskStatisticsResponse;
 import com.minhduc.tasktracker.dto.UserResponse;
@@ -34,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TaskController {
 
 	private final TaskService taskService;
-	
+
 	private final UserService userService;
 
 	@GetMapping("/all")
@@ -45,7 +46,7 @@ public class TaskController {
 		}
 		return taskService.getAll();
 	}
-	
+
 	@GetMapping
 	public Page<Task> getTasks(TaskFilterRequest filter, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "createdAt,desc") String[] sort) {
@@ -56,7 +57,7 @@ public class TaskController {
 		log.info("size: {}", size);
 		return taskService.getTasks(filter, page, size, sort);
 	}
-	
+
 	@GetMapping("/options/assignee")
 	public List<UserResponse> getAssigneeList() {
 		log.info("getAssigneeList() called");
@@ -68,7 +69,7 @@ public class TaskController {
 			return res;
 		}).toList();
 	}
-	
+
 	@GetMapping("/stats")
 	public TaskStatisticsResponse getStats() {
 		return taskService.getStatistics();
@@ -97,5 +98,15 @@ public class TaskController {
 	public Task getTask(@PathVariable Long id) {
 		log.info("getTask() called id=", id);
 		return taskService.getTask(id);
+	}
+
+	@GetMapping("/tags")
+	public List<String> getAllTags() {
+		return taskService.getAllTags();
+	}
+
+	@GetMapping("/tags/top")
+	public List<TagCount> topTags(@RequestParam(defaultValue = "20") int limit) {
+		return taskService.getTopTags().stream().limit(limit).toList();
 	}
 }

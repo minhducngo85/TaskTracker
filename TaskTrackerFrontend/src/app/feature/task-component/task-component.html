@@ -104,6 +104,13 @@
           </option>
         </select>
 
+        <select [(ngModel)]="filters.assignedTo" (change)="applyFilter()">
+          <option value="">Assignee All</option>
+          <option *ngFor="let user of assigneeList" [value]="user.username">
+            {{ user.fullname }}
+          </option>
+        </select>
+
         <!-- Search by name-->
         <input
           type="text"
@@ -112,12 +119,22 @@
           placeholder="Search by title..."
         />
 
-        <select [(ngModel)]="filters.assignedTo" (change)="applyFilter()">
-          <option value="">Assignee All</option>
-          <option *ngFor="let user of assigneeList" [value]="user.username">
-            {{ user.fullname }}
-          </option>
-        </select>
+        <!-- TAG SEARCH -->
+        <div class="tag-search-wrapper">
+          <input
+            type="text"
+            [(ngModel)]="tagInput"
+            (input)="onTagSearch()"
+            placeholder="Search by tag..."
+          />
+
+          <!-- AUTOCOMPLETE DROPDOWN -->
+          <div class="tag-suggestions" *ngIf="filteredTags.length">
+            <div class="tag-item" *ngFor="let tag of filteredTags" (click)="selectTag(tag)">
+              {{ tag }}
+            </div>
+          </div>
+        </div>
 
         <!-- Sorting-->
         <select [(ngModel)]="sortValue" (change)="applyFilter()">
@@ -173,9 +190,9 @@
 
       <div class="tags">
         <!-- display mode -->
-        <ng-container>
+
           <span class="tag" *ngFor="let tag of task.tags">{{ tag }}</span>
-        </ng-container>
+  
       </div>
 
       <!-- FOOTER -->

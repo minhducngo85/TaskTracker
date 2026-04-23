@@ -26,53 +26,112 @@ INSERT INTO task (title, description, status, priority, assigned_to, created_At,
 VALUES ('Dashboard', 'Dashboard with number of DONE/TODO/IN_PROGRESS and chart. Using chart.js', 'TODO', 'HIGH', 'admin', '2026-04-20 11:01:25', '2026-04-20 11:01:25');
 INSERT INTO task_tags (task_id, tag)
 VALUES 
+((SELECT MAX(id) FROM task), 'chartjs'),
 ((SELECT MAX(id) FROM task), 'dashboard');
 
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Priority Function', 'Extend Task with Priority (Critial, high, medim, low) including backend and front end side.', 'TODO', 'HIGH', 'lucas', '2026-04-20 09:00:25', '2026-04-20 09:00:25');
+INSERT INTO task_tags (task_id, tag)
+VALUES ((SELECT MAX(id) FROM task), 'priority'), ((SELECT MAX(id) FROM task), 'angular'), ((SELECT MAX(id) FROM task), 'frontend');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('DevOps/Configuration', 'Write Dockerfile and docker-compose files to enable deployment with one command', 'DONE', 'MEDIUM', 'mngo', '2026-04-19 11:00:25', '2026-04-19 11:00:25');
+INSERT INTO task_tags (task_id, tag)
+VALUES ((SELECT MAX(id) FROM task), 'nginx'), ((SELECT MAX(id) FROM task), 'vps'),((SELECT MAX(id) FROM task), 'linux');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Database Management', 'Modifying a database schema by adding a deleted_at column for soft-delete functionality', 'IN_PROGRESS', 'HIGH', 'mngo', '2026-04-20 11:05:25', '2026-04-20 11:05:25');
+INSERT INTO task_tags (task_id, tag)
+VALUES 
+((SELECT MAX(id) FROM task), 'postgresql'),
+((SELECT MAX(id) FROM task), 'database');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Intergate Keycloak', 'Implement and integrate ODIC authentication with Keycloak', 'TODO', 'MEDIUM', '', '2026-04-20 11:10:25', '2026-04-20 11:10:25');
+INSERT INTO task_tags (task_id, tag)
+VALUES ((SELECT MAX(id) FROM task), 'keycloak'), ((SELECT MAX(id) FROM task), 'oidc');
+
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Paginator', 'Backend: GET /tasks?page=0&size=10. Frontend: next / prev', 'DONE', 'MEDIUM', 'user', '2026-04-18 11:01:25', '2026-04-18 11:01:25');
+INSERT INTO task_tags (task_id, tag)
+VALUES
+((SELECT MAX(id) FROM task), 'backend'),
+((SELECT MAX(id) FROM task), 'paginator');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Due Date and Overdue', 'Add due date to task and highlight', 'IN_PROGRESS', 'HIGH', 'mngo', '2026-04-20 11:04:25', '2026-04-20 11:04:25');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Play pickleball', 'Practice Dink and drop ', 'DONE', 'LOW', 'lucas', '2026-04-20 11:06:25', '2026-04-20 11:06:25');
+INSERT INTO task_tags (task_id, tag)
+VALUES
+((SELECT MAX(id) FROM task), 'sport'),
+((SELECT MAX(id) FROM task), 'pickleball'),
+((SELECT MAX(id) FROM task), 'drop'),
+((SELECT MAX(id) FROM task), 'dink');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Play Tennis', 'Play tennis today. Practice forehand', 'TODO', 'MEDIUM', 'lucas', '2026-04-20 10:00:25', '2026-04-20 10:00:25');
+INSERT INTO task_tags (task_id, tag)
+VALUES
+((SELECT MAX(id) FROM task), 'sport'),
+((SELECT MAX(id) FROM task), 'tennis');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Email notification', 'If task is assigned. An email to assignee will be sent', 'TODO', 'HIGH', 'lucas', '2026-04-20 08:00:25', '2026-04-20 08:00:25');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Kanban Drag & Drop Feature', 'TODO → IN_PROGRESS → DONE. Angular CDK Dragdrop', 'IN_PROGRESS', 'CRITICAL', 'admin', '2026-04-19 11:09:25', '2026-04-19 11:09:25');
+INSERT INTO task_tags (task_id, tag)
+VALUES
+((SELECT MAX(id) FROM task), 'kanban'),
+((SELECT MAX(id) FROM task), 'drag & drop');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Task Comments', 'Implement feature "Task comments"', 'TODO', 'LOW', 'lucas', '2026-04-20 11:02:50', '2026-04-20 11:02:50');
+INSERT INTO task_tags (task_id, tag)
+VALUES
+((SELECT MAX(id) FROM task), 'backend'),
+((SELECT MAX(id) FROM task), 'frontend');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Deep sorting and filtering', 'Parse filter and sort value in url and perform sorting & filtering at server side.', 'DONE', 'HIGH', 'mia', '2026-04-20 12:08:00', '2026-04-20 12:08:00');
+INSERT INTO task_tags (task_id, tag)
+VALUES
+((SELECT MAX(id) FROM task), 'backend'),
+((SELECT MAX(id) FROM task), 'paginator'),
+((SELECT MAX(id) FROM task), 'frontend');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Refresh token', 'Extend JWT authentication with refresh token. Frontend: auto renew new token 5 minute before expiration', 'TODO', 'HIGH', 'mngo', '2026-04-21 00:07:00', '2026-04-21 00:07:00');
+INSERT INTO task_tags (task_id, tag)
+VALUES
+((SELECT MAX(id) FROM task), 'jwt'),
+((SELECT MAX(id) FROM task), 'token');
+
+
+INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
+VALUES ('Login with Jwt', 'Login function with Jwt', 'TODO', 'HIGH', 'mngo', '2026-04-21 00:07:00', '2026-04-21 00:07:00');
+INSERT INTO task_tags (task_id, tag)
+VALUES
+((SELECT MAX(id) FROM task), 'jwt'),
+((SELECT MAX(id) FROM task), 'token');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Option/ Assignee List api', 'New API to fetch all assignee list from database', 'TODO', 'CRITICAL', 'mngo', '2026-04-21 01:08:00', '2026-04-21 01:08:00');
+INSERT INTO task_tags (task_id, tag)
+VALUES
+((SELECT MAX(id) FROM task), 'assignee'),
+((SELECT MAX(id) FROM task), 'api');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Task List - Assignee Dropdown', 'Update frontend page Task list to use dropdown for assignee field', 'TODO', 'MEDIUM', 'admin', '2026-04-21 02:09:00', '2026-04-21 02:09:00');
+INSERT INTO task_tags (task_id, tag)
+VALUES
+((SELECT MAX(id) FROM task), 'dropdown'),
+((SELECT MAX(id) FROM task), 'assignee');
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
 VALUES ('Logger Service', 'Singleton Logger object with levels: log, info, debug, warn and error', 'DONE', 'CRITICAL', 'mngo', '2026-04-21 16:09:00', '2026-04-21 16:09:00');
@@ -91,7 +150,7 @@ INSERT INTO task (title, description, status, priority, assigned_to, created_At,
 VALUES ('Assigned to Me', 'Show assigned to me tasks in dashboard', 'DONE', 'CRITICAL', 'admin', '2026-04-21 16:09:00', '2026-04-21 16:09:00');
 INSERT INTO task_tags (task_id, tag)
 VALUES 
-((SELECT MAX(id) FROM task), 'free tag');
+((SELECT MAX(id) FROM task), 'assignee');
 
 
 INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
@@ -104,8 +163,39 @@ INSERT INTO task (title, description, status, priority, assigned_to, created_At,
 VALUES ('Tags feature', 'Each task can have multiple tags', 'TODO', 'LOW', 'admin', '2026-04-21 23:10:00', '2026-04-21 23:10:00');
 INSERT INTO task_tags (task_id, tag)
 VALUES 
-((SELECT MAX(id) FROM task), 'tag feature'),
+((SELECT MAX(id) FROM task), 'tag'),
 ((SELECT MAX(id) FROM task), 'angular material');
+
+INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
+VALUES ('Top Tags', 'Top tags in dashboard', 'DONE', 'CRITICAL', 'admin', '2026-04-22 23:10:00', '2026-04-22 23:10:00');
+INSERT INTO task_tags (task_id, tag)
+VALUES 
+((SELECT MAX(id) FROM task), 'dashboard'),
+((SELECT MAX(id) FROM task), 'backend'),
+((SELECT MAX(id) FROM task), 'tags');
+
+INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
+VALUES ('Task Historiy', 'Task history feature for auditing', 'TODO', 'LOW', 'admin', '2026-04-22 23:15:00', '2026-04-22 23:15:00');
+INSERT INTO task_tags (task_id, tag)
+VALUES 
+((SELECT MAX(id) FROM task), 'backend'),
+((SELECT MAX(id) FROM task), 'history');
+
+INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
+VALUES ('File Upload', 'Task can have multiple attachments', 'IN_PROGRESS', 'HIGH', 'mngo', '2026-04-23 08:10:00', '2026-04-22 08:10:00');
+INSERT INTO task_tags (task_id, tag)
+VALUES 
+((SELECT MAX(id) FROM task), 'backend'),
+((SELECT MAX(id) FROM task), 'attachment'),
+((SELECT MAX(id) FROM task), 'frontend');
+
+INSERT INTO task (title, description, status, priority, assigned_to, created_At, updated_At)
+VALUES ('Tag autocomplete', 'by entering tag, the suggestion box mus tbe appeared', 'TODO', 'HIGH', 'mngo', '2026-04-23 08:10:00', '2026-04-22 08:10:00');
+INSERT INTO task_tags (task_id, tag)
+VALUES 
+((SELECT MAX(id) FROM task), 'autocomplete'),
+((SELECT MAX(id) FROM task), 'frontend');
+
 
 DELETE FROM users;
 

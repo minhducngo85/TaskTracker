@@ -3,4 +3,5 @@ export interface TaskFilter {
   status?: string;
   priority?: string;
   assignedTo?: string;
+  tag?:string
 }
