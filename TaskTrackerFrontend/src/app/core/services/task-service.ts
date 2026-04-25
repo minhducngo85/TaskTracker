@@ -27,12 +27,12 @@ export class TaskService {
     return this.http.get<User[]>(`${this.api}/options/assignee`);
   }
 
-  getStats(){
+  getStats() {
     return this.http.get<any>(`${this.api}/stats`);
   }
 
   addTask(task: any) {
-    return this.http.post(this.api, task);
+    return this.http.post<Task>(this.api, task);
   }
 
   deleteTask(id: number) {
@@ -47,23 +47,31 @@ export class TaskService {
     return this.http.get<Task>(`${this.api}/${id}`);
   }
 
-  getAllTags(){
+  getAllTags() {
     return this.http.get<any[]>(`${this.api}/tags`);
   }
 
-  getTopTags(){
+  getTopTags() {
     return this.http.get<any[]>(`${this.api}/tags/top?limit=20`);
   }
 
-  getComments(taskId:Number, page : number, size : number){
+  getComments(taskId: Number, page: number, size: number) {
     return this.http.get<any>(`${this.api}/${taskId}/comments?page=${page}&size=${size}`);
   }
 
-  getHistory(taskId:Number, page : number, size : number){
+  getHistory(taskId: Number, page: number, size: number) {
     return this.http.get<any>(`${this.api}/${taskId}/history?page=${page}&size=${size}`);
   }
 
-  addComment(taskId:Number, content: string) {
-    return this.http.post<TaskComment[]>(`${this.api}/${taskId}/comments`, {content : content});
+  addComment(taskId: Number, content: string) {
+    return this.http.post<TaskComment[]>(`${this.api}/${taskId}/comments`, { content: content });
+  }
+
+  getMyWork() {
+    return this.http.get<any>(`${this.api}/my-work`);
+  }
+
+  getMyActiveTasks() {
+    return this.http.get<any[]>(`${this.api}/my-tasks`);
   }
 }

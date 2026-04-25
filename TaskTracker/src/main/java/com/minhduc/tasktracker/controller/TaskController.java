@@ -14,13 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.minhduc.tasktracker.dto.MyWorkDto;
 import com.minhduc.tasktracker.dto.TagCount;
+import com.minhduc.tasktracker.dto.TaskDto;
 import com.minhduc.tasktracker.dto.TaskFilterRequest;
 import com.minhduc.tasktracker.dto.TaskStatisticsResponse;
 import com.minhduc.tasktracker.dto.UserResponse;
 import com.minhduc.tasktracker.entity.Task;
 import com.minhduc.tasktracker.entity.TaskHistory;
 import com.minhduc.tasktracker.entity.TaskPriority;
+import com.minhduc.tasktracker.security.SecurityUtils;
 import com.minhduc.tasktracker.service.TaskService;
 import com.minhduc.tasktracker.service.UserService;
 
@@ -39,12 +42,12 @@ public class TaskController {
 	private final UserService userService;
 
 	@GetMapping("/all")
-	public List<Task> getAllTasks(@RequestParam(required = false) TaskPriority priority) {
+	public List<TaskDto> getAllTasks(@RequestParam(required = false) TaskPriority priority) {
 		log.info("getAllTasks() called");
 		if (priority != null) {
-			return taskService.findByPriority(priority);
+			return taskService.findByPriority(priority).stream().map(aTask -> mapTaskToDto(aTask)).toList();
 		}
-		return taskService.getAll();
+		return taskService.getAll().stream().map(aTask -> mapTaskToDto(aTask)).toList();
 	}
 
 	@GetMapping("/{taskId}/history")
@@ -54,16 +57,15 @@ public class TaskController {
 		return taskService.getHistory(taskId, page, size);
 	}
 
-	
 	@GetMapping
-	public Page<Task> getTasks(TaskFilterRequest filter, @RequestParam(defaultValue = "0") int page,
+	public Page<TaskDto> getTasks(TaskFilterRequest filter, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "createdAt,desc") String[] sort) {
 		log.info("getTasks() called");
 		log.info("Filters: {}", filter.toString());
 		log.info("sort: {}", String.join(",", sort));
 		log.info("page: {}", page);
 		log.info("size: {}", size);
-		return taskService.getTasks(filter, page, size, sort);
+		return taskService.getTasks(filter, page, size, sort).map(aTask -> mapTaskToDto(aTask));
 	}
 
 	@GetMapping("/options/assignee")
@@ -84,16 +86,16 @@ public class TaskController {
 	}
 
 	@PostMapping
-	public Task create(@RequestBody Task task) {
+	public TaskDto create(@RequestBody Task task) {
 		log.info("create() called");
 		log.info("Objt to save: {}", task.toString());
-		return taskService.create(task);
+		return mapTaskToDto(taskService.create(task));
 	}
 
 	@PutMapping("/{id}")
-	public Task update(@PathVariable Long id, @RequestBody Task task) {
+	public TaskDto update(@PathVariable Long id, @RequestBody Task task) {
 		log.info("update() called");
-		return taskService.update(id, task);
+		return mapTaskToDto(taskService.update(id, task));
 	}
 
 	@DeleteMapping("/{id}")
@@ -103,9 +105,9 @@ public class TaskController {
 	}
 
 	@GetMapping("/{id}")
-	public Task getTask(@PathVariable Long id) {
+	public TaskDto getTask(@PathVariable Long id) {
 		log.info("getTask() called id=", id);
-		return taskService.getTask(id);
+		return mapTaskToDto(taskService.getTask(id));
 	}
 
 	@GetMapping("/tags")
@@ -116,5 +118,35 @@ public class TaskController {
 	@GetMapping("/tags/top")
 	public List<TagCount> topTags(@RequestParam(defaultValue = "20") int limit) {
 		return taskService.getTopTags().stream().limit(limit).toList();
+	}
+
+	@GetMapping("/my-work")
+	public MyWorkDto getMyWork() {
+		String user = SecurityUtils.getCurrentUser();
+		return taskService.getMyWork(user);
+	}
+
+	@GetMapping("/my-tasks")
+	public List<TaskDto> getMyActiveTasks() {
+		log.info("getMyActiveTasks called!");
+		return taskService.getMyActiveTask().stream().map(aTask -> mapTaskToDto(aTask)).toList();
+	}
+
+	private TaskDto mapTaskToDto(Task aTask) {
+		if (aTask == null) {
+			return null;
+		}
+		TaskDto dto = new TaskDto();
+		dto.setId(aTask.getId());
+		dto.setTitle(aTask.getTitle());
+		dto.setAssignedTo(aTask.getAssignedTo());
+		dto.setCreatedAt(aTask.getCreatedAt());
+		dto.setUpdatedAt(aTask.getUpdatedAt());
+		dto.setDescription(aTask.getDescription());
+		dto.setDueDate(aTask.getDueDate());
+		dto.setPriority(aTask.getPriority());
+		dto.setStatus(aTask.getStatus());
+		dto.setTags(aTask.getTags());
+		return dto;
 	}
 }

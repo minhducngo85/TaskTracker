@@ -7,6 +7,7 @@ import { Admin } from './feature/admin/admin';
 import { DashboardComponent } from './feature/dashboard-component/dashboard-component';
 import { KanbanBoardComponent } from './feature/kanban-board-component/kanban-board-component';
 import { TaskDetail } from './feature/task-detail/task-detail';
+import { MyWorkComponent } from './feature/my-work-component/my-work-component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -14,6 +15,7 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'kanbanboard', component: KanbanBoardComponent, canActivate: [authGuard] },
   { path: 'tasks', component: TaskComponent, canActivate: [authGuard] },
+  { path: 'my-work', component: MyWorkComponent, canActivate: [authGuard] },
   { path: 'tasks/:id', component: TaskDetail, canActivate: [authGuard] },
   { path: 'admin', component: Admin, canActivate: [adminGuard] },
 

@@ -19,6 +19,13 @@ body {
   font-size: 20px;
 }
 
+.section {
+  margin-top: 20px;
+  border: 1px solid #dbdbdb;
+  border-radius: 15px;
+  padding: 15px;
+}
+
 @media (max-width: 768px) {
   .title {
     font-size: 18px;
@@ -646,6 +653,12 @@ button:active {
   background: #f3f4f6;
 }
 
+
+.due-edit input {
+  padding: 4px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
 
 
 

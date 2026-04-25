@@ -1,0 +1,170 @@
+<h2 class="title">💼 My Work</h2>
+
+<div class="page-content">
+  <div class="section">
+    <div class="section-title">🧾 Summary</div>
+    <div class="cards">
+      <div class="card total summary">
+        <div class="left">
+          <div class="card-title">Active Tasks</div>
+          <div class="card-value">{{ (myWork$ | async)?.total }}</div>
+          <div class="card-desc">Not done tasks</div>
+        </div>
+        <div class="icon">📋</div>
+      </div>
+
+      <div class="card overdue summary">
+        <div class="left">
+          <div class="card-title">Overdue</div>
+          <div class="card-value">{{ (myWork$ | async)?.overdue?.length }}</div>
+          <div class="card-desc">Needs attention</div>
+        </div>
+
+        <div class="icon">⏰</div>
+      </div>
+
+      <div class="card progress summary">
+        <div class="left">
+          <div class="card-title">In Progress</div>
+          <div class="card-value">
+            {{ (myWork$ | async)?.inProgress?.length }}
+          </div>
+          <div class="card-desc">Keep it up!</div>
+        </div>
+
+        <div class="icon">🔄</div>
+      </div>
+
+      <div class="card todo summary">
+        <div class="left">
+          <div class="card-title">To Do</div>
+          <div class="card-value">
+            {{ (myWork$ | async)?.todo?.length }}
+          </div>
+          <div class="card-desc">Planned tasks</div>
+        </div>
+
+        <div class="icon">⏳</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" >
+    <div class="section-title">⏰ Overdue</div>
+    <!-- List -->
+    <div class="task-list">
+      <div
+        class="task-item overdue clickable"
+        (click)="goToDetail(task.id); $event.stopPropagation()"
+        *ngFor="let task of (myWork$ | async)?.overdue ?? []; trackBy: trackById"
+      >
+        <!-- LEFT -->
+        <div class="left">
+          <div class="task-title">
+            {{ task.title }}
+          </div>
+        </div>
+
+        <div class="middle-overdue">
+          <span class="status-badge" title="Status" [ngClass]="task.status">
+            {{ task.status }}
+          </span>
+          <span class="status-badge" title="Priority" [ngClass]="task.priority">
+            {{ task.priority }}
+          </span>
+        </div>
+
+        <!-- due date -->
+        <div class="right">
+          <span class="due-date" title="Due date"
+            >📅 {{ task?.dueDate ? (task.dueDate | date: 'dd/MM/yyyy HH:mm') : 'No due date'}}</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div class="empty" *ngIf="((myWork$ | async)?.overdue ?? []).length === 0">
+      🎉 No overdue tasks
+    </div>
+  </div>
+
+  <div class="layout-2-cols">
+    <div class="col-left">
+      <div class="section-title">🔄 In Progress</div>
+      <!-- List -->
+      <div class="task-list">
+        <div
+          class="task-item progress clickable"
+          (click)="goToDetail(task.id); $event.stopPropagation();"
+          *ngFor="let task of (myWork$ | async)?.inProgress ?? []; trackBy: trackById"
+        >
+          <!-- LEFT -->
+          <div class="left">
+            <div class="task-title">
+              {{ task.title }}
+            </div>
+          </div>
+
+          <div class="middle">
+            <span class="status-badge" title="Priority" [ngClass]="task.priority">
+              {{ task.priority }}
+            </span>
+          </div>
+
+          <!-- due date -->
+          <div class="right">
+             <span *ngIf="isTodayTask(task)" title="Due today">⚠️</span>
+            <span class="due-date" title="Due date"
+              >📅 {{ task?.dueDate ? (task.dueDate | date: 'dd/MM/yyyy HH:mm') : 'No due date'}}</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- EMPTY STATE -->
+      <div class="empty" *ngIf="((myWork$ | async)?.inProgress ?? []).length === 0">
+        🎉 No in_progress tasks
+      </div>
+    </div>
+    <div class="col-right">
+
+            <div class="section-title">🔄 To Do</div>
+      <!-- List -->
+      <div class="task-list">
+        <div
+          class="task-item todo clickable"
+          (click)="goToDetail(task.id); $event.stopPropagation();"
+          *ngFor="let task of (myWork$ | async)?.todo ?? []; trackBy: trackById"
+        >
+          <!-- LEFT -->
+          <div class="left">
+            <div class="task-title">
+              {{ task.title }}
+            </div>
+          </div>
+
+          <div class="middle">
+            <span class="status-badge" title="Priority" [ngClass]="task.priority">
+              {{ task.priority }}
+            </span>
+          </div>
+
+          <!-- due date -->
+          <div class="right">
+            <span *ngIf="isTodayTask(task)" title="Due today">⚠️</span>
+
+            <span class="due-date" title="Due date"
+              >📅 {{ task?.dueDate ? (task.dueDate | date: 'dd/MM/yyyy HH:mm') : 'No due date'}}</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- EMPTY STATE -->
+      <div class="empty" *ngIf="((myWork$ | async)?.todo ?? []).length === 0">
+        🎉 No due-today tasks
+      </div>
+    </div>
+  </div>
+</div>

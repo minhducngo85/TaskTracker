@@ -1,9 +1,13 @@
 <h2 class="title">📋 Task List</h2>
 
 <div *ngIf="loading" class="loading">Loading...</div>
-<div *ngIf="!loading">
+<div *ngIf="!loading" class="section">
   <!-- Add button -->
-  <button class="add-btn" (click)="toggleForm()">+ Add Task</button>
+   <button mat-raised-button color="primary" (click)="openAddTaskDialog()" style="display:none;">
+  + Add Task
+</button>
+
+  <button class="add-btn"  (click)="openAddTaskDialog()">+ Add Task</button>
 
   <!-- Form add task -->
   <!-- Form -->

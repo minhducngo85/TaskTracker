@@ -1,5 +1,7 @@
 package com.minhduc.tasktracker.service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.minhduc.tasktracker.controller.exceptionhandling.ResourceNotFoundException;
-import com.minhduc.tasktracker.dto.TaskCommentDTO;
+import com.minhduc.tasktracker.dto.MyWorkDto;
+import com.minhduc.tasktracker.dto.TaskCommentDto;
 import com.minhduc.tasktracker.entity.Task;
 import com.minhduc.tasktracker.entity.TaskComment;
 import com.minhduc.tasktracker.entity.User;
@@ -36,15 +39,17 @@ public class TaskCommentService {
 	 * @param taskId
 	 * @return
 	 */
-	public Page<TaskCommentDTO> getComments(long taskId, int page, int size) {
-		if (page < 0) page = 0;
-	    if (size <= 0 || size > 50) size = 10; // tránh query quá lớn
-	    
+	public Page<TaskCommentDto> getComments(long taskId, int page, int size) {
+		if (page < 0)
+			page = 0;
+		if (size <= 0 || size > 50)
+			size = 10; // tránh query quá lớn
+
 		Page<TaskComment> comments = commentRepo.findByTaskIdOrderByCreatedAtDesc(taskId, PageRequest.of(page, size));
-		return comments.map(this::mapToDTO);
+		return comments.map(this::mapToDto);
 	}
 
-	public TaskCommentDTO addComment(Long taskId, String content, String username) {
+	public TaskCommentDto addComment(Long taskId, String content, String username) {
 		Task task = taskRepo.findById(taskId)
 				.orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + taskId));
 		String fullName = userRepo.findByUsername(username).map(User::getFullname).orElse(username);
@@ -54,7 +59,7 @@ public class TaskCommentService {
 		comment.setTask(task);
 		comment.setCreatedByFullName(fullName);
 		TaskComment saved = commentRepo.save(comment);
-		return mapToDTO(saved);
+		return mapToDto(saved);
 	}
 
 	/**
@@ -63,8 +68,8 @@ public class TaskCommentService {
 	 * @param c
 	 * @return
 	 */
-	private TaskCommentDTO mapToDTO(TaskComment c) {
-		TaskCommentDTO dto = new TaskCommentDTO();
+	private TaskCommentDto mapToDto(TaskComment c) {
+		TaskCommentDto dto = new TaskCommentDto();
 		dto.setId(c.getId());
 		dto.setContent(c.getContent());
 		dto.setCreatedBy(c.getCreatedBy());
@@ -73,4 +78,6 @@ public class TaskCommentService {
 		dto.setUpdatedAt(c.getUpdatedAt());
 		return dto;
 	}
+
+	
 }

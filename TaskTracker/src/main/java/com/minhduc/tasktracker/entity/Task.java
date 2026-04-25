@@ -25,12 +25,11 @@ import lombok.ToString;
 
 @Entity
 @Data
-@ToString(exclude = { "description","comments"  })
+@ToString(exclude = { "description", "comments" })
 public class Task {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
 	private String title;
 	private String description;
 
@@ -43,16 +42,17 @@ public class Task {
 
 	private String assignedTo;
 
+	private Instant dueDate;
+
 	@Column(updatable = false)
 	private Instant createdAt;
-
 	private Instant updatedAt;
 
 	@ElementCollection
 	@CollectionTable(name = "task_tags", joinColumns = @JoinColumn(name = "task_id"))
 	@Column(name = "tag")
 	private List<String> tags = new ArrayList<>();
-	
+
 	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference // ignore json loop if it is used as DTO
 	private List<TaskComment> comments = new ArrayList<>();

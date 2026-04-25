@@ -23,6 +23,7 @@ import { LoggerService } from '../../core/services/logger-service';
 import { User } from '../../core/models/User';
 import { Authentication } from '../../core/services/authentication';
 import { TagCount } from '../../core/models/TagCount';
+import { MyWork } from '../../core/models/MyWork';
 
 Chart.register(ChartDataLabels);
 
@@ -47,7 +48,6 @@ export interface TaskStats {
   styleUrl: './dashboard-component.css',
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
-
   // Loading indicator
   loading = true;
 
@@ -93,6 +93,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // top tags
   topTags: TagCount[] = [];
 
+  // my works
+  myWork: MyWork = {
+    overdue: 0,
+    today: 0,
+    thisWeek: 0,
+  };
+
   constructor(
     private taskService: TaskService,
     private cdr: ChangeDetectorRef,
@@ -112,6 +119,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.loadAssigneeList();
     this.loadMyTasks();
     this.loadTopTags();
+    this.loadMyWork();
+  }
+
+  loadMyWork() {
+    this.taskService.getMyWork().subscribe((res) => {
+      this.myWork = res;
+      this.logger.info('My Work: ' + JSON.stringify(this.myWork));
+    });
   }
 
   loadTopTags() {
@@ -321,10 +336,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
    *
    * @param status show my tasks
    */
-  filterAssignedTo() {
-    this.router.navigate(['/tasks'], {
-      queryParams: { assignedTo: this.auth.getUsername() },
-    });
+  toMyWork() {
+    this.router.navigate(['/my-work']);
   }
 
   /**
@@ -346,10 +359,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   filterByTag(tag: string) {
-  this.router.navigate(['/tasks'], {
-    queryParams: { tag }
-  });
-}
+    this.router.navigate(['/tasks'], {
+      queryParams: { tag },
+    });
+  }
 
   progressColorClass(percent: number): string {
     if (percent < 50) return 'progress-medium';

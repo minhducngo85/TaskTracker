@@ -5,9 +5,10 @@
     <h2>🚀 Menu</h2>
 
     <nav>
-      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeSidebar()">📉 Dashboard</a>
+      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeSidebar()">🏠 Dashboard</a>
+      <a routerLink="/my-work" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" (click)="closeSidebar()">💼 My Work</a>
       <a routerLink="/kanbanboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeSidebar()">🗓️ Kanban Board</a>
-      <a routerLink="/tasks" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" (click)="closeSidebar()">📋 Tasks</a>
+      <a routerLink="/tasks" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" (click)="closeSidebar()">📑 Tasks</a>
       <a *ngIf="auth.isAdmin()" routerLinkActive="active" routerLink="/admin" (click)="closeSidebar()">🛠️ Admin</a>
       <a *ngIf="!auth.isLoggedIn()" routerLink="/login"  routerLinkActive="active" (click)="closeSidebar()">🔐 Login</a>
     </nav>

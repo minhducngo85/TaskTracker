@@ -5,7 +5,7 @@ import java.time.Instant;
 import lombok.Data;
 
 @Data
-public class TaskCommentDTO {
+public class TaskCommentDto {
 	private Long id;
 	private String content;
 	private String createdBy;

@@ -21,7 +21,7 @@
             <span class="arrow">▼</span>
           </button>
 
-          <div class="status-menu" *ngIf="showStatusMenu">
+          <div class="status-menu" *ngIf="showStatusMenu" >
             <div *ngFor="let s of statusOptions" (click)="changeStatus(s)" class="status-option">
               {{ s }}
             </div>
@@ -31,7 +31,7 @@
         <div class="status-wrapper">
           <button class="status-badge" [ngClass]="task.priority" (click)="togglePriorityMenu()">
             {{ task.priority }}
-            <span class="arrow">▼</span>
+            <span class="arrow" *ngIf="isEditable()">▼</span>
           </button>
 
           <div class="status-menu" *ngIf="showPriorityMenu">
@@ -48,23 +48,52 @@
 
       <div class="section">
         <h4>Assignee</h4>
-       
- <span class="priority clickable assignee-display" *ngIf="!editingAssignee" (click)="startEditAssignee()">👤 {{ assigneeFullname(task.assignedTo) || 'Unassigned' }}</span>
- <!-- EDIT MODE -->
-  <ng-select
-  #assigneeSelect
-    *ngIf="editingAssignee"
-    class="assignee-select"
-    [items]="assigneeList"
-    bindLabel="fullname"
-    bindValue="username"
-    [ngModel]="task.assignedTo"
-    (ngModelChange)="onAssigneeChange($event)"
-    [searchable]="true"
-    [clearable]="true"
-    placeholder="Assigned to"
-  >
-  </ng-select>
+
+        <span
+          class="priority clickable assignee-display"
+          *ngIf="!editingAssignee"
+          (click)="startEditAssignee()"
+          >👤 {{ assigneeFullname(task.assignedTo) || 'Unassigned' }}</span
+        >
+        <!-- EDIT MODE -->
+        <ng-select
+          #assigneeSelect
+          *ngIf="editingAssignee"
+          class="assignee-select"
+          [items]="assigneeList"
+          bindLabel="fullname"
+          bindValue="username"
+          [ngModel]="task.assignedTo"
+          (ngModelChange)="onAssigneeChange($event)"
+          [searchable]="true"
+          [clearable]="true"
+          placeholder="Assigned to"
+        >
+        </ng-select>
+      </div>
+
+      <!-- Due date -->
+      <div class="section">
+        <h4>Due Date</h4>
+        <!-- VIEW MODE -->
+        <div *ngIf="!editingDueDate" (click)="startEditDueDate()" class="clickable due-display">
+          <span>
+            📅 {{ task.dueDate ? (task.dueDate | date: 'dd/MM/yyyy HH:mm') : 'No due date' }}
+          </span>
+          <span style="padding: 10px"></span>
+          <span *ngIf="isTaskOverdue(task)" class="status-badge OVERDUE">⚠️ Overdue</span>
+        </div>
+
+        <!-- EDIT MODE -->
+        <div *ngIf="editingDueDate" class="due-edit">
+          <input
+            type="datetime-local"
+            [ngModel]="task.dueDate | date: 'yyyy-MM-ddTHH:mm'"
+            (ngModelChange)="onDueDateChange($event)"
+          />
+
+          <button (click)="clearDueDate()">Clear</button>
+        </div>
       </div>
 
       <!-- DESCRIPTION -->
@@ -111,7 +140,7 @@
 
       <!-- ACTIONS -->
       <div class="actions">
-        <button class="btn edit" (click)="openEditDialog()">Edit</button>
+        <button class="btn edit" (click)="openEditDialog()" [disabled]="!isEditable()">Edit</button>
         <button class="btn delete" (click)="deleteTask()" style="display: none">Delete</button>
       </div>
     </div>

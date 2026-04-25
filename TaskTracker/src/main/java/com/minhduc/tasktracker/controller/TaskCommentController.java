@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.minhduc.tasktracker.dto.TaskCommentDTO;
+import com.minhduc.tasktracker.dto.TaskCommentDto;
 import com.minhduc.tasktracker.service.TaskCommentService;
 
 import lombok.RequiredArgsConstructor;
@@ -30,14 +30,14 @@ public class TaskCommentController {
 	private final TaskCommentService service;
 
 	@GetMapping
-	public Page<TaskCommentDTO> getComments(@PathVariable Long taskId, @RequestParam(defaultValue = "0") int page,
+	public Page<TaskCommentDto> getComments(@PathVariable Long taskId, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "5") int size) {
 		log.info("getComments called! page={}, size={}", page, size);
 		return service.getComments(taskId, page, size);
 	}
 
 	@PostMapping
-	public TaskCommentDTO addComment(@PathVariable Long taskId, @RequestBody Map<String, String> body,
+	public TaskCommentDto addComment(@PathVariable Long taskId, @RequestBody Map<String, String> body,
 			Principal principal) {
 		log.info("addComment called!");
 		return service.addComment(taskId, body.get("content"), principal.getName());

@@ -14,10 +14,13 @@ import { Task } from '../../core/models/Task';
 import { TaskFilter } from '../../core/models/TaskFilter';
 import { LoggerService } from '../../core/services/logger-service';
 import { User } from '../../core/models/User';
+import { MatDialog } from '@angular/material/dialog';
+import { AddTaskDialog } from '../add-task-dialog/add-task-dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-task-component',
-  imports: [FormsModule, CommonModule, TimeAgoPipe],
+  imports: [FormsModule, CommonModule, TimeAgoPipe, MatButtonModule],
   templateUrl: './task-component.html',
   styleUrl: './task-component.css',
 })
@@ -91,6 +94,7 @@ export class TaskComponent implements OnInit {
     private router: Router,
     private snackBar: MatSnackBar,
     private logger: LoggerService,
+    private dialog: MatDialog,
   ) {
     this.logger.context = 'TaskComponent';
     this.logger.log('Constructor');
@@ -376,7 +380,7 @@ export class TaskComponent implements OnInit {
     this.filters.keyword = '';
     this.filters.assignedTo = '';
     this.filters.tag = '';
-    this.tagInput = ''
+    this.tagInput = '';
 
     // Sorting
     this.sortValue = '';
@@ -472,6 +476,34 @@ export class TaskComponent implements OnInit {
     this.taskService.getAllTags().subscribe((tags) => {
       this.allTags = tags;
       this.logger.log(this.allTags.toString());
+    });
+  }
+
+  openAddTaskDialog() {
+    const dialogRef = this.dialog.open(AddTaskDialog, {
+      width: '600px',
+      data: {
+        assignees: this.assigneeList,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log('New task:', result);
+
+        // 👉 call API
+        this.taskService.addTask(result).subscribe({
+          next: (saved) => {
+            this.goToDetail(saved.id);
+          },
+          error: (err: any) => {
+            this.logger.error(err.toString());
+            this.snackBar.open(err.toString(), 'Close', {
+              duration: 2000,
+            });
+          },
+        });
+      }
     });
   }
 }

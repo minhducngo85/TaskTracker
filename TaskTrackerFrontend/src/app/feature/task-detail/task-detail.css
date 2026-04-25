@@ -70,6 +70,13 @@
   margin-top: 20px;
 }
 
+.content {
+   margin-top: 20px;
+  border: 1px solid #dbdbdb;
+  border-radius: 15px;
+  padding: 15px;
+}
+
 .section h4 {
   margin-bottom: 6px;
   color: #888;
@@ -138,6 +145,12 @@
   background: #b91c1c;
   color: white;
 }
+
+.status-badge.OVERDUE {
+  border: 1px solid #fecaca;
+  background: #fff5f5;
+}
+
 
 .status-badge.HIGH {
   background: #c2410c;
@@ -499,4 +512,9 @@
 
 .assignee-select {
   width: 220px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

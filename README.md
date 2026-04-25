@@ -37,8 +37,6 @@ Live Demo: https://82.165.51.255/
 ## ✨ To-do Features
 - Due date
 - real time: sync kanabn between users using websocket
-- audit log/ history:  Task updated by Minh at 14:32 Status changed from TODO → DONE
-- task comments and mention user (@john) in comment
 - Offline-first: cache task and sync when it becomes online
 - OIDC with keycloak
 - File upload: save file local or in S3

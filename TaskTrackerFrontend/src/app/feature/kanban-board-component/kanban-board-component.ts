@@ -15,11 +15,12 @@ import { filter, switchMap } from 'rxjs';
 import { LoggerService } from '../../core/services/logger-service';
 import { TaskFilter } from '../../core/models/TaskFilter';
 import { User } from '../../core/models/User';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-kanban-board-component',
   standalone: true,
-  imports: [DragDropModule, CommonModule, MatSnackBarModule, TimeAgoPipe],
+  imports: [DragDropModule, CommonModule, MatSnackBarModule, TimeAgoPipe, RouterModule],
   templateUrl: './kanban-board-component.html',
   styleUrl: './kanban-board-component.css',
 })

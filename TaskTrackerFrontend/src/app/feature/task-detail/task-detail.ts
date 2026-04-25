@@ -20,6 +20,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { TaskPriority } from '../../core/models/TaskPriority';
 import { TaskStatus } from '../../core/models/TaskStatus';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { isTaskOverdue } from '../../app/app-utils';
 
 /**
  * @author Minh Duc Ngo
@@ -82,6 +83,9 @@ export class TaskDetail implements OnInit {
 
   /** History or comment */
   selectedTabIndex = 0;
+
+  // expose the util function
+  isTaskOverdue = isTaskOverdue;
 
   /**
    * inject DJ in constructor
@@ -251,6 +255,7 @@ export class TaskDetail implements OnInit {
       data: {
         task: this.task,
         assignees: this.assigneeList,
+        tags: this.addTag,
       },
     });
 
@@ -312,7 +317,9 @@ export class TaskDetail implements OnInit {
   tagInput = '';
 
   startEditTags() {
-    this.editingTags = true;
+    if (this.isEditable()) {
+      this.editingTags = true;
+    }
   }
 
   addTag() {
@@ -381,7 +388,6 @@ export class TaskDetail implements OnInit {
 
   // change status dropdown
   showStatusMenu = false;
-
   toggleStatusMenu() {
     this.showStatusMenu = !this.showStatusMenu;
   }
@@ -403,9 +409,10 @@ export class TaskDetail implements OnInit {
 
   // change priority dropdown
   showPriorityMenu = false;
-
   togglePriorityMenu() {
-    this.showPriorityMenu = !this.showStatusMenu;
+    if (this.isEditable()) {
+      this.showPriorityMenu = !this.showStatusMenu;
+    }
   }
 
   changePriority(priority: TaskPriority) {
@@ -437,9 +444,16 @@ export class TaskDetail implements OnInit {
     if (
       !(event.target as HTMLElement).closest('.assignee-select') &&
       !(event.target as HTMLElement).closest('.assignee-display') &&
-       !(event.target as HTMLElement).closest('.ng-dropdown-panel') // 👈 FIX
+      !(event.target as HTMLElement).closest('.ng-dropdown-panel') // 👈 FIX
     ) {
       this.editingAssignee = false;
+    }
+
+    if (
+      !(event.target as HTMLElement).closest('.due-display') &&
+      !(event.target as HTMLElement).closest('.due-edit')
+    ) {
+      this.editingDueDate = false;
     }
   }
 
@@ -453,7 +467,7 @@ export class TaskDetail implements OnInit {
       assignedTo: newUser,
     };
 
-     this.logger.log(`onAssigneeChange: $call update api`);
+    this.logger.log(`onAssigneeChange: $call update api`);
     this.taskService.updateTask(this.task.id, updated).subscribe((task) => {
       this.task = task;
       this.loadHistory();
@@ -464,10 +478,50 @@ export class TaskDetail implements OnInit {
   // edit assignee
   editingAssignee = false;
   startEditAssignee() {
-    this.editingAssignee = true;
+    if (this.isEditable()) {
+      this.editingAssignee = true;
+    }
   }
 
   stopEditAssignee() {
     this.editingAssignee = true;
+  }
+
+  // edit due date
+  editingDueDate = false;
+  startEditDueDate() {
+    if (this.isEditable()) {
+      this.editingDueDate = true;
+    }
+  }
+
+  stopEditDueDate() {
+    this.editingDueDate = true;
+  }
+
+  onDueDateChange(value: string) {
+    this.logger.log(`onDueDateChange: ${value}`);
+    const newDate = value ? new Date(value).toISOString() : null;
+    if (!this.task) return;
+    if (newDate === this.task.dueDate) return;
+
+    const updated = {
+      ...this.task,
+      dueDate: newDate,
+    };
+
+    this.taskService.updateTask(this.task.id, updated).subscribe((task) => {
+      this.task = task;
+      this.loadHistory();
+      this.cdr.detectChanges();
+    });
+  }
+
+  clearDueDate() {
+    this.onDueDateChange(null as any);
+  }
+
+  isEditable() {
+    return this.task?.status !== TaskStatus.DONE;
   }
 }

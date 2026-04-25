@@ -1,6 +1,10 @@
 package com.minhduc.tasktracker.service;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,8 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.minhduc.tasktracker.controller.exceptionhandling.ResourceNotFoundException;
+import com.minhduc.tasktracker.dto.MyWorkDto;
 import com.minhduc.tasktracker.dto.TagCount;
-import com.minhduc.tasktracker.dto.TaskCommentDTO;
+import com.minhduc.tasktracker.dto.TaskCommentDto;
 import com.minhduc.tasktracker.dto.TaskFilterRequest;
 import com.minhduc.tasktracker.dto.TaskStatisticsResponse;
 import com.minhduc.tasktracker.entity.Task;
@@ -111,11 +116,11 @@ public class TaskService {
 		if (!Objects.equals(task.getTitle(), updated.getTitle())) {
 			saveHistory(task.getId(), "title", task.getTitle(), updated.getTitle());
 		}
-		
+
 		if (!Objects.equals(task.getDescription(), updated.getDescription())) {
 			saveHistory(task.getId(), "description", task.getDescription(), updated.getDescription());
 		}
-		
+
 		if (!Objects.equals(task.getStatus(), updated.getStatus())) {
 			saveHistory(task.getId(), "status", task.getStatus().name(), updated.getStatus().name());
 		}
@@ -123,6 +128,11 @@ public class TaskService {
 			saveHistory(task.getId(), "priority", String.valueOf(task.getPriority()),
 					String.valueOf(updated.getPriority()));
 		}
+		if (!Objects.equals(task.getDueDate(), updated.getDueDate())) {
+			saveHistory(task.getId(), "dueDate", String.valueOf(task.getDueDate()),
+					String.valueOf(updated.getDueDate()));
+		}
+		
 		if (!Objects.equals(task.getAssignedTo(), updated.getAssignedTo())) {
 			saveHistory(task.getId(), "assignedTo", task.getAssignedTo(), updated.getAssignedTo());
 		}
@@ -143,6 +153,7 @@ public class TaskService {
 		if (updated.getTags() != null) {
 			task.getTags().addAll(updated.getTags());
 		}
+		task.setDueDate(updated.getDueDate());
 		Task updatedObj = taskRepository.save(task);
 
 		log.info("Updated Res={}", updatedObj.toString());
@@ -188,12 +199,13 @@ public class TaskService {
 		h.setOldValue(oldVal);
 		h.setNewValue(newVal);
 		h.setChangedBy(SecurityUtils.getCurrentUser());
-		String fullName = userRepo.findByUsername(SecurityUtils.getCurrentUser()).map(User::getFullname).orElse(SecurityUtils.getCurrentUser());
+		String fullName = userRepo.findByUsername(SecurityUtils.getCurrentUser()).map(User::getFullname)
+				.orElse(SecurityUtils.getCurrentUser());
 		h.setChangedByFullName(fullName);
 		h.setChangedAt(Instant.now());
 		taskHistoryRepository.save(h);
 	}
-	
+
 	/**
 	 * to get list of comments by task id
 	 * 
@@ -201,10 +213,43 @@ public class TaskService {
 	 * @return
 	 */
 	public Page<TaskHistory> getHistory(long taskId, int page, int size) {
-		if (page < 0) page = 0;
-	    if (size <= 0 || size > 50) size = 10; // tránh query quá lớn
-	    
-		Page<TaskHistory> history = taskHistoryRepository.findByTaskIdOrderByChangedAtDesc(taskId, PageRequest.of(page, size));
+		if (page < 0)
+			page = 0;
+		if (size <= 0 || size > 50)
+			size = 10; // tránh query quá lớn
+
+		Page<TaskHistory> history = taskHistoryRepository.findByTaskIdOrderByChangedAtDesc(taskId,
+				PageRequest.of(page, size));
 		return history;
+	}
+
+	public MyWorkDto getMyWork(String username) {
+		LocalDate today = LocalDate.now();
+		ZoneId zone = ZoneId.systemDefault();
+		Instant startOfToday = today.atStartOfDay(zone).toInstant();
+
+		Instant startOfTomorrow = today.plusDays(1).atStartOfDay(zone).toInstant();
+		Instant weekLater = startOfTomorrow.plus(7, ChronoUnit.DAYS);
+
+		return new MyWorkDto(taskRepository.findOverdue(username, startOfToday).size(), findDueToday(username).size(),
+				taskRepository.findDueThisWeek(username, startOfTomorrow, weekLater).size());
+	}
+
+	public List<Task> findDueToday(String username) {
+
+		ZoneId zone = ZoneId.systemDefault();
+
+		LocalDate today = LocalDate.now();
+
+		Instant start = today.atStartOfDay(zone).toInstant();
+		Instant end = today.plusDays(1).atStartOfDay(zone).toInstant();
+		log.info("start = {}", start);
+		log.info("end   = {}", end);
+		return taskRepository.findTaksByDueDate(username, start, end);
+	}
+	
+	
+	public List<Task> getMyActiveTask(){
+		return taskRepository.findByAssignedToAndStatusNot(SecurityUtils.getCurrentUser(), TaskStatus.DONE);
 	}
 }

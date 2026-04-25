@@ -1,0 +1,247 @@
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.page-content {
+  padding: 0px;
+  font-family: Arial, sans-serif;
+}
+
+
+
+.section-title {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  padding: 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  border-radius: 12px;
+  background: #f9fafb;
+}
+
+.card-title {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.card-value {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 4px 0;
+}
+
+.card-desc {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* icon */
+.icon {
+  font-size: 40px;
+  opacity: 0.8;
+}
+
+.summary {
+  background: white;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+  border-left: 6px solid transparent;
+}
+
+.card.total {
+  border-left-color: #327cf3;
+}
+
+.card.todo {
+  border-left-color: #606672;
+}
+.card.progress {
+  border-left-color: #f59e0b;
+}
+
+.card.overdue {
+  border-left-color: #ef4444;
+}
+
+.clickable {
+  cursor: pointer;
+  transition: 0.2s;
+}
+.clickable:hover {
+  transform: translateY(-3px);
+}
+
+/* ===== STATUS && PRIORITY ===== */
+.status-badge {
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.status-badge.DONE {
+  background: #22c55e;
+  color: white;
+}
+
+.status-badge.TODO {
+  background: #64748b;
+  color: white;
+}
+
+.status-badge.IN_PROGRESS {
+  background: #f59e0b;
+  color: white;
+}
+
+.status-badge.CRITICAL {
+  background: #b91c1c;
+  color: white;
+}
+
+.status-badge.HIGH {
+  background: #c2410c;
+  color: white;
+}
+
+.status-badge.MEDIUM {
+  background: #a36917;
+  color: white;
+}
+
+.status-badge.LOW {
+  background: #166534;
+  color: white;
+}
+
+.task-title {
+  font-size: 15px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  background: #e3eafc;
+  color: #000000;
+  display: inline-block;
+}
+
+/* ===== LIST ===== */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ===== ITEM ===== */
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 12px;
+
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.task-item.overdue {
+  border: 1px solid #fecaca;
+  background: #fff5f5;
+  border-left: 4px solid #ef4444;
+}
+
+.task-item.progress {
+  border-left: 4px solid #f59e0b;
+}
+
+.task-item.todo {
+  border-left: 4px solid #606672;
+}
+
+.task-item:active {
+  transform: scale(0.98);
+}
+
+/* ===== LEFT ===== */
+.task-list .left {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 12px;
+}
+
+.task-list .middle {
+  width: 120px;
+  display: flex;
+  text-align: left;
+  gap: 5px;
+}
+
+.middle-overdue {
+  width: 180px;
+  display: flex;
+  text-align: left;
+  gap: 5px;
+}
+
+.task-list .right {
+  width: 160px; /* 👈 FIX cứng */
+  text-align: right;
+}
+
+.layout-2-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 cột bằng nhau */
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .layout-2-cols {
+    grid-template-columns: 1fr; /* mobile → 1 cột */
+  }
+}
+
+
+.col-left,
+.col-right,
+.section {
+    margin-top: 20px;
+  border: 1px solid #dbdbdb;
+  border-radius: 15px;
+  padding: 15px;
+}
+

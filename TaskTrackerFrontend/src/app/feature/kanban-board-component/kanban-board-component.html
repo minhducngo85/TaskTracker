@@ -16,7 +16,13 @@
       class="task-list"
     >
       <div class="task-card" *ngFor="let task of col.tasks; trackBy: trackByTaskId" cdkDrag>
-        <div class="task-title">{{ task.title }}</div>
+
+        <div class="section-header">
+            <div class="task-title">{{ task.title }}</div>
+            <a class="view-link"  [routerLink]="['/tasks',  task.id]">View →</a>
+          </div>
+
+        
 
         <div class="task-desc" *ngIf="task.description">
           {{ task.description }}

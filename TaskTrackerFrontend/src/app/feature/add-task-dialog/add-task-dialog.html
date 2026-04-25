@@ -1,0 +1,67 @@
+<h2 mat-dialog-title>Add Task</h2>
+<form [formGroup]="taskForm" (ngSubmit)="submit()" (keydown.enter)="$event.preventDefault()">
+  <mat-dialog-content>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Due Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dueDate" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Priority</mat-label>
+      <mat-select formControlName="priority">
+        <mat-option *ngFor="let p of priorityOptions" [value]="p">
+          {{ p }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Assigned to</mat-label>
+      <mat-select formControlName="assignedTo">
+        <mat-option *ngFor="let a of assigneeList" [value]="a.username">
+          {{ a.fullname }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="full-width" appearance="outline">
+      <mat-chip-grid #chipGrid>
+        <mat-chip-row *ngFor="let tag of tags" (removed)="removeTag(tag)">
+          {{ tag }}
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+      </mat-chip-grid>
+
+      <input 
+        placeholder="Add tag..."
+        [formControl]="tagCtrl"
+        [matAutocomplete]="auto"
+        (keydown.enter)="addTagFromInput()"
+      />
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectTag($event.option.value)">
+        <mat-option *ngFor="let t of filteredTags$ | async" [value]="t">
+          {{ t }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="primary" type="submit">Add</button>
+  </mat-dialog-actions>
+</form>
