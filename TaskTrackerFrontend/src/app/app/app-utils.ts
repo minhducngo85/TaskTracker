@@ -1,8 +1,10 @@
 import { Console } from 'console';
 import { Task } from '../core/models/Task';
+import { TaskStatus } from '../core/models/TaskStatus';
 
 export function isTaskOverdue(task: Task): boolean {
   if (!task?.dueDate) return false;
+  if (task.status === TaskStatus.DONE) return false;
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);

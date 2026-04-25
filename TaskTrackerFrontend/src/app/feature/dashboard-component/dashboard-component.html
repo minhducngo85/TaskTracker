@@ -11,28 +11,50 @@
           <div class="section-title">✔️ Status Overview</div>
           <div class="cards">
             <div class="card total clickable" (click)="filterStatus('')">
-              <div class="card-title">TOTAL TASKS</div>
-              <div class="card-value">{{ stats.total }}</div>
+              <div class="left">
+                <div class="card-title">TOTAL TASKS</div>
+                <div class="card-value">{{ stats.total }}</div>
+              </div>
+              <div >
+                <mat-icon class="mat-icon total">analytics</mat-icon>
+              </div>
             </div>
 
             <div class="card todo clickable" (click)="filterStatus('TODO')">
-              <div class="card-title">TODO</div>
-              <div class="card-value">
-                {{ stats.todo }} ({{ calculatePercentage(stats.todo, stats.total) }}%)
+              <div class="left">
+                <div class="card-title">TODO</div>
+                <div class="card-value">
+                  {{ stats.todo }} ({{ calculatePercentage(stats.todo, stats.total) }}%)
+                </div>
+              </div>
+
+              <div>
+                <mat-icon class="mat-icon todo">assignment</mat-icon>
               </div>
             </div>
 
             <div class="card progress clickable" (click)="filterStatus('IN_PROGRESS')">
-              <div class="card-title">IN PROGRESS</div>
-              <div class="card-value">
-                {{ stats.inProgress }} ({{ calculatePercentage(stats.inProgress, stats.total) }}%)
+              <div class="left">
+                <div class="card-title">IN PROGRESS</div>
+                <div class="card-value">
+                  {{ stats.inProgress }} ({{ calculatePercentage(stats.inProgress, stats.total) }}%)
+                </div>
+              </div>
+              <div >
+                <mat-icon class="mat-icon inprogress">autorenew</mat-icon>
               </div>
             </div>
 
             <div class="card done clickable" (click)="filterStatus('DONE')">
-              <div class="card-title">DONE</div>
-              <div class="card-value">
-                {{ stats.done }} ({{ calculatePercentage(stats.done, stats.total) }}%)
+              <div class="left">
+                <div class="card-title">DONE</div>
+                <div class="card-value">
+                  {{ stats.done }} ({{ calculatePercentage(stats.done, stats.total) }}%)
+                </div>
+              </div>
+
+              <div>
+                <mat-icon class="mat-icon done">check_circle</mat-icon>
               </div>
             </div>
           </div>
@@ -151,7 +173,7 @@
         </div>
 
         <!-- My recent Task -->
-        <div class="section" style="display: none;">
+        <div class="section" style="display: none">
           <div class="section-header">
             <div class="section-title">🙋‍♂️ Assigned to Me</div>
             <a class="view-link" (click)="toMyWork()">View all →</a>

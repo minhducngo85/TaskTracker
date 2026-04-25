@@ -496,19 +496,19 @@ button:active {
 
 /* 🎨 Colors */
 .priority-critical {
-  color: #f80004; /* red */
+  color: #b91c1c; /* red */
 }
 
 .priority-high {
-  color: #da680b; /* orange */
+  color: #ff7b00; /* orange */
 }
 
 .priority-medium {
-  color: #facc15; /* yellow */
+  color: #ffbb00; /* yellow */
 }
 
 .priority-low {
-  color: #22c55e; /* green */
+  color: #166534; /* green */
 }
 
 /** Pagionator*/

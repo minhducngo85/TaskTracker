@@ -153,12 +153,12 @@
 
 
 .status-badge.HIGH {
-  background: #c2410c;
+  background: #ff7b00;
   color: white;
 }
 
 .status-badge.MEDIUM {
-  background: #a36917;
+  background: #ffbb00;
   color: white;
 }
 

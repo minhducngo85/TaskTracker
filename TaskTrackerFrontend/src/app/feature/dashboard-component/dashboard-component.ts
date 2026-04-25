@@ -24,6 +24,7 @@ import { User } from '../../core/models/User';
 import { Authentication } from '../../core/services/authentication';
 import { TagCount } from '../../core/models/TagCount';
 import { MyWork } from '../../core/models/MyWork';
+import { MatIconModule } from "@angular/material/icon";
 
 Chart.register(ChartDataLabels);
 
@@ -43,7 +44,7 @@ export interface TaskStats {
 
 @Component({
   selector: 'app-dashboard-component',
-  imports: [CommonModule, FormsModule, TimeAgoPipe],
+  imports: [CommonModule, FormsModule, TimeAgoPipe, MatIconModule],
   templateUrl: './dashboard-component.html',
   styleUrl: './dashboard-component.css',
 })
@@ -268,7 +269,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         datasets: [
           {
             data: [0, 0, 0, 0],
-            backgroundColor: ['#f80004', '#da680b', '#facc15', '#22c55e'],
+            backgroundColor: ['#b91c1c', '#ff7b00', '#ffbb00', '#166534'],
           },
         ],
       },

@@ -10,8 +10,6 @@
   font-family: Arial, sans-serif;
 }
 
-
-
 .section-title {
   font-weight: 600;
   margin-bottom: 10px;
@@ -21,7 +19,7 @@
 .cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  gap: 8px;
 }
 
 /* Tablet */
@@ -134,12 +132,12 @@
 }
 
 .status-badge.HIGH {
-  background: #c2410c;
+  background: #ff7b00;
   color: white;
 }
 
 .status-badge.MEDIUM {
-  background: #a36917;
+  background: #ffbb00;
   color: white;
 }
 
@@ -211,6 +209,11 @@
   gap: 5px;
 }
 
+.task-list .right {
+  width: 160px; /* 👈 FIX cứng */
+  text-align: right;
+}
+
 .middle-overdue {
   width: 180px;
   display: flex;
@@ -218,9 +221,27 @@
   gap: 5px;
 }
 
-.task-list .right {
-  width: 160px; /* 👈 FIX cứng */
-  text-align: right;
+@media (max-width: 1024px) {
+  .task-item {
+    flex-wrap: wrap; /* 🔥 cho phép xuống dòng */
+    align-items: stretch; /* 🔥 rất quan trọng */
+  }
+
+  /* LEFT full dòng */
+  .task-item .left {
+    flex: 0 0 100%; /** flex-grow: 0; flex-shrink: 0; flex-basis: 100%;*/
+    margin-bottom: 5px;
+  }
+
+  /* MIDDLE */
+  .task-item .middle {
+    width: auto; /* ❗ override width:120px */
+  }
+
+  /* RIGHT */
+  .task-item .right {
+    width: auto; /* ❗ override width:160px */
+  }
 }
 
 .layout-2-cols {
@@ -235,13 +256,11 @@
   }
 }
 
-
 .col-left,
 .col-right,
 .section {
-    margin-top: 20px;
+  margin-top: 20px;
   border: 1px solid #dbdbdb;
   border-radius: 15px;
   padding: 15px;
 }
-
