@@ -374,6 +374,9 @@ docker-compose up --build
 ### Dashboard
 ![Kanban](./screenshots/dashboard.png)
 
+### My Work
+![Kanban](./screenshots/my-work.png)
+
 ### Kanban Board
 ![Kanban](./screenshots/kanban-board.png)
 
