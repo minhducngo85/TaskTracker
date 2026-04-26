@@ -9,7 +9,7 @@ import { Task } from '../../core/models/Task';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { EditTaskDialog } from '../edit-task-dialog/edit-task-dialog';
+import { EditTaskDialog } from '../view/edit-task-dialog/edit-task-dialog';
 import { User } from '../../core/models/User';
 import { Location } from '@angular/common';
 import { debounceTime, Subject } from 'rxjs';

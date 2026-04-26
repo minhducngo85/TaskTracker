@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Activity } from '../../../core/models/Activity';
-import { TimeAgoPipe } from "../../../core/pipe/TimeAgoPipe";
+import { TimeAgoPipe } from '../../../core/pipe/TimeAgoPipe';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -15,6 +15,7 @@ export class ActivityFeed {
   @Input() activities: any[] = [];
   @Input() activityPage: number = 0;
   @Input() totalActivityPages: number = 0;
+  @Input() maxPageLimit: number = 20;
 
   @Output() prev = new EventEmitter<void>();
   @Output() next = new EventEmitter<void>();
@@ -38,8 +39,7 @@ export class ActivityFeed {
     }
   }
 
-
-   prevPage() {
+  prevPage() {
     this.prev.emit();
   }
 

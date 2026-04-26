@@ -14,11 +14,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
-import { TaskPriority } from '../../core/models/TaskPriority';
-import { TaskStatus } from '../../core/models/TaskStatus';
-import { Authentication } from '../../core/services/authentication';
-import { User } from '../../core/models/User';
-import { TaskService } from '../../core/services/task-service';
+import { TaskPriority } from '../../../core/models/TaskPriority';
+import { TaskStatus } from '../../../core/models/TaskStatus';
+import { Authentication } from '../../../core/services/authentication';
+import { User } from '../../../core/models/User';
+import { TaskService } from '../../../core/services/task-service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
 // auto comple
@@ -89,12 +89,29 @@ export class AddTaskDialog implements OnInit {
   ngOnInit() {
     this.tagCtrl = this.fb.control('');
     this.loadTags();
+    this.loadAssigneeListIfEmpty();
 
     // ✅ reactive autocomplete
     this.filteredTags$ = this.tagCtrl.valueChanges.pipe(
       startWith(''), // emit one value after compoenent load
       map((value) => this._filter(value || '')),
     );
+  }
+
+  loadAssigneeListIfEmpty() {
+    if (!this.assigneeList || this.assigneeList.length === 0) {
+      // empty -> read agin form backend
+      // read assignee list
+      this.taskService.getAssigneeList().subscribe({
+        next: (users) => {
+          this.assigneeList = users;
+          this.cdr.detectChanges(); // trigger ui update
+        },
+        error: (err) => {
+          this.cdr.detectChanges();
+        },
+      });
+    }
   }
 
   // read all tags from backend

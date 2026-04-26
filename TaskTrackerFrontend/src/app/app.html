@@ -1,41 +1,77 @@
 <div class="layout">
-
   <!-- Sidebar -->
   <aside class="sidebar" [class.open]="isSidebarOpen">
     <h2>🚀 Menu</h2>
 
-    <nav>
-      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeSidebar()">🏠 Dashboard</a>
-      <a routerLink="/my-work" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" (click)="closeSidebar()">💼 My Work</a>
-      <a routerLink="/kanbanboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeSidebar()">🗓️ Kanban Board</a>
-      <a routerLink="/tasks" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" (click)="closeSidebar()">📑 Tasks</a>
-      <a *ngIf="auth.isAdmin()" routerLinkActive="active" routerLink="/admin" (click)="closeSidebar()">🛠️ Admin</a>
-      <a *ngIf="!auth.isLoggedIn()" routerLink="/login"  routerLinkActive="active" (click)="closeSidebar()">🔐 Login</a>
+    <nav class="menu">
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="closeSidebar()"
+        >🏠 Dashboard</a
+      >
+      <a
+        routerLink="/my-work"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: false }"
+        (click)="closeSidebar()"
+        >💼 My Work</a
+      >
+      <a
+        routerLink="/kanbanboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="closeSidebar()"
+        >🗓️ Kanban Board</a
+      >
+      <a
+        routerLink="/tasks"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: false }"
+        (click)="closeSidebar()"
+        >📑 Tasks</a
+      >
+      <a
+        *ngIf="auth.isAdmin()"
+        routerLinkActive="active"
+        routerLink="/admin"
+        (click)="closeSidebar()"
+        >🛠️ Admin</a
+      >
+      <a
+        *ngIf="!auth.isLoggedIn()"
+        routerLink="/login"
+        routerLinkActive="active"
+        (click)="closeSidebar()"
+        >🔐 Login</a
+      >
+      <!-- spacer -->
+      <div class="spacer"></div>
+      <a *ngIf="auth.isLoggedIn()" routerLink="/logout" routerLinkActive="active" (click)="logout()"
+        >🔒 Logout</a
+      >
     </nav>
   </aside>
 
   <!-- Overlay (mobile) -->
-  <div 
-    class="overlay" 
-    *ngIf="isSidebarOpen"
-    (click)="toggleSidebar()">
-  </div>
+  <div class="overlay" *ngIf="isSidebarOpen" (click)="toggleSidebar()"></div>
 
   <!-- Main -->
   <div class="main">
-
     <!-- Header -->
     <header class="header">
-      <button class="menu-btn" (click)="toggleSidebar()" style="font-weight: bold;">☰</button>
+      <button class="menu-btn" (click)="toggleSidebar()" style="font-weight: bold">☰</button>
       <h2>Task Tracker - Mini Jira</h2>
-      <button class="logout-btn" (click)="logout()">Logout</button>
+      <div>
+        <button class="add-btn" (click)="openAddTaskDialog()">+ Task</button>
+        <button class="logout-btn" (click)="logout()" style="display: none">Logout</button>
+      </div>
     </header>
 
     <!-- Content -->
     <main class="content">
       <router-outlet></router-outlet>
     </main>
-
   </div>
-
 </div>

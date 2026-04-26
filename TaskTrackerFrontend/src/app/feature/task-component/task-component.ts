@@ -15,7 +15,7 @@ import { TaskFilter } from '../../core/models/TaskFilter';
 import { LoggerService } from '../../core/services/logger-service';
 import { User } from '../../core/models/User';
 import { MatDialog } from '@angular/material/dialog';
-import { AddTaskDialog } from '../add-task-dialog/add-task-dialog';
+import { AddTaskDialog } from '../view/add-task-dialog/add-task-dialog';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({

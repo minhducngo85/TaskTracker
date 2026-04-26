@@ -22,9 +22,9 @@
       <span class="page-total">{{ activityPage + 1 }}</span>
     </div>
     <button
+      [disabled]="activityPage >= totalActivityPages - 1 || activityPage >= maxPageLimit"
       (click)="nextPage()"
       class="page-btn"
-      [disabled]="activityPage >= totalActivityPages - 1"
     >
       Next →
     </button>
