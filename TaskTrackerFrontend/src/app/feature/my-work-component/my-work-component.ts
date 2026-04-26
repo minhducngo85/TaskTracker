@@ -10,10 +10,13 @@ import { FormsModule } from '@angular/forms';
 import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
 import { Task } from '../../core/models/Task';
 import { isTaskOverdue, isTodayTask } from '../../app/app-utils';
+import { Activity } from '../../core/models/Activity';
+import { ActivityService } from '../../core/services/activity-service';
+import { ActivityFeed } from '../view/activity-feed/activity-feed';
 
 @Component({
   selector: 'app-my-work-component',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ActivityFeed ],
   templateUrl: './my-work-component.html',
   styleUrl: './my-work-component.css',
 })
@@ -24,6 +27,12 @@ export class MyWorkComponent implements OnInit {
   isTaskOverdue = isTaskOverdue;
   isTodayTask = isTodayTask;
 
+  // activities
+  activities: Activity[] = [];
+  activityPageSize = 10;
+  activityPage = 0;
+  totalActivityPages = 0;
+
   constructor(
     private taskService: TaskService,
     private cdr: ChangeDetectorRef,
@@ -31,14 +40,44 @@ export class MyWorkComponent implements OnInit {
     private router: Router,
     private logger: LoggerService,
     private snackBar: MatSnackBar,
+    private activityService: ActivityService,
   ) {
     this.logger.context = 'MyWorkComponent';
   }
 
   ngOnInit(): void {
     this.loadMyActiveTasks();
+    this.loadMyActivities();
   }
 
+  /** Load activities */
+  loadMyActivities() {
+    this.logger.info('loadMyActivities() called.');
+    this.activityService.getMyActivites(this.activityPage, this.activityPageSize).subscribe((res) => {
+      this.activities = res.content;
+      this.totalActivityPages = res.totalPages;
+      this.logger.info(JSON.stringify(this.activities));
+      this.cdr.detectChanges();
+    });
+  }
+
+  nextActivityPage() {
+    if (this.activityPage < this.totalActivityPages - 1) {
+      this.activityPage++;
+      this.loadMyActivities();
+    }
+  }
+
+  prevActivityPage() {
+    if (this.activityPage > 0) {
+      this.activityPage--;
+      this.loadMyActivities();
+    }
+  }
+
+  /**
+   * to load my active task
+   */
   loadMyActiveTasks() {
     this.myWork$ = this.taskService.getMyActiveTasks().pipe(
       map((tasks) => {

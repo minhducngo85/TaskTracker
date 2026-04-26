@@ -28,6 +28,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ListOfLastDays, removeTimeFromUpdatedAt } from '../../app/app-utils';
 import { Activity } from '../../core/models/Activity';
 import { ActivityService } from '../../core/services/activity-service';
+import { ActivityFeed } from "../view/activity-feed/activity-feed";
 
 Chart.register(ChartDataLabels);
 
@@ -47,7 +48,7 @@ export interface TaskStats {
 
 @Component({
   selector: 'app-dashboard-component',
-  imports: [CommonModule, FormsModule, TimeAgoPipe, MatIconModule, RouterLink],
+  imports: [CommonModule, FormsModule, TimeAgoPipe, MatIconModule, ActivityFeed],
   templateUrl: './dashboard-component.html',
   styleUrl: './dashboard-component.css',
 })
@@ -156,6 +157,21 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
+
+  nextActivityPage() {
+    if (this.activityPage < this.totalActivityPages - 1) {
+      this.activityPage++;
+      this.loadActivities();
+    }
+  }
+
+  prevActivityPage() {
+    if (this.activityPage > 0) {
+      this.activityPage--;
+      this.loadActivities();
+    }
+  }
+
   /**
    *
    * @returns init chart in ui
@@ -187,7 +203,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         ],
       },
       options: {
-         layout: {
+        layout: {
           padding: 20, // 👈 quan trọng
         },
         responsive: true,
@@ -563,21 +579,5 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     return '';
   }
 
-  getActivityIcon(action: string): string {
-    switch (action) {
-      case 'STATUS_CHANGED':
-        return 'sync';
-      case 'PRIORITY_CHANGED':
-        return 'flag';
-      case 'ASSIGNED':
-        return 'person';
-      case 'DUE_DATE_CHANGED':
-        return 'event';
-      case 'CREATED':
-        return 'open_in_new';
 
-      default:
-        return 'edit';
-    }
-  }
 }

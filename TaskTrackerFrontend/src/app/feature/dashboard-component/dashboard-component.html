@@ -160,32 +160,14 @@
         </div>
 
         <!--Recent Activities-->
-        <div class="section">
-          <div class="section-header">
-            <div class="section-title">
-              <mat-icon class="header">history</mat-icon> Recent Activities
-            </div>
-            <a class="view-link" (click)="sortTaksByUpdated()" style="display: none">View all →</a>
-          </div>
-          <div class="list-container">
-            <div class="card" class="activity-item" *ngFor="let item of activities">
-              <div class="activitiy-icon" [ngClass]="item.action">
-                <i class="material-icons">{{ getActivityIcon(item.action) }}</i>
-              </div>
-
-              <div>
-                <div class="activity-title">{{ item.message }}</div>
-                <div class="task-meta">
-                  <a class="view-link" [routerLink]="['/tasks', item.taskId]">{{
-                    item.taskTitle
-                  }}</a>
-                  •
-                  {{ item.createdAt | timeAgo }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <app-activity-feed
+          [activities]="activities"
+          [activityPage]="activityPage"
+          [totalActivityPages]="totalActivityPages"
+          (prev)="prevActivityPage()"
+          (next)="nextActivityPage()"
+        >
+        </app-activity-feed>
 
         <!--Recent Update-->
         <div class="section" style="display: none">

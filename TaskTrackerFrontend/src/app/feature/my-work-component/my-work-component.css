@@ -10,9 +10,15 @@
   font-family: Arial, sans-serif;
 }
 
+
+/* title */
 .section-title {
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
 }
 
 /* Cards */
@@ -244,23 +250,34 @@
   }
 }
 
-.layout-2-cols {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* 2 cột bằng nhau */
-  gap: 16px;
-}
 
-@media (max-width: 768px) {
-  .layout-2-cols {
-    grid-template-columns: 1fr; /* mobile → 1 cột */
-  }
-}
-
-.col-left,
-.col-right,
 .section {
   margin-top: 20px;
   border: 1px solid #dbdbdb;
   border-radius: 15px;
   padding: 15px;
+}
+
+
+.row-2col {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  margin-top: 0px;
+   align-items: start;
+}
+
+.list-container {
+  background: #fff;
+  border-radius: 15px;
+  padding: 10px;
+}
+
+
+/* Tabler´t */
+@media (max-width: 1024px) {
+  .row-2col {
+    grid-template-columns: 1fr 1fr;
+  }
+
 }

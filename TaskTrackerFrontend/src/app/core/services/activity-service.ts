@@ -6,13 +6,15 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class ActivityService {
-
   private api = `${environment.apiUrl}/activities`;
 
   constructor(private http: HttpClient) {}
 
-
-   getActivites(page: number, size: number) {
+  getActivites(page: number, size: number) {
     return this.http.get<any>(`${this.api}?page=${page}&size=${size}`);
+  }
+
+  getMyActivites(page: number, size: number) {
+    return this.http.get<any>(`${this.api}/mine?page=${page}&size=${size}`);
   }
 }

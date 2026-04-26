@@ -28,4 +28,10 @@ public class ActivitiyController {
 			@RequestParam(defaultValue = "10") int size) {
 		return activityService.getActivities(page, size);
 	}
+	
+	@GetMapping("/mine")
+	public Page<ActivityDto> getMyActivities(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size) {
+		return activityService.getMyActivities(page, size);
+	}
 }

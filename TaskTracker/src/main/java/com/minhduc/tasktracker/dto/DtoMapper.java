@@ -42,6 +42,7 @@ public class DtoMapper {
 
 	/**
 	 * convert history to activity dto object
+	 * 
 	 * @param h
 	 * @return
 	 */
@@ -53,6 +54,10 @@ public class DtoMapper {
 			action = "STATUS_CHANGED";
 			message = String.format("%s changed status from %s → %s", h.getChangedByFullName(), h.getOldValue(),
 					h.getNewValue());
+		}
+		case "title" -> {
+			action = "TITLE_CHANGED";
+			message = String.format("%s changed title to %s", h.getChangedByFullName(), h.getNewValue());
 		}
 		case "priority" -> {
 			action = "PRIORITY_CHANGED";

@@ -1,0 +1,41 @@
+<div class="section">
+  <div class="section-header">
+    <div class="section-title"><mat-icon class="header">history</mat-icon> Recent Activities</div>
+  </div>
+  <div class="list-container">
+    <div class="card" class="activity-item" *ngFor="let item of activities">
+      <div class="activitiy-icon" [ngClass]="item.action">
+        <i class="material-icons">{{ getActivityIcon(item.action) }}</i>
+      </div>
+
+      <div>
+        <div class="activity-title">{{ item.message }}</div>
+        <div class="task-meta">
+          <a class="view-link" [routerLink]="['/tasks', item.taskId]">{{ item.taskTitle }}</a>
+          •
+          {{ item.createdAt | timeAgo }}
+        </div>
+      </div>
+    </div>
+
+    <div class="paginator" *ngIf="totalActivityPages > 1">
+      <button (click)="prevPage()" class="page-btn" [disabled]="activityPage === 0">
+        ← Prev
+      </button>
+
+      <div class="page-center">
+        <span class="page-label">Page</span>
+        <span class="page-total">{{ activityPage + 1 }}</span>
+      </div>
+      <button
+        (click)="nextPage()"
+        class="page-btn"
+        [disabled]="activityPage >= totalActivityPages - 1"
+      >
+        Next →
+      </button>
+    </div>
+  </div>
+</div>
+
+

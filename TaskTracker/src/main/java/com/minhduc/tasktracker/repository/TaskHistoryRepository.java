@@ -28,4 +28,22 @@ public interface TaskHistoryRepository extends JpaRepository<TaskHistory, Long> 
 		    ORDER BY h.changedAt DESC
 		""")
 	 Page<ActivityProjection> findAllActivities(Pageable pageable);
+	
+	@Query("""
+		    SELECT new com.minhduc.tasktracker.dto.ActivityProjection(
+		        h.taskId,
+		        t.title,
+		        h.field,
+		        h.oldValue,
+		        h.newValue,
+		        h.changedBy,
+		        h.changedByFullName,
+		        h.changedAt
+		    )
+		    FROM TaskHistory h
+		    JOIN Task t ON h.taskId = t.id
+		    WHERE h.changedBy = :username
+		    ORDER BY h.changedAt DESC
+		""")
+	 Page<ActivityProjection> findAllActivities(String username, Pageable pageable);
 }

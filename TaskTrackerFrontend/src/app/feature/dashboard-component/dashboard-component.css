@@ -143,10 +143,6 @@
   text-decoration: underline;
 }
 
-.section-title {
-  font-weight: 600;
-  margin-bottom: 10px;
-}
 
 /* Priority */
 .priority-list {
@@ -240,6 +236,7 @@
   grid-template-columns: 2fr 1fr;
   gap: 16px;
   margin-top: 0px;
+   align-items: start;
 }
 
 .pie-canvas {
@@ -253,10 +250,6 @@
   padding: 10px;
 }
 
-.chart-container {
-  display: flex;
-  justify-content: flex-start; /* 👈 align left */
-}
 
 /* Tabler´t */
 @media (max-width: 1024px) {
@@ -426,6 +419,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  font-size: 15px;
 }
 
 /* layout */
@@ -523,75 +517,3 @@
   }
 }
 
-
-/** Activities*/
-.activity-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-
-  padding: 6px 10px;
-  border-radius: 10px;
-
-  background: #fff;
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-/* hover nhẹ */
-.activity-item:hover {
-  background: #eef3f8;
-}
-
-.activity-title {
-  color: #525252;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-/* ICON */
-.activitiy-icon {
-  width: 30px;
-  height: 30px;
-  min-width: 30px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 8px;
-  color: white;
-  font-size: 18px;
-  opacity: 0.8;
-}
-
-/* màu theo action */
-.activitiy-icon.STATUS_CHANGED {
-  background: #2196f3;
-}
-
-.activitiy-icon.PRIORITY_CHANGED {
-  background: #f44336;
-}
-
-.activitiy-icon.ASSIGNED {
-  background: #9c27b0;
-}
-
-.activitiy-icon.DUE_DATE_CHANGED {
-  background: #ff9800;
-}
-
-.activitiy-icon.CREATED {
-  background: #4caf50;
-}
-
-.activitiy-icon.UPDATED {
-  background: #607d8b;
-}
-
-/* CONTENT */
-.activity-item > div:last-child {
-  display: flex;
-  flex-direction: column;
-}
