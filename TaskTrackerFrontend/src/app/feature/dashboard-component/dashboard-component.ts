@@ -94,6 +94,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   // Line chart
   doneTaskMap: Map<string, number> = new Map<string, 0>();
+  totalDone : number = 0;
   private completeChartCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('completeChartCanvas')
   set completeChartCanvasSetter(canvas: ElementRef<HTMLCanvasElement>) {
@@ -205,8 +206,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           return acc;
         }, new Map<string, Task[]>());
 
-        this.logger.log(JSON.stringify(ListOfLastDays()));
-        this.logger.log('Total: ' + tasks.length);
+        //this.logger.log(JSON.stringify(ListOfLastDays()));
+        //this.logger.log('Total: ' + tasks.length);
+        this.totalDone = tasks.length;
         ListOfLastDays().forEach((day) => {
           this.doneTaskMap.set(day, grouped.get(day)?.length ?? '0');
           //this.doneTaskMap.get(day)?.push(grouped.get(day)?.length ?? '0'):
