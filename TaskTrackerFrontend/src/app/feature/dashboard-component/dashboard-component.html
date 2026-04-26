@@ -3,65 +3,101 @@
 <div *ngIf="loading" class="loading">Loading...</div>
 <div *ngIf="stats$ | async as stats">
   <div class="dashboard" *ngIf="!loading">
+    <div class="section">
+      <div class="section-title">
+        <mat-icon class="header">view_agenda</mat-icon> Status Overview
+      </div>
+      <div class="cards">
+        <div class="card total clickable" (click)="filterStatus('')">
+          <div class="left">
+            <div class="card-title">TOTAL TASKS</div>
+            <div class="card-value">{{ stats.total }}</div>
+          </div>
+          <div>
+            <mat-icon class="mat-icon-card total">analytics</mat-icon>
+          </div>
+        </div>
+
+        <div class="card todo clickable" (click)="filterStatus('TODO')">
+          <div class="left">
+            <div class="card-title">TODO</div>
+            <div class="card-value">
+              {{ stats.todo }} ({{ calculatePercentage(stats.todo, stats.total) }}%)
+            </div>
+          </div>
+
+          <div>
+            <mat-icon class="mat-icon-card todo">assignment</mat-icon>
+          </div>
+        </div>
+
+        <div class="card progress clickable" (click)="filterStatus('IN_PROGRESS')">
+          <div class="left">
+            <div class="card-title">IN PROGRESS</div>
+            <div class="card-value">
+              {{ stats.inProgress }} ({{ calculatePercentage(stats.inProgress, stats.total) }}%)
+            </div>
+          </div>
+          <div>
+            <mat-icon class="mat-icon-card inprogress">autorenew</mat-icon>
+          </div>
+        </div>
+
+        <div class="card done clickable" (click)="filterStatus('DONE')">
+          <div class="left">
+            <div class="card-title">DONE</div>
+            <div class="card-value">
+              {{ stats.done }} ({{ calculatePercentage(stats.done, stats.total) }}%)
+            </div>
+          </div>
+
+          <div>
+            <mat-icon class="mat-icon-card done">check_circle</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 🔢 Summary Cards -->
     <div class="row-2col">
       <!--Left-->
       <div>
-        <div class="section">
-          <div class="section-title">✔️ Status Overview</div>
-          <div class="cards">
-            <div class="card total clickable" (click)="filterStatus('')">
-              <div class="left">
-                <div class="card-title">TOTAL TASKS</div>
-                <div class="card-value">{{ stats.total }}</div>
-              </div>
-              <div >
-                <mat-icon class="mat-icon total">analytics</mat-icon>
-              </div>
+        <!--Progress bar-->
+        <div class="section section-progress clickable" (click)="toKanbanBoard()">
+          <div class="section-title">
+            <mat-icon class="header">refresh</mat-icon>
+            Progress Overview
+          </div>
+          <div class="progress-wrapper">
+            <div class="progress-info">
+              <span>{{ stats.done }} / {{ stats.total }} tasks done</span>
+              <span>{{ stats.completionPercent }}%</span>
             </div>
 
-            <div class="card todo clickable" (click)="filterStatus('TODO')">
-              <div class="left">
-                <div class="card-title">TODO</div>
-                <div class="card-value">
-                  {{ stats.todo }} ({{ calculatePercentage(stats.todo, stats.total) }}%)
-                </div>
-              </div>
-
-              <div>
-                <mat-icon class="mat-icon todo">assignment</mat-icon>
-              </div>
-            </div>
-
-            <div class="card progress clickable" (click)="filterStatus('IN_PROGRESS')">
-              <div class="left">
-                <div class="card-title">IN PROGRESS</div>
-                <div class="card-value">
-                  {{ stats.inProgress }} ({{ calculatePercentage(stats.inProgress, stats.total) }}%)
-                </div>
-              </div>
-              <div >
-                <mat-icon class="mat-icon inprogress">autorenew</mat-icon>
-              </div>
-            </div>
-
-            <div class="card done clickable" (click)="filterStatus('DONE')">
-              <div class="left">
-                <div class="card-title">DONE</div>
-                <div class="card-value">
-                  {{ stats.done }} ({{ calculatePercentage(stats.done, stats.total) }}%)
-                </div>
-              </div>
-
-              <div>
-                <mat-icon class="mat-icon done">check_circle</mat-icon>
-              </div>
+            <div class="progress-bar">
+              <div
+                class="progress-fill"
+                [ngClass]="progressColorClass(stats.completionPercent)"
+                [style.width.%]="stats.completionPercent"
+              ></div>
             </div>
           </div>
         </div>
 
+        <!--Complete charts-->
+        <div class="section section-progress clickable" (click)="toKanbanBoard()">
+          <div class="section-title">
+            <mat-icon class="header">check_circle</mat-icon>
+            Tasks Completed (Last 7 Days)
+          </div>
+          <div class="complete-chart-container">
+            <canvas #completeChartCanvas class="complete-chart-canvas"></canvas>
+          </div>
+        </div>
+
+        <!--My Work-->
         <div class="section clickable" (click)="toMyWork()">
-          <div class="section-title">👤 My Work</div>
+          <div class="section-title"><mat-icon class="header">work</mat-icon> My Work</div>
           <div class="my-work">
             <div class="card overdue">
               <div class="left">
@@ -99,27 +135,8 @@
           </div>
         </div>
 
-        <!--Progress bar-->
-        <div class="section section-progress clickable" (click)="toKanbanBoard()">
-          <div class="section-title">⟳ Progress Overview</div>
-          <div class="progress-wrapper">
-            <div class="progress-info">
-              <span>{{ stats.done }} / {{ stats.total }} tasks done</span>
-              <span>{{ stats.completionPercent }}%</span>
-            </div>
-
-            <div class="progress-bar">
-              <div
-                class="progress-fill"
-                [ngClass]="progressColorClass(stats.completionPercent)"
-                [style.width.%]="stats.completionPercent"
-              ></div>
-            </div>
-          </div>
-        </div>
-
         <div class="section">
-          <div class="section-title">🔥 Top Tags</div>
+          <div class="section-title"><mat-icon class="header">grade</mat-icon> Top Tags</div>
           <div class="tag-list">
             <div class="tag-item clickable" *ngFor="let t of topTags" (click)="filterByTag(t.tag)">
               <span class="tag">{{ t.tag }}</span>
@@ -133,13 +150,19 @@
       <div>
         <!-- 🎯 Priority Overview -->
         <div class="section">
-          <div class="section-title">🏴 Priority Overview</div>
-          <canvas #chartCanvas (click)="onChartClick($event)"></canvas>
+          <div class="section-title">
+            <mat-icon class="header">flag</mat-icon>
+            Priority Overview
+          </div>
+          <canvas #priorityChartCanvas class="pie-canvas" (click)="onChartClick($event)"></canvas>
         </div>
 
+        <!--Recent Update-->
         <div class="section">
           <div class="section-header">
-            <div class="section-title">⏲ Recent Update</div>
+            <div class="section-title">
+              <mat-icon class="header">history</mat-icon> Recent Update
+            </div>
             <a class="view-link" (click)="sortTaksByUpdated()">View all →</a>
           </div>
 

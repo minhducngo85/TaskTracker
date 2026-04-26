@@ -74,4 +74,8 @@ export class TaskService {
   getMyActiveTasks() {
     return this.http.get<any[]>(`${this.api}/my-tasks`);
   }
+
+  getCompleteTasks(){
+    return this.http.get<any[]>(`${this.api}/complete-tasks`);
+  }
 }

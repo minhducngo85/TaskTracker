@@ -55,4 +55,12 @@ public interface TaskRepository extends JpaRepository<Task, Long>, JpaSpecificat
 	
 	
 	List<Task> findByAssignedToAndStatusNot(String assignedTo, TaskStatus status);
+	
+	@Query("""
+			SELECT t FROM Task t
+			WHERE t.status = 'DONE'
+			AND t.updatedAt >= :start
+			ORDER BY t.updatedAt DESC
+			""")
+	List<Task> findDoneTask(Instant start);
 }

@@ -24,7 +24,8 @@ import { User } from '../../core/models/User';
 import { Authentication } from '../../core/services/authentication';
 import { TagCount } from '../../core/models/TagCount';
 import { MyWork } from '../../core/models/MyWork';
-import { MatIconModule } from "@angular/material/icon";
+import { MatIconModule } from '@angular/material/icon';
+import { ListOfLastDays, removeTimeFromUpdatedAt } from '../../app/app-utils';
 
 Chart.register(ChartDataLabels);
 
@@ -65,9 +66,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   assigneeList: User[] = [];
 
-  // Priority chart
-  private chartCanvas!: ElementRef<HTMLCanvasElement>;
-
   // filter and search
   filters: TaskFilter = {
     keyword: '',
@@ -79,16 +77,29 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // Important: wrong sort field causes the http code 401
   sort: string = 'updatedAt,desc';
   page = 0;
-  size = 6;
+  size = 10;
 
-  @ViewChild('chartCanvas')
-  set chartCanvasSetter(canvas: ElementRef<HTMLCanvasElement>) {
+  // Priority chart
+  private chartCanvas!: ElementRef<HTMLCanvasElement>;
+
+  @ViewChild('priorityChartCanvas')
+  set priorityChartCanvasSetter(canvas: ElementRef<HTMLCanvasElement>) {
     if (!canvas) return;
 
     this.chartCanvas = canvas;
 
     // Khi canvas xuất hiện → create chart
     this.initChart();
+  }
+
+  // Line chart
+  doneTaskMap: Map<string, number> = new Map<string, 0>();
+  private completeChartCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('completeChartCanvas')
+  set completeChartCanvasSetter(canvas: ElementRef<HTMLCanvasElement>) {
+    if (!canvas) return;
+    this.completeChartCanvas = canvas;
+    this.initCompleteTaskChart();
   }
 
   // top tags
@@ -121,8 +132,97 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.loadMyTasks();
     this.loadTopTags();
     this.loadMyWork();
+    this.loadCompleteTasks();
+    this.initCompleteTaskChart();
   }
 
+  initCompleteTaskChart() {
+    const ctx = this.completeChartCanvas.nativeElement.getContext('2d');
+    if (!ctx) return;
+    // gradient
+    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, 'rgba(59, 130, 246, 0.4)');
+    gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: Array.from(this.doneTaskMap.keys()),
+        datasets: [
+          {
+            data: Array.from(this.doneTaskMap.values()),
+            borderColor: '#3b82f6',
+            backgroundColor: gradient,
+            fill: true,
+            tension: 0.4,
+            pointRadius: 4,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false, // to make it full width of container
+        plugins: {
+          legend: { display: false },
+          datalabels: {
+            // to avoid overlap
+            align: 'top',
+            anchor: 'end',
+            offset: 6,
+          },
+        },
+        interaction: {
+          mode: 'index',
+          intersect: false,
+        },
+        scales: {
+          x: { grid: { display: false } },
+          y: {
+            beginAtZero: true,
+            ticks: { stepSize: 5 },
+          },
+        },
+      },
+    });
+  }
+
+  loadCompleteTasks() {
+    this.logger.log('loadCompleteTasks() ');
+    this.taskService.getCompleteTasks().subscribe({
+      next: (tasks) => {
+        tasks.forEach((t) => {
+          t = removeTimeFromUpdatedAt(t);
+        });
+        console.log(JSON.stringify(tasks));
+
+        const grouped = tasks.reduce((acc, task) => {
+          // go over the array
+          const key = task.updatedAt || 'UNASSIGNED';
+          if (!acc.has(key)) {
+            acc.set(key, []);
+          }
+          acc.get(key)!.push(task);
+          return acc;
+        }, new Map<string, Task[]>());
+
+        this.logger.log(JSON.stringify(ListOfLastDays()));
+        this.logger.log('Total: ' + tasks.length);
+        ListOfLastDays().forEach((day) => {
+          this.doneTaskMap.set(day, grouped.get(day)?.length ?? '0');
+          //this.doneTaskMap.get(day)?.push(grouped.get(day)?.length ?? '0'):
+          // this.logger.log(day + '=' + JSON.stringify(grouped.get(day)?.length ?? '0'));
+        });
+
+        for (const [key, value] of this.doneTaskMap) {
+          this.logger.log(key + '=' + value);
+        }
+      },
+    });
+  }
+
+  /**
+   * load my active works
+   */
   loadMyWork() {
     this.taskService.getMyWork().subscribe((res) => {
       this.myWork = res;
@@ -174,7 +274,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       sort: this.sort,
       ...Object.fromEntries(
         Object.entries(myTasksFilters).filter(
-          ([_, v]) => v !== null && v !== undefined && v !== '',
+          ([_, v]) => v !== null && v !== undefined && v !== '', // field filtering
         ),
       ),
     };
@@ -255,7 +355,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * chart creation
+   * priority chart creation
    */
   chart!: Chart;
   initChart() {
@@ -276,7 +376,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       options: {
         plugins: {
           legend: {
-            position: 'bottom',
+            position: 'right',
           },
           datalabels: {
             color: '#fff',

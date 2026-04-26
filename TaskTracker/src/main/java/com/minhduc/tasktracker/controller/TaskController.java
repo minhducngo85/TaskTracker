@@ -131,6 +131,13 @@ public class TaskController {
 		log.info("getMyActiveTasks called!");
 		return taskService.getMyActiveTask().stream().map(aTask -> mapTaskToDto(aTask)).toList();
 	}
+	
+	@GetMapping("/complete-tasks")
+	public List<TaskDto> getCompleteTasks(@RequestParam(defaultValue = "7") int lastDays) {
+		log.info("getCompleteTasks called!");
+		return taskService.getDoneTaskLastDays(lastDays).stream().map(aTask -> mapTaskToDto(aTask)).toList();
+	}
+
 
 	private TaskDto mapTaskToDto(Task aTask) {
 		if (aTask == null) {

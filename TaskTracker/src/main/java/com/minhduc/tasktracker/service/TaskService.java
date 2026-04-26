@@ -252,4 +252,17 @@ public class TaskService {
 	public List<Task> getMyActiveTask(){
 		return taskRepository.findByAssignedToAndStatusNot(SecurityUtils.getCurrentUser(), TaskStatus.DONE);
 	}
+	
+	/**
+	 * 
+	 * @return
+	 * list of all done task form last 7 days
+	 */
+	public List<Task> getDoneTaskLastDays(int lastDays) {
+		LocalDate today = LocalDate.now();
+		ZoneId zone = ZoneId.systemDefault();
+		Instant startOfToday = today.atStartOfDay(zone).toInstant();
+		Instant dayStart = startOfToday.minus(lastDays, ChronoUnit.DAYS);
+		return taskRepository.findDoneTask(dayStart);
+	}
 }

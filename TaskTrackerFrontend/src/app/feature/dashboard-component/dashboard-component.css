@@ -123,7 +123,7 @@
 
 /* Sections */
 .section {
-  margin-top: 20px;
+  margin-top: 15px;
   border: 1px solid #dbdbdb;
   border-radius: 15px;
   padding: 15px;
@@ -251,8 +251,8 @@
   margin-top: 0px;
 }
 
-canvas {
-  height: 300px !important;
+.pie-canvas {
+  height: 310px !important;
 }
 
 /* Tabler´t */
@@ -459,10 +459,10 @@ canvas {
 /* icon */
 .icon {
   font-size: 40px;
-  opacity: 0.8;
+  opacity: 0.6;
 }
 
-.mat-icon {
+.mat-icon-card {
   width: 40px;
   height: 40px;
   font-size: 40px;
@@ -484,7 +484,9 @@ canvas {
 .mat-icon.done {
   color: #26b45a;
 }
-
+.mat-icon.header {
+ color: #1976d2
+}
 /* ===== COLORS (giống Jira style) ===== */
 
 /* Overdue */
@@ -508,3 +510,10 @@ canvas {
     grid-template-columns: 1fr;
   }
 }
+
+
+.complete-chart-canvas {
+  width: 100% !important;
+  height: 250px !important;
+}
+
