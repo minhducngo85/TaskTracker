@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.minhduc.tasktracker.controller.exceptionhandling.ResourceNotFoundException;
+import com.minhduc.tasktracker.dto.DtoMapper;
 import com.minhduc.tasktracker.dto.MyWorkDto;
 import com.minhduc.tasktracker.dto.TaskCommentDto;
 import com.minhduc.tasktracker.entity.Task;
@@ -46,7 +47,7 @@ public class TaskCommentService {
 			size = 10; // tránh query quá lớn
 
 		Page<TaskComment> comments = commentRepo.findByTaskIdOrderByCreatedAtDesc(taskId, PageRequest.of(page, size));
-		return comments.map(this::mapToDto);
+		return comments.map(DtoMapper::mapToCommentDto);
 	}
 
 	public TaskCommentDto addComment(Long taskId, String content, String username) {
@@ -59,25 +60,10 @@ public class TaskCommentService {
 		comment.setTask(task);
 		comment.setCreatedByFullName(fullName);
 		TaskComment saved = commentRepo.save(comment);
-		return mapToDto(saved);
+		return DtoMapper.mapToCommentDto(saved);
 	}
 
-	/**
-	 * map entity to dto
-	 * 
-	 * @param c
-	 * @return
-	 */
-	private TaskCommentDto mapToDto(TaskComment c) {
-		TaskCommentDto dto = new TaskCommentDto();
-		dto.setId(c.getId());
-		dto.setContent(c.getContent());
-		dto.setCreatedBy(c.getCreatedBy());
-		dto.setCreatedByFullName(c.getCreatedByFullName());
-		dto.setCreatedAt(c.getCreatedAt());
-		dto.setUpdatedAt(c.getUpdatedAt());
-		return dto;
-	}
+	
 
 	
 }

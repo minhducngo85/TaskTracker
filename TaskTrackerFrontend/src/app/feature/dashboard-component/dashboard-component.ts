@@ -14,7 +14,7 @@ import { TaskStatus } from '../../core/models/TaskStatus';
 import { TaskPriority } from '../../core/models/TaskPriority';
 import { Chart } from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
 import { Task } from '../../core/models/Task';
@@ -26,6 +26,8 @@ import { TagCount } from '../../core/models/TagCount';
 import { MyWork } from '../../core/models/MyWork';
 import { MatIconModule } from '@angular/material/icon';
 import { ListOfLastDays, removeTimeFromUpdatedAt } from '../../app/app-utils';
+import { Activity } from '../../core/models/Activity';
+import { ActivityService } from '../../core/services/activity-service';
 
 Chart.register(ChartDataLabels);
 
@@ -45,7 +47,7 @@ export interface TaskStats {
 
 @Component({
   selector: 'app-dashboard-component',
-  imports: [CommonModule, FormsModule, TimeAgoPipe, MatIconModule],
+  imports: [CommonModule, FormsModule, TimeAgoPipe, MatIconModule, RouterLink],
   templateUrl: './dashboard-component.html',
   styleUrl: './dashboard-component.css',
 })
@@ -94,7 +96,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   // Line chart
   doneTaskMap: Map<string, number> = new Map<string, 0>();
-  totalDone : number = 0;
+  totalDone: number = 0;
   private completeChartCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('completeChartCanvas')
   set completeChartCanvasSetter(canvas: ElementRef<HTMLCanvasElement>) {
@@ -113,6 +115,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     thisWeek: 0,
   };
 
+  // activities
+  activities: Activity[] = [];
+  activityPageSize = 10;
+  activityPage = 0;
+  totalActivityPages = 0;
+
   constructor(
     private taskService: TaskService,
     private cdr: ChangeDetectorRef,
@@ -120,6 +128,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private snackBar: MatSnackBar,
     private logger: LoggerService,
     private auth: Authentication,
+    private activityService: ActivityService,
   ) {
     this.logger.context = 'DashboardComponent';
   }
@@ -130,13 +139,28 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.logger.log('ngOnInit(): void');
     this.loadRecentTasks();
     this.loadAssigneeList();
-    this.loadMyTasks();
+    // this.loadMyTasks();
     this.loadTopTags();
     this.loadMyWork();
     this.loadCompleteTasks();
-    this.initCompleteTaskChart();
+    this.loadActivities();
   }
 
+  /** Load activities */
+  loadActivities() {
+    this.logger.info('loadActivities() called.');
+    this.activityService.getActivites(this.activityPage, this.activityPageSize).subscribe((res) => {
+      this.activities = res.content;
+      this.totalActivityPages = res.totalPages;
+      this.logger.info(JSON.stringify(this.activities));
+      this.cdr.detectChanges();
+    });
+  }
+
+  /**
+   *
+   * @returns init chart in ui
+   */
   initCompleteTaskChart() {
     const ctx = this.completeChartCanvas.nativeElement.getContext('2d');
     if (!ctx) return;
@@ -187,6 +211,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * read chart data from backend
+   */
   loadCompleteTasks() {
     this.logger.log('loadCompleteTasks() ');
     this.taskService.getCompleteTasks().subscribe({
@@ -194,7 +221,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         tasks.forEach((t) => {
           t = removeTimeFromUpdatedAt(t);
         });
-        console.log(JSON.stringify(tasks));
+        // console.log(JSON.stringify(tasks));
 
         const grouped = tasks.reduce((acc, task) => {
           // go over the array
@@ -493,5 +520,20 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       return username;
     }
     return '';
+  }
+
+  getActivityIcon(action: string): string {
+    switch (action) {
+      case 'STATUS_CHANGED':
+        return 'sync';
+      case 'PRIORITY_CHANGED':
+        return 'flag';
+      case 'ASSIGNED':
+        return 'person';
+      case 'DUE_DATE_CHANGED':
+        return 'event';
+      default:
+        return 'edit';
+    }
   }
 }

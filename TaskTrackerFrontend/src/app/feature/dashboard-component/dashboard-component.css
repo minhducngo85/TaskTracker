@@ -181,13 +181,10 @@
   color: #166534;
 }
 
-/* Tasks */
-.task-title {
-  font-weight: 500;
-}
+
 
 .task-meta {
-  font-size: 12px;
+  font-size: 13px;
   color: #666;
 }
 .progress-wrapper {
@@ -252,7 +249,7 @@
 }
 
 .pie-canvas {
-  height: 310px !important;
+  height: 280px !important;
 }
 
 /* Tabler´t */
@@ -261,7 +258,7 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  canvas {
+  .pie-canvas {
     height: 250px !important;
   }
 }
@@ -271,7 +268,7 @@
   .row-2col {
     grid-template-columns: 1fr;
   }
-  canvas {
+  .pie-canvas {
     height: 250px !important;
   }
 }
@@ -405,6 +402,7 @@
   gap: 6px;
   font-size: 14px;
    background: #eee;
+     color: #525252;
 }
 
 .tag-item:hover {
@@ -514,6 +512,79 @@
 
 .complete-chart-canvas {
   width: 100% !important;
-  height: 250px !important;
+  height: 350px !important;
 }
+
+
+/** Activities*/
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  padding: 6px 10px;
+  border-radius: 10px;
+
+  background: #f9fafc;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+/* hover nhẹ */
+.activity-item:hover {
+  background: #eef3f8;
+}
+
+.activity-title {
+  color: #525252;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ICON */
+.icon {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+  color: white;
+  font-size: 18px;
+}
+
+/* màu theo action */
+.icon.STATUS_CHANGED {
+  background: #2196f3;
+}
+
+.icon.PRIORITY_CHANGED {
+  background: #f44336;
+}
+
+.icon.ASSIGNED {
+  background: #9c27b0;
+}
+
+.icon.DUE_DATE_CHANGED {
+  background: #ff9800;
+}
+
+.icon.CREATED {
+  background: #4caf50;
+}
+
+.icon.UPDATED {
+  background: #607d8b;
+}
+
+/* CONTENT */
+.activity-item > div:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
 

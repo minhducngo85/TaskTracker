@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.minhduc.tasktracker.dto.DtoMapper;
 import com.minhduc.tasktracker.dto.MyWorkDto;
 import com.minhduc.tasktracker.dto.TagCount;
 import com.minhduc.tasktracker.dto.TaskDto;
@@ -45,9 +46,9 @@ public class TaskController {
 	public List<TaskDto> getAllTasks(@RequestParam(required = false) TaskPriority priority) {
 		log.info("getAllTasks() called");
 		if (priority != null) {
-			return taskService.findByPriority(priority).stream().map(aTask -> mapTaskToDto(aTask)).toList();
+			return taskService.findByPriority(priority).stream().map(aTask -> DtoMapper.mapTaskToDto(aTask)).toList();
 		}
-		return taskService.getAll().stream().map(aTask -> mapTaskToDto(aTask)).toList();
+		return taskService.getAll().stream().map(aTask -> DtoMapper.mapTaskToDto(aTask)).toList();
 	}
 
 	@GetMapping("/{taskId}/history")
@@ -65,7 +66,7 @@ public class TaskController {
 		log.info("sort: {}", String.join(",", sort));
 		log.info("page: {}", page);
 		log.info("size: {}", size);
-		return taskService.getTasks(filter, page, size, sort).map(aTask -> mapTaskToDto(aTask));
+		return taskService.getTasks(filter, page, size, sort).map(aTask -> DtoMapper.mapTaskToDto(aTask));
 	}
 
 	@GetMapping("/options/assignee")
@@ -89,13 +90,13 @@ public class TaskController {
 	public TaskDto create(@RequestBody Task task) {
 		log.info("create() called");
 		log.info("Objt to save: {}", task.toString());
-		return mapTaskToDto(taskService.create(task));
+		return DtoMapper.mapTaskToDto(taskService.create(task));
 	}
 
 	@PutMapping("/{id}")
 	public TaskDto update(@PathVariable Long id, @RequestBody Task task) {
 		log.info("update() called");
-		return mapTaskToDto(taskService.update(id, task));
+		return DtoMapper.mapTaskToDto(taskService.update(id, task));
 	}
 
 	@DeleteMapping("/{id}")
@@ -107,7 +108,7 @@ public class TaskController {
 	@GetMapping("/{id}")
 	public TaskDto getTask(@PathVariable Long id) {
 		log.info("getTask() called id=", id);
-		return mapTaskToDto(taskService.getTask(id));
+		return DtoMapper.mapTaskToDto(taskService.getTask(id));
 	}
 
 	@GetMapping("/tags")
@@ -129,31 +130,13 @@ public class TaskController {
 	@GetMapping("/my-tasks")
 	public List<TaskDto> getMyActiveTasks() {
 		log.info("getMyActiveTasks called!");
-		return taskService.getMyActiveTask().stream().map(aTask -> mapTaskToDto(aTask)).toList();
+		return taskService.getMyActiveTask().stream().map(aTask -> DtoMapper.mapTaskToDto(aTask)).toList();
 	}
-	
+
 	@GetMapping("/complete-tasks")
 	public List<TaskDto> getCompleteTasks(@RequestParam(defaultValue = "7") int lastDays) {
 		log.info("getCompleteTasks called!");
-		return taskService.getDoneTaskLastDays(lastDays).stream().map(aTask -> mapTaskToDto(aTask)).toList();
+		return taskService.getDoneTaskLastDays(lastDays).stream().map(aTask -> DtoMapper.mapTaskToDto(aTask)).toList();
 	}
 
-
-	private TaskDto mapTaskToDto(Task aTask) {
-		if (aTask == null) {
-			return null;
-		}
-		TaskDto dto = new TaskDto();
-		dto.setId(aTask.getId());
-		dto.setTitle(aTask.getTitle());
-		dto.setAssignedTo(aTask.getAssignedTo());
-		dto.setCreatedAt(aTask.getCreatedAt());
-		dto.setUpdatedAt(aTask.getUpdatedAt());
-		dto.setDescription(aTask.getDescription());
-		dto.setDueDate(aTask.getDueDate());
-		dto.setPriority(aTask.getPriority());
-		dto.setStatus(aTask.getStatus());
-		dto.setTags(aTask.getTags());
-		return dto;
-	}
 }

@@ -94,9 +94,12 @@ public class TaskService {
 	 * @param task
 	 * @return
 	 */
+	@Transactional
 	public Task create(Task task) {
 		task.setStatus(TaskStatus.TODO);
-		return taskRepository.save(task);
+		Task saved = taskRepository.save(task);
+		saveHistory(saved.getId(), "task", "Null", "Task created");
+		return saved;
 	}
 
 	/**
@@ -132,7 +135,7 @@ public class TaskService {
 			saveHistory(task.getId(), "dueDate", String.valueOf(task.getDueDate()),
 					String.valueOf(updated.getDueDate()));
 		}
-		
+
 		if (!Objects.equals(task.getAssignedTo(), updated.getAssignedTo())) {
 			saveHistory(task.getId(), "assignedTo", task.getAssignedTo(), updated.getAssignedTo());
 		}
@@ -247,16 +250,14 @@ public class TaskService {
 		log.info("end   = {}", end);
 		return taskRepository.findTaksByDueDate(username, start, end);
 	}
-	
-	
-	public List<Task> getMyActiveTask(){
+
+	public List<Task> getMyActiveTask() {
 		return taskRepository.findByAssignedToAndStatusNot(SecurityUtils.getCurrentUser(), TaskStatus.DONE);
 	}
-	
+
 	/**
 	 * 
-	 * @return
-	 * list of all done task form last 7 days
+	 * @return list of all done task form last 7 days
 	 */
 	public List<Task> getDoneTaskLastDays(int lastDays) {
 		LocalDate today = LocalDate.now();
