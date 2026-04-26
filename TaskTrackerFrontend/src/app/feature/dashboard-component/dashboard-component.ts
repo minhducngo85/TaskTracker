@@ -182,10 +182,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             fill: true,
             tension: 0.4,
             pointRadius: 4,
+            spanGaps: true,
           },
         ],
       },
       options: {
+         layout: {
+          padding: 20, // 👈 quan trọng
+        },
         responsive: true,
         maintainAspectRatio: false, // to make it full width of container
         plugins: {
@@ -435,6 +439,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         ],
       },
       options: {
+        layout: {
+          padding: 20, // 👈 quan trọng
+        },
+        responsive: true,
+        maintainAspectRatio: false, // to make it full width of container
         plugins: {
           legend: {
             position: 'right',

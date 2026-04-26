@@ -29,6 +29,7 @@ Live Demo: https://82.165.51.255/
   - MEDIUM
   - LOW
 - 📊 Task change history (audit log)
+- 📝 Activity feed
 - 💬 Task comments with pagination / Collaboration: discussion per tag
 - 🌐 Clean REST API design
 - 📱 Responsive UI

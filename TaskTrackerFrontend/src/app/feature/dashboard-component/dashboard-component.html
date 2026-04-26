@@ -90,7 +90,7 @@
             <mat-icon class="header">check_circle</mat-icon>
             {{ this.totalDone }} Tasks Completed (Last 7 Days)
           </div>
-          <div class="complete-chart-container">
+          <div class="chart-container">
             <canvas #completeChartCanvas class="complete-chart-canvas"></canvas>
           </div>
         </div>
@@ -154,7 +154,9 @@
             <mat-icon class="header">flag</mat-icon>
             Priority Overview
           </div>
-          <canvas #priorityChartCanvas class="pie-canvas" (click)="onChartClick($event)"></canvas>
+          <div class="chart-container">
+            <canvas #priorityChartCanvas class="pie-canvas" (click)="onChartClick($event)"></canvas>
+          </div>
         </div>
 
         <!--Recent Activities-->
@@ -165,17 +167,21 @@
             </div>
             <a class="view-link" (click)="sortTaksByUpdated()" style="display: none">View all →</a>
           </div>
+          <div class="list-container">
+            <div class="card" class="activity-item" *ngFor="let item of activities">
+              <div class="activitiy-icon" [ngClass]="item.action">
+                <i class="material-icons">{{ getActivityIcon(item.action) }}</i>
+              </div>
 
-          <div class="card" class="activity-item" *ngFor="let item of activities">
-            <div class="activitiy-icon" [ngClass]="item.action">
-              <i class="material-icons">{{ getActivityIcon(item.action) }}</i>
-            </div>
-
-            <div>
-              <div class="activity-title">{{ item.message }}</div>
-              <div class="task-meta">
-                <a class="view-link" [routerLink]="['/tasks', item.taskId]">{{ item.taskTitle }}</a> •
-                {{ item.createdAt | timeAgo }}
+              <div>
+                <div class="activity-title">{{ item.message }}</div>
+                <div class="task-meta">
+                  <a class="view-link" [routerLink]="['/tasks', item.taskId]">{{
+                    item.taskTitle
+                  }}</a>
+                  •
+                  {{ item.createdAt | timeAgo }}
+                </div>
               </div>
             </div>
           </div>

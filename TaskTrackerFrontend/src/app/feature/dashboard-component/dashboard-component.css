@@ -22,8 +22,6 @@
   gap: 10px;
 }
 
-
-
 /* Tablet */
 @media (max-width: 1024px) {
   .cards {
@@ -45,6 +43,7 @@
   padding: 10px;
   border-radius: 10px;
   font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .card-title {
@@ -53,11 +52,10 @@
 }
 
 .card-value {
-    font-size: 20px;
+  font-size: 20px;
   font-weight: 700;
   margin: 4px 0;
 }
-
 
 .overdue {
   background: #e53935;
@@ -70,7 +68,6 @@
 .week {
   background: #43a047;
 }
-
 
 /* Colors */
 .card.total {
@@ -100,7 +97,6 @@
   transition: all 0.2s ease;
   border-left: 6px solid transparent;
   border-left-color: #f59e0b;
-
 }
 .card.done {
   background: white;
@@ -181,8 +177,6 @@
   color: #166534;
 }
 
-
-
 .task-meta {
   font-size: 13px;
   color: #666;
@@ -250,6 +244,18 @@
 
 .pie-canvas {
   height: 280px !important;
+}
+
+.chart-container,
+.list-container {
+  background: #fff;
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.chart-container {
+  display: flex;
+  justify-content: flex-start; /* 👈 align left */
 }
 
 /* Tabler´t */
@@ -383,7 +389,6 @@
   color: white;
 }
 
-
 /** Top Tags */
 .tag-list {
   border-radius: 15px;
@@ -401,8 +406,8 @@
   align-items: center;
   gap: 6px;
   font-size: 14px;
-   background: #eee;
-     color: #525252;
+  background: #eee;
+  color: #525252;
 }
 
 .tag-item:hover {
@@ -438,7 +443,7 @@
 
   padding: 14px;
   border-radius: 12px;
-  background: #f9fafb;
+  background: #fff;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -446,8 +451,6 @@
 .my-work > div:hover {
   transform: translateY(-2px);
 }
-
-
 
 .card-desc {
   font-size: 12px;
@@ -483,7 +486,7 @@
   color: #26b45a;
 }
 .mat-icon.header {
- color: #1976d2
+  color: #1976d2;
 }
 /* ===== COLORS (giống Jira style) ===== */
 
@@ -502,17 +505,22 @@
   border-left: 6px solid #22c55e;
 }
 
+
+.complete-chart-canvas {
+  width: 100% !important;
+  height: 350px !important;
+}
+
+
 /* ===== MOBILE ===== */
 @media (max-width: 768px) {
   .my-work {
     grid-template-columns: 1fr;
   }
-}
 
-
-.complete-chart-canvas {
-  width: 100% !important;
-  height: 350px !important;
+  .complete-chart-canvas {
+    height: 250px !important;
+  }
 }
 
 
@@ -525,7 +533,7 @@
   padding: 6px 10px;
   border-radius: 10px;
 
-  background: #f9fafc;
+  background: #fff;
   transition: all 0.2s ease;
   cursor: pointer;
 }
@@ -587,5 +595,3 @@
   display: flex;
   flex-direction: column;
 }
-
-
