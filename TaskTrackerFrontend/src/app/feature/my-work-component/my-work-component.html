@@ -183,14 +183,22 @@
     <!--Right-->
     <div>
       <!--Recent Activities-->
-      <app-activity-feed
-        [activities]="activities"
-        [activityPage]="activityPage"
-        [totalActivityPages]="totalActivityPages"
-        (prev)="prevActivityPage()"
-        (next)="nextActivityPage()"
-      >
-      </app-activity-feed>
+       <!--Recent Activities-->
+        <div class="section">
+          <div class="section-header">
+            <div class="section-title">
+              <mat-icon class="header">history</mat-icon>My Activities
+            </div>
+          </div>
+          <app-activity-feed
+            [activities]="activities"
+            [activityPage]="activityPage"
+            [totalActivityPages]="totalActivityPages"
+            (prev)="prevActivityPage()"
+            (next)="nextActivityPage()"
+          >
+          </app-activity-feed>
+        </div>
     </div>
   </div>
 </div>

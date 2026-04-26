@@ -160,14 +160,21 @@
         </div>
 
         <!--Recent Activities-->
-        <app-activity-feed
-          [activities]="activities"
-          [activityPage]="activityPage"
-          [totalActivityPages]="totalActivityPages"
-          (prev)="prevActivityPage()"
-          (next)="nextActivityPage()"
-        >
-        </app-activity-feed>
+        <div class="section">
+          <div class="section-header">
+            <div class="section-title">
+              <mat-icon class="header">history</mat-icon> Recent Activities
+            </div>
+          </div>
+          <app-activity-feed
+            [activities]="activities"
+            [activityPage]="activityPage"
+            [totalActivityPages]="totalActivityPages"
+            (prev)="prevActivityPage()"
+            (next)="nextActivityPage()"
+          >
+          </app-activity-feed>
+        </div>
 
         <!--Recent Update-->
         <div class="section" style="display: none">

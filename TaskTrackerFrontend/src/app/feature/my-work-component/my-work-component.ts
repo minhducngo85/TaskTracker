@@ -13,10 +13,11 @@ import { isTaskOverdue, isTodayTask } from '../../app/app-utils';
 import { Activity } from '../../core/models/Activity';
 import { ActivityService } from '../../core/services/activity-service';
 import { ActivityFeed } from '../view/activity-feed/activity-feed';
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-my-work-component',
-  imports: [CommonModule, FormsModule, ActivityFeed ],
+  imports: [CommonModule, FormsModule, ActivityFeed, MatIcon],
   templateUrl: './my-work-component.html',
   styleUrl: './my-work-component.css',
 })

@@ -21,6 +21,10 @@
   font-size: 15px;
 }
 
+.mat-icon.header {
+  color: #1976d2;
+}
+
 /* Cards */
 .cards {
   display: grid;
@@ -278,6 +282,15 @@
 @media (max-width: 1024px) {
   .row-2col {
     grid-template-columns: 1fr 1fr;
+  }
+
+}
+
+
+/* Mobile */
+@media (max-width: 768px) {
+  .row-2col {
+    grid-template-columns: 1fr;
   }
 
 }
