@@ -36,9 +36,9 @@ export function removeTimeFromUpdatedAt(task: Task): Task {
 export function ListOfLastDays(): string[] {
   let days : string[] = [];
   const today = new Date();
-  for (let i= 0; i<7; i++) {
+  for (let i= 0; i<8; i++) {
     const day =   new Date(today);
-    day.setDate(day.getDate() - (i +1));
+    day.setDate(day.getDate() - i);
     const str = day.toISOString().slice(0, 10);
     days.push(str);
   }

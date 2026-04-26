@@ -457,14 +457,14 @@
 /* icon */
 .icon {
   font-size: 40px;
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
 .mat-icon-card {
   width: 40px;
   height: 40px;
   font-size: 40px;
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
 .mat-icon.total {
@@ -542,7 +542,7 @@
 }
 
 /* ICON */
-.icon {
+.activitiy-icon {
   width: 30px;
   height: 30px;
   min-width: 30px;
@@ -554,30 +554,31 @@
   border-radius: 8px;
   color: white;
   font-size: 18px;
+  opacity: 0.8;
 }
 
 /* màu theo action */
-.icon.STATUS_CHANGED {
+.activitiy-icon.STATUS_CHANGED {
   background: #2196f3;
 }
 
-.icon.PRIORITY_CHANGED {
+.activitiy-icon.PRIORITY_CHANGED {
   background: #f44336;
 }
 
-.icon.ASSIGNED {
+.activitiy-icon.ASSIGNED {
   background: #9c27b0;
 }
 
-.icon.DUE_DATE_CHANGED {
+.activitiy-icon.DUE_DATE_CHANGED {
   background: #ff9800;
 }
 
-.icon.CREATED {
+.activitiy-icon.CREATED {
   background: #4caf50;
 }
 
-.icon.UPDATED {
+.activitiy-icon.UPDATED {
   background: #607d8b;
 }
 

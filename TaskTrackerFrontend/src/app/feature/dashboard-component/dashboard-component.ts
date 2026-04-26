@@ -137,12 +137,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.logger.log('ngOnInit(): void');
-    this.loadRecentTasks();
+    this.loadRecentTasksAndStats();
     this.loadAssigneeList();
     // this.loadMyTasks();
     this.loadTopTags();
     this.loadMyWork();
-    this.loadCompleteTasks();
     this.loadActivities();
   }
 
@@ -161,7 +160,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
    *
    * @returns init chart in ui
    */
+  completeTaskChart!: Chart;
   initCompleteTaskChart() {
+    this.logger.log('initCompleteTaskChart() ');
     const ctx = this.completeChartCanvas.nativeElement.getContext('2d');
     if (!ctx) return;
     // gradient
@@ -169,7 +170,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     gradient.addColorStop(0, 'rgba(59, 130, 246, 0.4)');
     gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
 
-    new Chart(ctx, {
+    this.completeTaskChart = new Chart(ctx, {
       type: 'line',
       data: {
         labels: Array.from(this.doneTaskMap.keys()),
@@ -209,6 +210,40 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         },
       },
     });
+
+    // subscribe ở đây luôn
+    this.taskService.getCompleteTasks().subscribe({
+      next: (tasks) => {
+        tasks.forEach((t) => {
+          t = removeTimeFromUpdatedAt(t);
+        });
+
+        const grouped = tasks.reduce((acc, task) => {
+          // go over the array
+          const key = task.updatedAt || 'UNASSIGNED';
+          if (!acc.has(key)) {
+            acc.set(key, []);
+          }
+          acc.get(key)!.push(task);
+          return acc;
+        }, new Map<string, Task[]>());
+
+        this.totalDone = tasks.length;
+        ListOfLastDays().forEach((day) => {
+          this.doneTaskMap.set(day, grouped.get(day)?.length ?? '0');
+        });
+
+        for (const [key, value] of this.doneTaskMap) {
+          this.logger.log(key + '=' + value);
+        }
+
+        this.completeTaskChart.data.labels = Array.from(this.doneTaskMap.keys());
+        this.completeTaskChart.data.datasets[0].data = Array.from(this.doneTaskMap.values());
+        this.completeTaskChart.update();
+        this.cdr.detectChanges();
+        this.logger.log('initCompleteTaskChart() done!');
+      },
+    });
   }
 
   /**
@@ -221,7 +256,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         tasks.forEach((t) => {
           t = removeTimeFromUpdatedAt(t);
         });
-        // console.log(JSON.stringify(tasks));
 
         const grouped = tasks.reduce((acc, task) => {
           // go over the array
@@ -233,18 +267,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           return acc;
         }, new Map<string, Task[]>());
 
-        //this.logger.log(JSON.stringify(ListOfLastDays()));
-        //this.logger.log('Total: ' + tasks.length);
         this.totalDone = tasks.length;
         ListOfLastDays().forEach((day) => {
           this.doneTaskMap.set(day, grouped.get(day)?.length ?? '0');
-          //this.doneTaskMap.get(day)?.push(grouped.get(day)?.length ?? '0'):
-          // this.logger.log(day + '=' + JSON.stringify(grouped.get(day)?.length ?? '0'));
         });
 
         for (const [key, value] of this.doneTaskMap) {
           this.logger.log(key + '=' + value);
         }
+        this.cdr.detectChanges();
+        this.logger.log('loadCompleteTasks() done!');
       },
     });
   }
@@ -330,7 +362,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   /**
    * loads tasks from backend and calcualte stats
    */
-  loadRecentTasks() {
+  loadRecentTasksAndStats() {
     this.logger.log('loadTaks() called!');
     // filtering and sorting at server side
     const params: any = {
@@ -532,6 +564,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         return 'person';
       case 'DUE_DATE_CHANGED':
         return 'event';
+      case 'CREATED':
+        return 'open_in_new';
+
       default:
         return 'edit';
     }
