@@ -175,4 +175,26 @@ export class AddTaskDialog implements OnInit {
       tags: this.tags.filter((t) => t !== tag),
     });
   }
+
+  onKeyDown(event: KeyboardEvent) {
+    const target = event.target as HTMLElement;
+    const tag = target.tagName.toLowerCase();
+
+    // Ctrl + Enter → submit
+    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+      event.preventDefault();
+      this.submit();
+      return;
+    }
+
+    // Nếu là textarea → cho xuống dòng (KHÔNG chặn)
+    if (tag === 'textarea') {
+      return;
+    }
+
+    // Nếu là input/select → chặn Enter submit
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
 }

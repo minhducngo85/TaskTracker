@@ -347,8 +347,7 @@
   }
 }
 
-/** PAginator */
-/** Pagionator*/
+/** Paginator */
 .paginator {
   display: flex;
   align-items: center;
@@ -501,8 +500,6 @@
 /**  Assignee inline edit*/
 .assignee-display {
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 6px;
   display: inline-block;
 }
 
@@ -517,4 +514,11 @@
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.icon {
+  height: 20px;
+  width: 20px;
+  font-size: 18px;
+  color: #cf611e;
 }

@@ -92,6 +92,12 @@
     		<artifactId>commons-lang3</artifactId>
     		<version>3.14.0</version> <!-- hoặc version mới hơn nếu có -->
 		</dependency>
+		
+		<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <scope>runtime</scope>
+</dependency>
 	</dependencies>
 
 	<build>

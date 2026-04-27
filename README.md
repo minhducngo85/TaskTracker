@@ -36,10 +36,9 @@ Live Demo: https://82.165.51.255/
 - 📲 Mobile-optimized layout (Kanban swipe / horizontal scroll)
 
 ## ✨ To-do Features
-- Due date
-- real time: sync kanabn between users using websocket
+- real time: sync kanban between users using websocket
 - Offline-first: cache task and sync when it becomes online
-- OIDC with keycloak
+- OIDC with keycloak (optional)
 - File upload: save file local or in S3
 - notification system :Notification {id, userId, message, isRead}. to trigger assign task, comment
 
@@ -155,6 +154,45 @@ TaskTracker.postman_collection.json
 ```
 sudo apt update
 sudo apt install openjdk-17-jdk nginx -y
+```
+
+### Install PostgreSQL
+Install
+```
+sudo apt update
+sudo apt upgrade -y
+sudo apt install postgresql postgresql-contrib -y
+```
+
+Test Service:
+```
+sudo systemctl status postgresql
+```
+Create Database and user
+```
+Login: sudo -u postgres psql
+Create db: CREATE DATABASE task_tracker;
+Create User: CREATE USER app_user WITH PASSWORD 'Postgresql1234!';
+```
+
+Grant role:
+```
+ALTER ROLE app_user SET client_encoding TO 'utf8';
+ALTER ROLE app_user SET default_transaction_isolation TO 'read committed';
+ALTER ROLE app_user SET timezone TO 'UTC';
+GRANT ALL ON SCHEMA public TO app_user;
+ALTER SCHEMA public OWNER TO app_user;
+GRANT ALL PRIVILEGES ON DATABASE task_tracker TO app_user;
+```
+
+Update application.properties
+```
+# PostgreSQL datasource
+spring.datasource.url=jdbc:postgresql://localhost:5432/task_tracker
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.username=app_user
+spring.datasource.password=Postgresql1234!
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
 ```
 
 ### Deploy backend to serser

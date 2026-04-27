@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>Add Task</h2>
-<form [formGroup]="taskForm" (ngSubmit)="submit()" (keydown.enter)="$event.preventDefault()">
+<form [formGroup]="taskForm" (ngSubmit)="submit()" (keydown)="onKeyDown($event)">
   <mat-dialog-content>
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Title</mat-label>

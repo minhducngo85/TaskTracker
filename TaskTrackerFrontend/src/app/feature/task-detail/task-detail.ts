@@ -21,6 +21,7 @@ import { TaskPriority } from '../../core/models/TaskPriority';
 import { TaskStatus } from '../../core/models/TaskStatus';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { isTaskOverdue } from '../../app/app-utils';
+import { MatIcon, MatIconModule } from "@angular/material/icon";
 
 /**
  * @author Minh Duc Ngo
@@ -37,7 +38,8 @@ import { isTaskOverdue } from '../../app/app-utils';
     MatTabsModule,
     TimeAgoPipe,
     NgSelectModule,
-  ],
+    MatIconModule
+],
   templateUrl: './task-detail.html',
   styleUrl: './task-detail.css',
 })

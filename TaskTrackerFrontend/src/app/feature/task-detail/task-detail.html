@@ -50,7 +50,7 @@
         <h4>Assignee</h4>
 
         <span
-          class="priority clickable assignee-display"
+          class="clickable assignee-display"
           *ngIf="!editingAssignee"
           (click)="startEditAssignee()"
           >👤 {{ assigneeFullname(task.assignedTo) || 'Unassigned' }}</span
@@ -134,7 +134,7 @@
 
       <!-- DATES -->
       <div class="footer">
-        <span>📅 Created: {{ task.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+        <span>⬆️ Created: {{ task.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
         <span>🔄 Updated: {{ task.updatedAt | date: 'dd/MM/yyyy HH:mm' }}</span>
       </div>
 
