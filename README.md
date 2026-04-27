@@ -12,28 +12,22 @@ Live Demo: https://82.165.51.255/
 ## ✨ Features
 
 - 🔐 Authentication with JWT
-- 🔄 Refresh token to renew access token
-- 👤 User roles: Admin & user
-- 📝 CRUD Task (Create, Read, Update, Delete)
-- 🔍 Filter/Search and paginator
-- 📉 Dashboard: statistics, chart and recent tasks
-- 📋 Kanban Board: interactive Kanban board with drag-and-drop (Angular CDK)
+- 🔄 Refresh token mechanism to renew access tokens
+- 👤 Role-based access control (Admin & User)
+- 📝 Task management (CRUD: Create, Read, Update, Delete)
+- 🔍 Advanced filtering, search & pagination
+- 📊 Dashboard with statistics, charts & recent tasks
+- 📋 Kanban Board with drag-and-drop (Angular CDK)
+- 📱 Responsive UI with mobile-optimized layout (swipe / horizontal scroll)
 - 👤 Assign tasks to users
-- 📌 Status management:
-  - TODO
-  - IN_PROGRESS
-  - DONE
-- 🚩 Priority levels:
-  - CRITICAL
-  - HIGH
-  - MEDIUM
-  - LOW
+- 📌 Status management: TODO, IN_PROGRESS, DONE
+- 🚩 Priority levels: CRITICAL, HIGH, MEDIUM, LOW
 - 📊 Task change history (audit log)
-- 📝 Activity feed
-- 💬 Task comments with pagination / Collaboration: discussion per tag
-- 🌐 Clean REST API design
-- 📱 Responsive UI
-- 📲 Mobile-optimized layout (Kanban swipe / horizontal scroll)
+- 📝 Activity feed (timeline of changes)
+- 💬 Task comments with pagination
+- 🤝 Collaboration: discussions per task
+- 🌐 Clean REST API design (Spring Boot best practices)
+- 📈 Structured logging with correlationId for request tracing & debugging
 
 ## ✨ To-do Features
 - real time: sync kanban between users using websocket
