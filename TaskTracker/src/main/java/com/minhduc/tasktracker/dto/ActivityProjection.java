@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class ActivityProjection {
+        private Long id;
 	private Long taskId;
 	private String taskTitle;
 
@@ -17,9 +18,10 @@ public class ActivityProjection {
 	private String changedByFullName;
 	private Instant createdAt;
 
-	public ActivityProjection(Long taskId, String taskTitle, String field, String oldValue, String newValue,
+	public ActivityProjection(Long id, Long taskId, String taskTitle, String field, String oldValue, String newValue,
 			String user, String changedByFullName, Instant createdAt) {
-		this.taskId = taskId;
+		this.id = id;
+	    this.taskId = taskId;
 		this.taskTitle = taskTitle;
 		this.field = field;
 		this.oldValue = oldValue;

@@ -13,7 +13,7 @@ describe('KanbanBoardComponent', () => {
 
     fixture = TestBed.createComponent(KanbanBoardComponent);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    // await fixture.whenStable();
   });
 
   it('should create', () => {

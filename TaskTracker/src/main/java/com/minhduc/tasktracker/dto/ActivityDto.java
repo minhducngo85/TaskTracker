@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class ActivityDto {
+    	private Long id;
 	private Long taskId;
 	private String taskTitle;
 	

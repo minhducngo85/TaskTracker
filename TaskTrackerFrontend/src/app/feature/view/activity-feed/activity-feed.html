@@ -1,6 +1,8 @@
 <div class="list-container">
-  <div class="card" class="activity-item" *ngFor="let item of activities">
-    <div class="activitiy-icon" [ngClass]="item.action">
+  <div *ngIf="activities.length === 0" class="empty">No activity</div>
+
+  <div class="card activity-item" *ngFor="let item of activities; trackBy: trackById">
+    <div class="activity-icon" [ngClass]="item.action">
       <i class="material-icons">{{ getActivityIcon(item.action) }}</i>
     </div>
 

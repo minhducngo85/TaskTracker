@@ -81,6 +81,8 @@ public class DtoMapper {
 			message = String.format("%s updated %s", h.getChangedByFullName(), h.getField());
 		}
 		}
-		return new ActivityDto(h.getTaskId(), h.getTaskTitle(), action, message, h.getUser(), h.getCreatedAt());
+		ActivityDto dto = new ActivityDto( h.getTaskId(), h.getTaskTitle(), action, message, h.getUser(), h.getCreatedAt());
+		dto.setId(h.getId());
+		return dto;
 	}
 }

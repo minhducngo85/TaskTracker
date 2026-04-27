@@ -214,7 +214,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             // to avoid overlap
             align: 'top',
             anchor: 'end',
-            offset: 6,
+            offset: -1,
           },
         },
         interaction: {

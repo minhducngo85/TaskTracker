@@ -12,6 +12,9 @@ import { CommonModule } from '@angular/common';
   styleUrl: './activity-feed.css',
 })
 export class ActivityFeed {
+  onClick() {
+    throw new Error('Method not implemented.');
+  }
   @Input() activities: any[] = [];
   @Input() activityPage: number = 0;
   @Input() totalActivityPages: number = 0;
@@ -45,5 +48,9 @@ export class ActivityFeed {
 
   nextPage() {
     this.next.emit();
+  }
+
+  trackById(index: number, item: Activity) {
+    return item.id;
   }
 }

@@ -14,6 +14,7 @@ public interface TaskHistoryRepository extends JpaRepository<TaskHistory, Long> 
 	
 	@Query("""
 		    SELECT new com.minhduc.tasktracker.dto.ActivityProjection(
+		        h.id,
 		        h.taskId,
 		        t.title,
 		        h.field,
@@ -31,6 +32,7 @@ public interface TaskHistoryRepository extends JpaRepository<TaskHistory, Long> 
 	
 	@Query("""
 		    SELECT new com.minhduc.tasktracker.dto.ActivityProjection(
+		        h.id,
 		        h.taskId,
 		        t.title,
 		        h.field,
