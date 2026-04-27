@@ -371,7 +371,7 @@ export class TaskDetail implements OnInit {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.commentLoading = true;
 
-    this.taskService.addComment(id, this.newComment).subscribe({
+    this.taskService.addComment(id, JSON.stringify(this.newComment)).subscribe({
       next: () => {
         this.page = 0;
         this.newComment = ''; // clear editor

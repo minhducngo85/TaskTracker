@@ -23,60 +23,65 @@ import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.ToString;
 
+/**
+ * @author Minh Duc Ngo
+ */
 @Entity
 @Data
 @ToString(exclude = { "description", "comments" })
 public class Task {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private String title;
-	private String description;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String title;
 
-	@Enumerated(EnumType.STRING)
-	private TaskStatus status;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
-	@Column(nullable = false)
-	@Enumerated(EnumType.STRING)
-	private TaskPriority priority = TaskPriority.MEDIUM;
+    @Enumerated(EnumType.STRING)
+    private TaskStatus status;
 
-	private String assignedTo;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TaskPriority priority = TaskPriority.MEDIUM;
 
-	private Instant dueDate;
+    private String assignedTo;
 
-	@Column(updatable = false)
-	private Instant createdAt;
-	private Instant updatedAt;
+    private Instant dueDate;
 
-	@ElementCollection
-	@CollectionTable(name = "task_tags", joinColumns = @JoinColumn(name = "task_id"))
-	@Column(name = "tag")
-	private List<String> tags = new ArrayList<>();
+    @Column(updatable = false)
+    private Instant createdAt;
+    private Instant updatedAt;
 
-	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference // ignore json loop if it is used as DTO
-	private List<TaskComment> comments = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(name = "task_tags", joinColumns = @JoinColumn(name = "task_id"))
+    @Column(name = "tag")
+    private List<String> tags = new ArrayList<>();
 
-	/** duplicate tag */
-	public void setTags(List<String> tags) {
-		if (tags == null) {
-			this.tags = new ArrayList<>();
-			return;
-		}
-		this.tags = tags.stream().map(String::trim).map(String::toLowerCase).distinct().toList();
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference // ignore json loop if it is used as DTO
+    private List<TaskComment> comments = new ArrayList<>();
+
+    /** duplicate tag */
+    public void setTags(List<String> tags) {
+	if (tags == null) {
+	    this.tags = new ArrayList<>();
+	    return;
 	}
+	this.tags = tags.stream().map(String::trim).map(String::toLowerCase).distinct().toList();
+    }
 
-	@PrePersist
-	public void prePersist() {
-		if (this.priority == null) {
-			this.priority = TaskPriority.MEDIUM;
-		}
-		this.createdAt = Instant.now();
-		this.updatedAt = Instant.now();
+    @PrePersist
+    public void prePersist() {
+	if (this.priority == null) {
+	    this.priority = TaskPriority.MEDIUM;
 	}
+	this.createdAt = Instant.now();
+	this.updatedAt = Instant.now();
+    }
 
-	@PreUpdate
-	public void preUpdate() {
-		this.updatedAt = Instant.now();
-	}
+    @PreUpdate
+    public void preUpdate() {
+	this.updatedAt = Instant.now();
+    }
 }

@@ -4,6 +4,7 @@ import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -22,29 +23,31 @@ import lombok.Data;
 @Data
 public class TaskComment {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	private String content;
-	private String createdBy;
-	private String createdByFullName;
-	private Instant createdAt;
-	private Instant updatedAt;
+    @Column(columnDefinition = "TEXT")
+    private String content;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "task_id")
-	@JsonBackReference // ignore json loop if it is used as DTO
-	private Task task;
+    private String createdBy;
+    private String createdByFullName;
+    private Instant createdAt;
+    private Instant updatedAt;
 
-	@PrePersist
-	public void prePersist() {
-		this.createdAt = Instant.now();
-		this.updatedAt = Instant.now();
-	}
-	
-	@PreUpdate
-	public void preUpdate() {
-		this.updatedAt = Instant.now();
-	}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "task_id")
+    @JsonBackReference // ignore json loop if it is used as DTO
+    private Task task;
+
+    @PrePersist
+    public void prePersist() {
+	this.createdAt = Instant.now();
+	this.updatedAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+	this.updatedAt = Instant.now();
+    }
 }

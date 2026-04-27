@@ -8,6 +8,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,230 +41,231 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class TaskService {
-	private final TaskRepository taskRepository;
-	private final TaskHistoryRepository taskHistoryRepository;
-	private final UserRepository userRepo;
+    private final TaskRepository taskRepository;
+    private final TaskHistoryRepository taskHistoryRepository;
+    private final UserRepository userRepo;
 
-	/**
-	 * @return all task form db
-	 */
-	public List<Task> getAll() {
-		return taskRepository.findAll(Sort.by("createdAt").descending());
+    /**
+     * @return all task form db
+     */
+    public List<Task> getAll() {
+	return taskRepository.findAll(Sort.by("createdAt").descending());
+    }
+
+    public TaskStatisticsResponse getStatistics() {
+	TaskStatisticsResponse stats = new TaskStatisticsResponse();
+	stats.setTotal(taskRepository.count());
+	stats.setCritical(taskRepository.countByPriority(TaskPriority.CRITICAL));
+	stats.setHigh(taskRepository.countByPriority(TaskPriority.HIGH));
+	stats.setMedium(taskRepository.countByPriority(TaskPriority.MEDIUM));
+	stats.setLow(taskRepository.countByPriority(TaskPriority.LOW));
+
+	stats.setTodo(taskRepository.countByStatus(TaskStatus.TODO));
+	stats.setInProgress(taskRepository.countByStatus(TaskStatus.IN_PROGRESS));
+	stats.setDone(taskRepository.countByStatus(TaskStatus.DONE));
+
+	return stats;
+    }
+
+    /**
+     * 
+     * @param filter
+     * @param page
+     * @param size
+     * @param sort
+     * @return
+     */
+    public Page<Task> getTasks(TaskFilterRequest filter, int page, int size, String[] sort) {
+	log.info("getTasks(TaskFilterRequest filter={}, int page={}, int size={}, String[] sort={})", filter, page,
+		size, String.join(",", sort));
+	// ✅ parse sort
+	String sortField = sort[0];
+	String sortDir = sort.length > 1 ? sort[1] : "asc";
+
+	Sort.Direction direction = sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+	Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortField));
+
+	// Call repository
+	return taskRepository.findAll(TaskSpecification.filter(filter), pageable);
+    }
+
+    /**
+     * to create a task and save into db
+     * 
+     * @param task
+     * @return
+     */
+    @Transactional
+    public Task create(Task task) {
+	task.setStatus(TaskStatus.TODO);
+	Task saved = taskRepository.save(task);
+	saveHistory(saved.getId(), "task", "Null", "Task created");
+	return saved;
+    }
+
+    /**
+     * to update an entry
+     * 
+     * @param id
+     * @param updated
+     * @return
+     */
+    @Transactional
+    public Task update(Long id, Task updated) {
+	log.info("Updated Req={}", updated.toString());
+	Task task = taskRepository.findById(id)
+		.orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
+
+	// save change history
+	if (!Objects.equals(task.getTitle(), updated.getTitle())) {
+	    saveHistory(task.getId(), "title", task.getTitle(), updated.getTitle());
 	}
 
-	public TaskStatisticsResponse getStatistics() {
-		TaskStatisticsResponse stats = new TaskStatisticsResponse();
-		stats.setTotal(taskRepository.count());
-		stats.setCritical(taskRepository.countByPriority(TaskPriority.CRITICAL));
-		stats.setHigh(taskRepository.countByPriority(TaskPriority.HIGH));
-		stats.setMedium(taskRepository.countByPriority(TaskPriority.MEDIUM));
-		stats.setLow(taskRepository.countByPriority(TaskPriority.LOW));
-
-		stats.setTodo(taskRepository.countByStatus(TaskStatus.TODO));
-		stats.setInProgress(taskRepository.countByStatus(TaskStatus.IN_PROGRESS));
-		stats.setDone(taskRepository.countByStatus(TaskStatus.DONE));
-
-		return stats;
+	if (!Objects.equals(task.getDescription(), updated.getDescription())) {
+	    saveHistory(task.getId(), "description", task.getDescription(), updated.getDescription());
 	}
 
-	/**
-	 * 
-	 * @param filter
-	 * @param page
-	 * @param size
-	 * @param sort
-	 * @return
-	 */
-	public Page<Task> getTasks(TaskFilterRequest filter, int page, int size, String[] sort) {
-
-		// ✅ parse sort
-		String sortField = sort[0];
-		String sortDir = sort.length > 1 ? sort[1] : "asc";
-
-		Sort.Direction direction = sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-
-		Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortField));
-
-		// Call repository
-		return taskRepository.findAll(TaskSpecification.filter(filter), pageable);
+	if (!Objects.equals(task.getStatus(), updated.getStatus())) {
+	    saveHistory(task.getId(), "status", task.getStatus().name(), updated.getStatus().name());
+	}
+	if (!Objects.equals(task.getPriority(), updated.getPriority())) {
+	    saveHistory(task.getId(), "priority", String.valueOf(task.getPriority()),
+		    String.valueOf(updated.getPriority()));
+	}
+	if (!Objects.equals(task.getDueDate(), updated.getDueDate())) {
+	    saveHistory(task.getId(), "dueDate", String.valueOf(task.getDueDate()),
+		    String.valueOf(updated.getDueDate()));
 	}
 
-	/**
-	 * to create a task and save into db
-	 * 
-	 * @param task
-	 * @return
-	 */
-	@Transactional
-	public Task create(Task task) {
-		task.setStatus(TaskStatus.TODO);
-		Task saved = taskRepository.save(task);
-		saveHistory(saved.getId(), "task", "Null", "Task created");
-		return saved;
+	if (!Objects.equals(task.getAssignedTo(), updated.getAssignedTo())) {
+	    saveHistory(task.getId(), "assignedTo", task.getAssignedTo(), updated.getAssignedTo());
+	}
+	String oldTags = String.join(",", task.getTags());
+	String newTags = updated.getTags() != null ? String.join(",", updated.getTags()) : "";
+	if (!Objects.equals(oldTags, newTags)) {
+	    saveHistory(task.getId(), "tags", oldTags, newTags);
 	}
 
-	/**
-	 * to update an entry
-	 * 
-	 * @param id
-	 * @param updated
-	 * @return
-	 */
-	@Transactional
-	public Task update(Long id, Task updated) {
-		log.info("Updated Req={}", updated.toString());
-		Task task = taskRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
-
-		// save change history
-		if (!Objects.equals(task.getTitle(), updated.getTitle())) {
-			saveHistory(task.getId(), "title", task.getTitle(), updated.getTitle());
-		}
-
-		if (!Objects.equals(task.getDescription(), updated.getDescription())) {
-			saveHistory(task.getId(), "description", task.getDescription(), updated.getDescription());
-		}
-
-		if (!Objects.equals(task.getStatus(), updated.getStatus())) {
-			saveHistory(task.getId(), "status", task.getStatus().name(), updated.getStatus().name());
-		}
-		if (!Objects.equals(task.getPriority(), updated.getPriority())) {
-			saveHistory(task.getId(), "priority", String.valueOf(task.getPriority()),
-					String.valueOf(updated.getPriority()));
-		}
-		if (!Objects.equals(task.getDueDate(), updated.getDueDate())) {
-			saveHistory(task.getId(), "dueDate", String.valueOf(task.getDueDate()),
-					String.valueOf(updated.getDueDate()));
-		}
-
-		if (!Objects.equals(task.getAssignedTo(), updated.getAssignedTo())) {
-			saveHistory(task.getId(), "assignedTo", task.getAssignedTo(), updated.getAssignedTo());
-		}
-		String oldTags = String.join(",", task.getTags());
-		String newTags = updated.getTags() != null ? String.join(",", updated.getTags()) : "";
-		if (!Objects.equals(oldTags, newTags)) {
-			saveHistory(task.getId(), "tags", oldTags, newTags);
-		}
-
-		// update obj
-		task.setTitle(updated.getTitle());
-		task.setAssignedTo(updated.getAssignedTo());
-		task.setDescription(updated.getDescription());
-		task.setStatus(updated.getStatus());
-		task.setPriority(updated.getPriority());
-		task.setUpdatedAt(Instant.now());
-		task.getTags().clear();
-		if (updated.getTags() != null) {
-			task.getTags().addAll(updated.getTags());
-		}
-		task.setDueDate(updated.getDueDate());
-		Task updatedObj = taskRepository.save(task);
-
-		log.info("Updated Res={}", updatedObj.toString());
-
-		return updatedObj;
+	// update obj
+	task.setTitle(updated.getTitle());
+	task.setAssignedTo(updated.getAssignedTo());
+	task.setDescription(updated.getDescription());
+	task.setStatus(updated.getStatus());
+	task.setPriority(updated.getPriority());
+	task.setUpdatedAt(Instant.now());
+	task.getTags().clear();
+	if (updated.getTags() != null) {
+	    task.getTags().addAll(updated.getTags());
 	}
+	task.setDueDate(updated.getDueDate());
+	Task updatedObj = taskRepository.save(task);
 
-	public void delete(Long id) {
-		taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
-		taskRepository.deleteById(id);
-	}
+	log.info("Updated Res={}", updatedObj.toString());
 
-	public List<Task> findByPriority(TaskPriority priority) {
-		return taskRepository.findByPriority(priority);
-	}
+	return updatedObj;
+    }
 
-	public Task getTask(long id) {
-		Task task = taskRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
-		return task;
-	}
+    public void delete(Long id) {
+	taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
+	taskRepository.deleteById(id);
+    }
 
-	public List<String> getAllTags() {
-		return taskRepository.findAllUniqueTags();
-	}
+    public List<Task> findByPriority(TaskPriority priority) {
+	return taskRepository.findByPriority(priority);
+    }
 
-	public List<TagCount> getTopTags() {
-		return taskRepository.findTopTags().stream().map(obj -> new TagCount((String) obj[0], (Long) obj[1])).toList();
-	}
+    public Task getTask(long id) {
+	Task task = taskRepository.findById(id)
+		.orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
+	return task;
+    }
 
-	/**
-	 * helper method to save history
-	 * 
-	 * @param taskId
-	 * @param field
-	 * @param oldVal
-	 * @param newVal
-	 */
-	private void saveHistory(Long taskId, String field, String oldVal, String newVal) {
-		TaskHistory h = new TaskHistory();
-		h.setTaskId(taskId);
-		h.setField(field);
-		h.setOldValue(oldVal);
-		h.setNewValue(newVal);
-		h.setChangedBy(SecurityUtils.getCurrentUser());
-		String fullName = userRepo.findByUsername(SecurityUtils.getCurrentUser()).map(User::getFullname)
-				.orElse(SecurityUtils.getCurrentUser());
-		h.setChangedByFullName(fullName);
-		h.setChangedAt(Instant.now());
-		taskHistoryRepository.save(h);
-	}
+    public List<String> getAllTags() {
+	return taskRepository.findAllUniqueTags();
+    }
 
-	/**
-	 * to get list of comments by task id
-	 * 
-	 * @param taskId
-	 * @return
-	 */
-	public Page<TaskHistory> getHistory(long taskId, int page, int size) {
-		if (page < 0)
-			page = 0;
-		if (size <= 0 || size > 50)
-			size = 10; // tránh query quá lớn
+    public List<TagCount> getTopTags() {
+	return taskRepository.findTopTags().stream().map(obj -> new TagCount((String) obj[0], (Long) obj[1])).toList();
+    }
 
-		Page<TaskHistory> history = taskHistoryRepository.findByTaskIdOrderByChangedAtDesc(taskId,
-				PageRequest.of(page, size));
-		return history;
-	}
+    /**
+     * helper method to save history
+     * 
+     * @param taskId
+     * @param field
+     * @param oldVal
+     * @param newVal
+     */
+    private void saveHistory(Long taskId, String field, String oldVal, String newVal) {
+	TaskHistory h = new TaskHistory();
+	h.setTaskId(taskId);
+	h.setField(field);
+	h.setOldValue(oldVal);
+	h.setNewValue(newVal);
+	h.setChangedBy(SecurityUtils.getCurrentUser());
+	String fullName = userRepo.findByUsername(SecurityUtils.getCurrentUser()).map(User::getFullname)
+		.orElse(SecurityUtils.getCurrentUser());
+	h.setChangedByFullName(fullName);
+	h.setChangedAt(Instant.now());
+	taskHistoryRepository.save(h);
+    }
 
-	public MyWorkDto getMyWork(String username) {
-		LocalDate today = LocalDate.now();
-		ZoneId zone = ZoneId.systemDefault();
-		Instant startOfToday = today.atStartOfDay(zone).toInstant();
+    /**
+     * to get list of comments by task id
+     * 
+     * @param taskId
+     * @return
+     */
+    public Page<TaskHistory> getHistory(long taskId, int page, int size) {
+	if (page < 0)
+	    page = 0;
+	if (size <= 0 || size > 50)
+	    size = 10; // tránh query quá lớn
 
-		Instant startOfTomorrow = today.plusDays(1).atStartOfDay(zone).toInstant();
-		Instant weekLater = startOfTomorrow.plus(7, ChronoUnit.DAYS);
+	Page<TaskHistory> history = taskHistoryRepository.findByTaskIdOrderByChangedAtDesc(taskId,
+		PageRequest.of(page, size));
+	return history;
+    }
 
-		return new MyWorkDto(taskRepository.findOverdue(username, startOfToday).size(), findDueToday(username).size(),
-				taskRepository.findDueThisWeek(username, startOfTomorrow, weekLater).size());
-	}
+    public MyWorkDto getMyWork(String username) {
+	LocalDate today = LocalDate.now();
+	ZoneId zone = ZoneId.systemDefault();
+	Instant startOfToday = today.atStartOfDay(zone).toInstant();
 
-	public List<Task> findDueToday(String username) {
+	Instant startOfTomorrow = today.plusDays(1).atStartOfDay(zone).toInstant();
+	Instant weekLater = startOfTomorrow.plus(7, ChronoUnit.DAYS);
 
-		ZoneId zone = ZoneId.systemDefault();
+	return new MyWorkDto(taskRepository.findOverdue(username, startOfToday).size(), findDueToday(username).size(),
+		taskRepository.findDueThisWeek(username, startOfTomorrow, weekLater).size());
+    }
 
-		LocalDate today = LocalDate.now();
+    public List<Task> findDueToday(String username) {
 
-		Instant start = today.atStartOfDay(zone).toInstant();
-		Instant end = today.plusDays(1).atStartOfDay(zone).toInstant();
-		log.info("start = {}", start);
-		log.info("end   = {}", end);
-		return taskRepository.findTaksByDueDate(username, start, end);
-	}
+	ZoneId zone = ZoneId.systemDefault();
 
-	public List<Task> getMyActiveTask() {
-		return taskRepository.findByAssignedToAndStatusNot(SecurityUtils.getCurrentUser(), TaskStatus.DONE);
-	}
+	LocalDate today = LocalDate.now();
 
-	/**
-	 * 
-	 * @return list of all done task form last 7 days
-	 */
-	public List<Task> getDoneTaskLastDays(int lastDays) {
-		LocalDate today = LocalDate.now();
-		ZoneId zone = ZoneId.systemDefault();
-		Instant startOfToday = today.atStartOfDay(zone).toInstant();
-		Instant dayStart = startOfToday.minus(lastDays, ChronoUnit.DAYS);
-		return taskRepository.findDoneTask(dayStart);
-	}
+	Instant start = today.atStartOfDay(zone).toInstant();
+	Instant end = today.plusDays(1).atStartOfDay(zone).toInstant();
+	log.info("start = {}", start);
+	log.info("end   = {}", end);
+	return taskRepository.findTaksByDueDate(username, start, end);
+    }
+
+    public List<Task> getMyActiveTask() {
+	return taskRepository.findByAssignedToAndStatusNot(SecurityUtils.getCurrentUser(), TaskStatus.DONE);
+    }
+
+    /**
+     * 
+     * @return list of all done task form last 7 days
+     */
+    public List<Task> getDoneTaskLastDays(int lastDays) {
+	LocalDate today = LocalDate.now();
+	ZoneId zone = ZoneId.systemDefault();
+	Instant startOfToday = today.atStartOfDay(zone).toInstant();
+	Instant dayStart = startOfToday.minus(lastDays, ChronoUnit.DAYS);
+	return taskRepository.findDoneTask(dayStart);
+    }
 }

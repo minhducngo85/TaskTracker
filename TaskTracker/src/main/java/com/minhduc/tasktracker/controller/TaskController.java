@@ -44,7 +44,7 @@ public class TaskController {
 
 	@GetMapping("/all")
 	public List<TaskDto> getAllTasks(@RequestParam(required = false) TaskPriority priority) {
-		log.info("getAllTasks() called");
+		log.info("getAllTasks() called! priority={}", priority);
 		if (priority != null) {
 			return taskService.findByPriority(priority).stream().map(aTask -> DtoMapper.mapTaskToDto(aTask)).toList();
 		}
@@ -135,7 +135,7 @@ public class TaskController {
 
 	@GetMapping("/complete-tasks")
 	public List<TaskDto> getCompleteTasks(@RequestParam(defaultValue = "7") int lastDays) {
-		log.info("getCompleteTasks called!");
+		log.info("getCompleteTasks called! lastDays={}", lastDays);
 		return taskService.getDoneTaskLastDays(lastDays).stream().map(aTask -> DtoMapper.mapTaskToDto(aTask)).toList();
 	}
 
