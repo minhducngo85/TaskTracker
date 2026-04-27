@@ -80,31 +80,31 @@
 }
 
 /* màu theo action */
-.activitiy-icon.STATUS_CHANGED {
+.activity-icon.STATUS_CHANGED {
   background: #2196f3;
 }
 
-.activitiy-icon.PRIORITY_CHANGED {
+.activity-icon.PRIORITY_CHANGED {
   background: #f44336;
 }
 
-.activitiy-icon.ASSIGNED {
+.activity-icon.ASSIGNED {
   background: #9c27b0;
 }
 
-.activitiy-icon.DUE_DATE_CHANGED {
+.activity-icon.DUE_DATE_CHANGED {
   background: #ff9800;
 }
 
-.activitiy-icon.TITLE_CHANGED {
+.activity-icon.TITLE_CHANGED {
   background: #1c475c;
 }
 
-.activitiy-icon.CREATED {
+.activity-icon.CREATED {
   background: #4caf50;
 }
 
-.activitiy-icon.UPDATED {
+.activity-icon.UPDATED {
   background: #607d8b;
 }
 
