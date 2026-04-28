@@ -11,23 +11,62 @@ Live Demo: https://82.165.51.255/
 
 ## ✨ Features
 
+### 🔐 Authentication & Security
 - 🔐 Authentication with JWT
 - 🔄 Refresh token mechanism to renew access tokens
 - 👤 Role-based access control (Admin & User)
+
+---
+
+### 📝 Task Management
 - 📝 Task management (CRUD: Create, Read, Update, Delete)
-- 🔍 Advanced filtering, search & pagination
-- 📊 Dashboard with statistics, charts & recent tasks
-- 📋 Kanban Board with drag-and-drop (Angular CDK)
-- 📱 Responsive UI with mobile-optimized layout (swipe / horizontal scroll)
 - 👤 Assign tasks to users
 - 📌 Status management: TODO, IN_PROGRESS, DONE
 - 🚩 Priority levels: CRITICAL, HIGH, MEDIUM, LOW
-- 📊 Task change history (audit log)
-- 📝 Activity feed (timeline of changes)
+
+---
+
+### 🔍 Advanced Features
+- 🔍 Advanced filtering, search & pagination
+- 📊 Dashboard with statistics, charts & recent tasks
+- 📋 Kanban Board with drag-and-drop (Angular CDK)
+
+---
+
+### 💬 Collaboration
 - 💬 Task comments with pagination
 - 🤝 Collaboration: discussions per task
+- 📊 Task change history (audit log)
+- 📝 Activity feed (timeline of changes)
+
+---
+
+### 📱 UI/UX
+- 📱 Responsive UI with mobile-optimized layout (swipe / horizontal scroll)
+
+---
+
+### 🌐 Backend & API
 - 🌐 Clean REST API design (Spring Boot best practices)
-- 📈 Structured logging with correlationId for request tracing & debugging
+- 🧱 Layered architecture (Controller → Service → Repository)
+- 🔄 DTO mapping & validation
+
+---
+
+### 📈 Logging & Observability (Production-Ready)
+- 📈 Structured logging with correlationId for request tracing
+- 🔗 Correlation ID propagation across requests
+- 📥 Full HTTP request & response logging (method, URI, body, latency)
+- 👤 User-aware logging (logs include authenticated user context)
+- ⚠️ Standardized error logging with stacktrace & context
+- 🧾 Audit logging for business actions (create/update/delete tasks)
+- 📊 Activity tracking for debugging and system monitoring
+
+---
+
+### 🐳 DevOps
+- 🐳 Docker & Docker Compose setup for fullstack environment
+- ⚙️ Environment-based configuration (dev/prod ready)
 
 ## ✨ To-do Features
 - real time: sync kanban between users using websocket

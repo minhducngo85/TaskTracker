@@ -1,4 +1,4 @@
-package com.minhduc.tasktracker;
+package com.minhduc.tasktracker.logging;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -12,6 +12,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/**
+ * @author Minh Duc Ngo - 2026
+ */
 @Component
 public class CorrelationIdFilter extends OncePerRequestFilter {
 

@@ -22,20 +22,22 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
-	private final AuthService authService;
+    private final AuthService authService;
 
-	@PostMapping("/login")
-	public LoginResponse login(@RequestBody LoginRequest request) {
-		log.info("Login called!");
-		return authService.login(request);
-	}
-	
-	@PostMapping("/refresh")
-	public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
-		log.info("Refresh token called!");
-		String refreshToken = request.get("refreshToken");
-	    String newAccessToken = authService.refreshToken(refreshToken);
-	    log.info("Return OK");
-	    return ResponseEntity.ok(Map.of("token", newAccessToken));
-	}
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody LoginRequest request) {
+	log.info("LOGIN_ATTEMPT username={}", request.getUsername());
+	LoginResponse response = authService.login(request);
+	log.info("LOGIN_SUCCESS username={}", request.getUsername());
+	return response;
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
+	log.info("Refresh token called!");
+	String refreshToken = request.get("refreshToken");
+	String newAccessToken = authService.refreshToken(refreshToken);
+	log.info("Return OK");
+	return ResponseEntity.ok(Map.of("token", newAccessToken));
+    }
 }
