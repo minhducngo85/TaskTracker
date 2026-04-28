@@ -99,7 +99,7 @@
    		 	<scope>runtime</scope>
 		</dependency>
 
-<!-- Structured logging-->
+		<!-- Structured logging-->
 		<dependency>
 		  <groupId>net.logstash.logback</groupId>
 		  <artifactId>logstash-logback-encoder</artifactId>

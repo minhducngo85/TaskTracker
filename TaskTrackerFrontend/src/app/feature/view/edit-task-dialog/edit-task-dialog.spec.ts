@@ -11,17 +11,17 @@ describe('EditTaskDialog', () => {
     await TestBed.configureTestingModule({
       imports: [EditTaskDialog],
       providers: [
-      {
-        provide: MatDialogRef,
-        useValue: {
-          close: vi.fn(), // 👈 mock function
+        {
+          provide: MatDialogRef,
+          useValue: {
+            close: vi.fn(), // 👈 mock function
+          },
         },
-      },
-      {
-        provide: MAT_DIALOG_DATA,
-        useValue: {}, // 👈transfer data into dialog
-      },
-    ],
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {}, // 👈transfer data into dialog
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(EditTaskDialog);

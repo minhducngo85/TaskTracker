@@ -4,17 +4,16 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../core/services/task-service';
 import { map, Observable, shareReplay, tap } from 'rxjs';
-import { TaskStatus } from '../../core/models/TaskStatus';
-import { TaskPriority } from '../../core/models/TaskPriority';
 import { Chart } from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TimeAgoPipe } from '../../core/pipe/TimeAgoPipe';
 import { Task } from '../../core/models/Task';
@@ -28,7 +27,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ListOfLastDays, removeTimeFromUpdatedAt } from '../../app/app-utils';
 import { Activity } from '../../core/models/Activity';
 import { ActivityService } from '../../core/services/activity-service';
-import { ActivityFeed } from "../view/activity-feed/activity-feed";
+import { ActivityFeed } from '../view/activity-feed/activity-feed';
 
 Chart.register(ChartDataLabels);
 
@@ -52,7 +51,7 @@ export interface TaskStats {
   templateUrl: './dashboard-component.html',
   styleUrl: './dashboard-component.css',
 })
-export class DashboardComponent implements OnInit, AfterViewInit {
+export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   // Loading indicator
   loading = true;
 
@@ -146,6 +145,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.loadActivities();
   }
 
+  ngOnDestroy() {
+    this.chart?.destroy();
+    this.completeTaskChart?.destroy();
+  }
+
   /** Load activities */
   loadActivities() {
     this.logger.info('loadActivities() called.');
@@ -156,7 +160,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.cdr.detectChanges();
     });
   }
-
 
   nextActivityPage() {
     if (this.activityPage < this.totalActivityPages - 1) {
@@ -415,16 +418,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       tap({
         next: () => {
           this.loading = false;
-          this.cdr.detectChanges();
           this.logger.info(`Loading done!`);
-        },
-        error: (err) => {
-          this.logger.error('ERROR STATUS:', err);
-          this.snackBar.open(`Error: ${err.message}`, 'Close', {
-            duration: 3000,
-          });
-          this.cdr.detectChanges();
-        },
+        }
       }),
       map((stats) => ({
         ...stats,
@@ -578,6 +573,4 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
     return '';
   }
-
-
 }
