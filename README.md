@@ -58,7 +58,7 @@ Live Demo: https://82.165.51.255/
 - Repository tests with in-memory database (H2)
 - Validation & error handling test coverage
 
-####⚡ Frontend testing (Angular + Vitest)
+#### ⚡ Frontend testing (Angular + Vitest)
 - Unit tests for components, services, and pipes
 - Mocked HTTP requests for isolated testing- 
 - Reactive forms & validation testing
