@@ -178,9 +178,6 @@ npm install ngx-toastr
 npm install @angular/animations
 ```
 
-## 🛠 Testing with Postmann
-TaskTracker.postman_collection.json
-
 ## 🗯️ Deployment on VPS
 
 ### 🚀 Deployment Steps
@@ -446,6 +443,67 @@ npm install
 docker-compose down -v
 docker system prune -a
 docker-compose up --build
+```
+
+
+## 🛠 Testing API with Postmann
+TaskTracker.postman_collection.json
+
+## 🛠 E2E Testing with Playwright
+### Baisc Information
+- Unit test: Vitest
+- Component test:	Angular TestBed
+- E2E / System test:	Playwright
+
+
+### Write example tests
+Playwright installation
+```
+npm init playwright@latest
+npx playwright install
+```
+
+playwright.config.ts
+```
+export default defineConfig({
+  use: {
+    baseURL: 'http://localhost:4200',
+  },
+
+  workers: 1, // 🔥 tránh race
+
+  webServer: {
+    command: 'npx ng serve --port 4200',
+    url: 'http://localhost:4200',
+    reuseExistingServer: false,
+    timeout: 120 * 1000,
+  },
+});
+```
+
+/tests/dashboard.spec.ts
+```
+import { test, expect } from '@playwright/test';
+
+test.describe('Dashboard Page', () => {
+  test.beforeEach(async ({ page }) => {
+    // make sure in playwright.config.ts:   baseURL: 'http://localhost:4200',
+    await page.goto('/login');
+
+    await page.fill('input[name="username"]', 'username');
+    await page.fill('input[name="password"]', 'password');
+
+    await Promise.all([page.waitForURL('**/dashboard'), page.click('button[type=submit]')]);
+
+    // await page.goto('http://localhost:4200'); // adjust nếu cần
+  });
+
+  // ✅ 1. Page loads
+  test('should load dashboard text', async ({ page }) => {
+    await page.waitForSelector('.title');
+    await expect(page.locator('.title')).toBeVisible();
+    await expect(page.locator('.title')).toContainText('Dashboard');
+  });
 ```
 
 ## 📸 Screenshots
