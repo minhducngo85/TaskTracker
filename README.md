@@ -16,22 +16,16 @@ Live Demo: https://82.165.51.255/
 - 🔄 Refresh token mechanism to renew access tokens
 - 👤 Role-based access control (Admin & User)
 
----
-
 ### 📝 Task Management
 - 📝 Task management (CRUD: Create, Read, Update, Delete)
 - 👤 Assign tasks to users
 - 📌 Status management: TODO, IN_PROGRESS, DONE
 - 🚩 Priority levels: CRITICAL, HIGH, MEDIUM, LOW
 
----
-
 ### 🔍 Advanced Features
 - 🔍 Advanced filtering, search & pagination
 - 📊 Dashboard with statistics, charts & recent tasks
 - 📋 Kanban Board with drag-and-drop (Angular CDK)
-
----
 
 ### 💬 Collaboration
 - 💬 Task comments with pagination
@@ -39,19 +33,13 @@ Live Demo: https://82.165.51.255/
 - 📊 Task change history (audit log)
 - 📝 Activity feed (timeline of changes)
 
----
-
 ### 📱 UI/UX
 - 📱 Responsive UI with mobile-optimized layout (swipe / horizontal scroll)
-
----
 
 ### 🌐 Backend & API
 - 🌐 Clean REST API design (Spring Boot best practices)
 - 🧱 Layered architecture (Controller → Service → Repository)
 - 🔄 DTO mapping & validation
-
----
 
 ### 📈 Logging & Observability (Production-Ready)
 - 📈 Structured logging with correlationId for request tracing
@@ -62,7 +50,26 @@ Live Demo: https://82.165.51.255/
 - 🧾 Audit logging for business actions (create/update/delete tasks)
 - 📊 Activity tracking for debugging and system monitoring
 
----
+### 🧪 Testing (Full-Stack Coverage)
+
+#### 🧪 Backend testing (Spring Boot)
+- Unit tests for service layer (business logic validation)
+- Integration tests for REST controllers (MockMvc)
+- Repository tests with in-memory database (H2)
+- Validation & error handling test coverage
+
+####⚡ Frontend testing (Angular + Vitest)
+- Unit tests for components, services, and pipes
+- Mocked HTTP requests for isolated testing- 
+- Reactive forms & validation testing
+- Observable-based async testing
+
+#### 🌐 End-to-End (E2E) testing with Playwright
+- Full user flow testing (login → dashboard → task actions)
+- Authentication handling (JWT / session reuse)
+- UI interaction testing (filters, navigation, pagination)
+- Stable async handling (auto-wait, non-flaky tests)
+- Multi-browser support (Chromium, Firefox, WebKit)
 
 ### 🐳 DevOps
 - 🐳 Docker & Docker Compose setup for fullstack environment
