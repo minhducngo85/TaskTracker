@@ -186,3 +186,16 @@ docker exec -it tasktracker_db_1 psql -U user -d postgres -c "CREATE DATABASE ta
 docker exec -i tasktracker_db_1 psql -U user -d taskdb < backup.sql
 docker start tasktracker_backend_1
 ```
+
+
+
+## 🧱 SSL Setup
+1. Create self-signed cert
+```
+mkdir -p nginx/certs
+cd nginx/certs
+openssl req -x509 -nodes -days 365 \
+-newkey rsa:2048 \
+-keyout selfsigned.key \
+-out selfsigned.crt
+```
