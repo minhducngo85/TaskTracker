@@ -15,7 +15,7 @@ services:
 
   backend:
     image: minhducngo85/tasktracker-backend:latest
-    restart: "yes"
+    restart: "no"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/taskdb
       SPRING_DATASOURCE_USERNAME: user
@@ -23,11 +23,11 @@ services:
 
   frontend:
     image: minhducngo85/tasktracker-frontend:latest
-    restart: "yes"
+    restart: "no"
 
   db:
     image: postgres:15
-    restart: "yes"
+    restart: "no"
     environment:
       POSTGRES_DB: taskdb
       POSTGRES_USER: user

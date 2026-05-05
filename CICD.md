@@ -208,6 +208,9 @@ nano ~/tasktracker/nginx/conf/default.conf
 
 Content:
 ```
+# =========================
+# HTTP → HTTPS redirect
+# =========================
 server {
     listen 80;
     server_name _;
@@ -215,22 +218,41 @@ server {
     return 301 https://$host$request_uri;
 }
 
+# =========================
+# HTTPS server
+# =========================
 server {
     listen 443 ssl;
+    server_name _;
 
     ssl_certificate /etc/nginx/certs/selfsigned.crt;
     ssl_certificate_key /etc/nginx/certs/selfsigned.key;
 
+    # -------------------------
+    # API → Spring Boot
+    # -------------------------
     location /api/ {
-        proxy_pass http://backend:8080/api/;
+        proxy_pass http://backend:8080/api/;   # 🔥 QUAN TRỌNG: có dấu /
+
+        proxy_http_version 1.1;
+
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+
+        # fix JWT header (optional nhưng nên có)
+        proxy_set_header Authorization $http_authorization;
     }
 
+    # -------------------------
+    # Frontend → Angular (nginx container)
+    # -------------------------
     location / {
         proxy_pass http://frontend:80;
+
+        proxy_http_version 1.1;
+
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
@@ -256,7 +278,7 @@ services:
 
   backend:
     image: minhducngo85/tasktracker-backend:latest
-    restart: "yes"
+    restart: "no"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/taskdb
       SPRING_DATASOURCE_USERNAME: user
@@ -264,11 +286,11 @@ services:
 
   frontend:
     image: minhducngo85/tasktracker-frontend:latest
-    restart: "yes"
+    restart: "no"
 
   db:
     image: postgres:15
-    restart: "yes"
+    restart: "no"
     environment:
       POSTGRES_DB: taskdb
       POSTGRES_USER: user

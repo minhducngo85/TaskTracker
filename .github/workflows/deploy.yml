@@ -17,8 +17,23 @@ jobs:
         working-directory: TaskTracker
         run: |
           chmod +x mvnw
-          ./mvnw clean package -DskipTests
+          #./mvnw clean package -DskipTests
+          ./mvnw clean package
+      
+      - name: Test Frontend (Unit - Vitest)
+        working-directory: TaskTrackerFrontend
+        run: |
+          npm ci
+          npx vitest run
 
+      - name: Install Playwright Browsers
+        working-directory: TaskTrackerFrontend
+        run: npx playwright install --with-deps
+
+      - name: Run E2E Tests
+        working-directory: TaskTrackerFrontend
+        run: npx playwright test
+    
       # 🌐 Build Frontend
       - name: Build Frontend
         working-directory: TaskTrackerFrontend
