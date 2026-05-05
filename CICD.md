@@ -166,3 +166,23 @@ jobs:
 ### ⚙️ Testing
 - docker ps
 - check log in frond end: docker-compose logs frontend
+
+### Database backup
+- backup
+```
+docker exec -e PGPASSWORD=password tasktracker_db_1 pg_dump -U user taskdb > backup.sql
+```
+
+- restore
+```
+cat backup.sql | docker exec -i tasktracker_db_1 psql -U user taskdb
+```
+
+- if data exists -Y reset
+```
+docker stop tasktracker_backend_1
+docker exec -it tasktracker_db_1 psql -U user -d postgres -c "DROP DATABASE taskdb;"
+docker exec -it tasktracker_db_1 psql -U user -d postgres -c "CREATE DATABASE taskdb;"
+docker exec -i tasktracker_db_1 psql -U user -d taskdb < backup.sql
+docker start tasktracker_backend_1
+```
