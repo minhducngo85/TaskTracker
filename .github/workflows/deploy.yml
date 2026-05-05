@@ -20,11 +20,26 @@ jobs:
           #./mvnw clean package -DskipTests
           ./mvnw clean package
       
+       # 📦 Install FE deps (CHỈ 1 LẦN)
+      - name: Install Frontend deps
+        working-directory: TaskTrackerFrontend
+        run: npm ci
+        
       - name: Test Frontend (Unit - Vitest)
         working-directory: TaskTrackerFrontend
-        run: |
-          npm ci
-          npm run test -- --watch=false
+        run: npm run test -- --watch=false
+        
+      # 🌐 Build Frontend before E2E test
+      - name: Build Frontend
+        working-directory: TaskTrackerFrontend
+        run: npm run build -- --configuration production
+
+       # ⚡ Cache Playwright (Important to improve performance)
+      - name: Cache Playwright browsers
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright
 
       - name: Install Playwright Browsers
         working-directory: TaskTrackerFrontend
@@ -32,14 +47,12 @@ jobs:
 
       - name: Playwright E2E Tests
         working-directory: TaskTrackerFrontend
-        run: npx playwright test
-    
-      # 🌐 Build Frontend
-      - name: Build Frontend
-        working-directory: TaskTrackerFrontend
         run: |
-          npm ci
-          npm run build -- --configuration production
+          npx serve -s dist -l 4200 &
+          npx wait-on http://localhost:4200
+          npx playwright test
+    
+
 
       # 🔐 Docker login
       - name: Login Docker Hub
