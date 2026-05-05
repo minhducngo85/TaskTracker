@@ -1,39 +1,30 @@
 version: '3.8'
 
 services:
-  nginx:
-    image: nginx:latest
-    ports:
-      - "443:443"
-      - "80:80"
-    volumes:
-      - ./nginx/conf:/etc/nginx/conf.d
-      - ./nginx/certs:/etc/nginx/certs
-    depends_on:
-      - frontend
-      - backend
-
   backend:
     image: minhducngo85/tasktracker-backend:latest
-    restart: "yes"
+    ports:
+      - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/taskdb
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - db
 
   frontend:
     image: minhducngo85/tasktracker-frontend:latest
-    restart: "yes"
+    ports:
+      - "80:80"
 
   db:
     image: postgres:15
-    restart: "yes"
     environment:
       POSTGRES_DB: taskdb
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data   # 🔥 QUAN TRỌNG
 
 volumes:
   pgdata:
