@@ -181,6 +181,9 @@ npm install @angular/animations
 ## 🗯️ Deployment on VPS
 See full deployment guide here 👉 [DEPLOYMENT.md](./DEPLOYMENT.md)
 
+## 🗯️ CI/CD pipeline with GitHub actions
+See full CI/CD guide here 👉 [CICD.md](./CICD.md)
+
 ##  🛠️ Containerize with Docker Image
 ### 🧱Docker architecture
 ````
@@ -319,7 +322,7 @@ export default defineConfig({
     baseURL: 'http://localhost:4200',
   },
 
-  workers: 1, // 🔥 tránh race
+  workers: 1, // to avoid race condition
 
   webServer: {
     command: 'npx ng serve --port 4200',
