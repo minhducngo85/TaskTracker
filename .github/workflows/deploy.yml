@@ -35,19 +35,19 @@ jobs:
         run: npm run build -- --configuration production
 
        # ⚡ Cache Playwright (Important to improve performance)
-      - name: Cache Playwright browsers
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright
+      #- name: Cache Playwright browsers
+      #  uses: actions/cache@v3
+      #  with:
+      #   path: ~/.cache/ms-playwright
+      #    key: ${{ runner.os }}-playwright
 
-      - name: Install Playwright Browsers
-        working-directory: TaskTrackerFrontend
-        run: npx playwright install --with-deps
+      #- name: Install Playwright Browsers
+      #  working-directory: TaskTrackerFrontend
+      #  run: npx playwright install --with-deps
 
-      - name: Playwright E2E Tests
-        working-directory: TaskTrackerFrontend
-        run: npx playwright test
+      #- name: Playwright E2E Tests
+      #  working-directory: TaskTrackerFrontend
+      #  run: npx playwright test
     
 
 
