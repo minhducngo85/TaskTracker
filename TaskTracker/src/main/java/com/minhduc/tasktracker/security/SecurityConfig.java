@@ -29,8 +29,7 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-	return http.cors(cors -> {
-	}) // Có enabled
+	return http.cors(cors -> cors.configurationSource(corsConfigurationSource())) // 🔥 FIX
 		.csrf(csrf -> csrf.disable())
 		// stateless for JWT
 		.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -63,8 +62,7 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
 	CorsConfiguration config = new CorsConfiguration();
 
-	config.setAllowedOrigins(List.of("http://localhost:4200", "http://217.154.146.178", "https://217.154.146.178",
-		"http://82.165.51.255", "https://82.165.51.255"));
+	config.setAllowedOrigins(List.of("*"));
 	config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 	config.setAllowedHeaders(List.of("*"));
 	config.setAllowCredentials(true);

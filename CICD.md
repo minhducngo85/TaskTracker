@@ -190,12 +190,92 @@ docker start tasktracker_backend_1
 
 
 ## 🧱 SSL Setup
-1. Create self-signed cert
+### 1. Create self-signed cert
 ```
-mkdir -p nginx/certs
-cd nginx/certs
+mkdir -p ~/tasktracker/nginx/certs
+cd ~/tasktracker/nginx/certs
 openssl req -x509 -nodes -days 365 \
 -newkey rsa:2048 \
 -keyout selfsigned.key \
 -out selfsigned.crt
+```
+
+### 2. Create Nginx config
+```
+mkdir -p ~/tasktracker/nginx/conf
+nano ~/tasktracker/nginx/conf/default.conf
+```
+
+Content:
+```
+server {
+    listen 80;
+    server_name _;
+
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+
+    ssl_certificate /etc/nginx/certs/selfsigned.crt;
+    ssl_certificate_key /etc/nginx/certs/selfsigned.key;
+
+    location /api/ {
+        proxy_pass http://backend:8080/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location / {
+        proxy_pass http://frontend:80;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+### 3. Update docker compose file
+```
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+      - ./nginx/certs:/etc/nginx/certs
+    depends_on:
+      - frontend
+      - backend
+
+  backend:
+    image: minhducngo85/tasktracker-backend:latest
+    restart: "yes"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/taskdb
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+
+  frontend:
+    image: minhducngo85/tasktracker-frontend:latest
+    restart: "yes"
+
+  db:
+    image: postgres:15
+    restart: "yes"
+    environment:
+      POSTGRES_DB: taskdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
 ```
