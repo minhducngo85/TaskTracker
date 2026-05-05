@@ -317,7 +317,9 @@ Update file deploy-yml
       
       - name: Test Frontend (Unit - Vitest)
         working-directory: TaskTrackerFrontend
-        run: npx vitest run
+        run: |
+          npm ci
+          npm run test -- --watch=false
 
       - name: Install Playwright Browsers
         working-directory: TaskTrackerFrontend
