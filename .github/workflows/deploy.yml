@@ -40,7 +40,7 @@ jobs:
       # 🐳 Frontend image
       - name: Build & Push Frontend
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/tasktracker-frontend ./TaskTrackerFontend
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/tasktracker-frontend ./TaskTrackerFrontend
           docker push ${{ secrets.DOCKER_USERNAME }}/tasktracker-frontend
 
       # 🚀 Deploy

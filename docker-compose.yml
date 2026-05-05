@@ -24,7 +24,7 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     volumes:
-      - pgdata:/var/lib/postgresql/data   # 🔥 QUAN TRỌNG
+      - pgdata:/var/lib/postgresql/data   # 🔥 Important
 
 volumes:
   pgdata:
