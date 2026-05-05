@@ -21,7 +21,7 @@ jobs:
 
       # 🌐 Build Frontend
       - name: Build Frontend
-        working-directory: TaskTrackerFontend
+        working-directory: TaskTrackerFrontend
         run: |
           npm ci
           npm run build -- --configuration production
