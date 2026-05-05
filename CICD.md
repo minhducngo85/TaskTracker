@@ -50,3 +50,114 @@ chmod 700 ~/.ssh
 chmod 600 ~/.ssh/authorized_keys
 ```
 - SERVER_SSH_KEY = id_ed25519
+
+
+### Server sertup & Docker-compose-yml
+#### Setup
+- install docker
+```
+sudo apt update
+sudo apt install docker.io docker-compose -y
+```
+- create deploy folder
+mkdir -p ~/tasktracker
+cd ~/tasktracker
+
+- copy file docker-compose.yml into  ~/tasktracker
+
+#### docker-compose.yml
+```
+version: '3.8'
+
+services:
+  backend:
+    image: minhducngo85/tasktracker-backend:latest
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/taskdb
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - db
+
+  frontend:
+    image: minhducngo85/tasktracker-frontend:latest
+    ports:
+      - "80:80"
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: taskdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - pgdata:/var/lib/postgresql/data   # 🔥 Important
+
+volumes:
+  pgdata:
+```
+
+
+### ⚙️ GitHub Actions (CI/CD)
+```
+name: CI/CD TaskTracker
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # 🧱 Build Backend
+      - name: Build Backend
+        working-directory: TaskTracker
+        run: |
+          chmod +x mvnw
+          ./mvnw clean package -DskipTests
+
+      # 🌐 Build Frontend
+      - name: Build Frontend
+        working-directory: TaskTrackerFrontend
+        run: |
+          npm ci
+          npm run build -- --configuration production
+
+      # 🔐 Docker login
+      - name: Login Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      # 🐳 Backend image
+      - name: Build & Push Backend
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/tasktracker-backend ./TaskTracker
+          docker push ${{ secrets.DOCKER_USERNAME }}/tasktracker-backend
+
+      # 🐳 Frontend image
+      - name: Build & Push Frontend
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/tasktracker-frontend ./TaskTrackerFrontend
+          docker push ${{ secrets.DOCKER_USERNAME }}/tasktracker-frontend
+
+      # 🚀 Deploy
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd ~/tasktracker
+            docker pull ${{ secrets.DOCKER_USERNAME }}/tasktracker-backend
+            docker pull ${{ secrets.DOCKER_USERNAME }}/tasktracker-frontend
+            docker-compose down
+            docker-compose up -d
+```
