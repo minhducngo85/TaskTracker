@@ -47,10 +47,7 @@ jobs:
 
       - name: Playwright E2E Tests
         working-directory: TaskTrackerFrontend
-        run: |
-          npx serve -s dist -l 4200 &
-          npx wait-on http://localhost:4200
-          npx playwright test
+        run: npx playwright test
     
 
 
