@@ -1,2 +1,4 @@
 *.log
 /TaskTracker/data
+/nginx/certs/selfsigned.key
+/nginx/certs/selfsigned.crt
