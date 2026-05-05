@@ -123,9 +123,21 @@ export class KanbanBoardComponent implements OnInit {
    */
   mapTasksToColumns(tasks: Task[]) {
     this.kanbanColumns.forEach((col) => {
-      col.tasks = tasks
-        .filter((t) => t.status === col.status)
-        .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+      let filtered = tasks.filter((t) => t.status === col.status);
+
+      if (col.status === TaskStatus.DONE) {
+        // ✅ DONE: sort by updatedAt desc + limit 10
+        col.tasks = [...filtered]
+          .sort((a, b) => {
+            const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+            const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+            return dateB - dateA;
+          })
+          .slice(0, 10);
+      } else {
+        // ✅ other columns: keep position sorting
+        col.tasks = filtered.sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+      }
     });
   }
 
@@ -176,7 +188,7 @@ export class KanbanBoardComponent implements OnInit {
       )
       .subscribe({
         next: (updated) => {
-           this.logger.log('Task updated', updated);
+          this.logger.log('Task updated', updated);
           // show snack bar
           this.snackBar.open(`Knanban board updated!`, 'Close', {
             duration: 2000,
