@@ -22,7 +22,9 @@ jobs:
       
       - name: Test Frontend (Unit - Vitest)
         working-directory: TaskTrackerFrontend
-        run: npx vitest run
+        run: |
+          npm ci
+          npm run test -- --watch=false --browsers=ChromeHeadless
 
       - name: Install Playwright Browsers
         working-directory: TaskTrackerFrontend
