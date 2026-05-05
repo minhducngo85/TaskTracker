@@ -301,3 +301,35 @@ services:
 volumes:
   pgdata:
 ```
+
+
+## 🧱 Enable Tests for Backend  & Frontend
+
+Update file deploy-yml
+```
+     # 🧱 Build Backend
+      - name: Build Backend
+        working-directory: TaskTracker
+        run: |
+          chmod +x mvnw
+          #./mvnw clean package -DskipTests
+          ./mvnw clean package
+      
+      - name: Test Frontend (Unit - Vitest)
+        working-directory: TaskTrackerFrontend
+        run: npx vitest run
+
+      - name: Install Playwright Browsers
+        working-directory: TaskTrackerFrontend
+        run: npx playwright install --with-deps
+
+      - name: Playwright E2E Tests
+        working-directory: TaskTrackerFrontend
+        run: npx playwright test
+```
+Update playwright.config.ts
+```		
+export default defineConfig({
+  testDir: './tests',
+  testMatch: ['**/*.spec.ts', '**/*.e2e.ts'],// 👈 thêm dòng này
+```

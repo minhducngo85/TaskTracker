@@ -22,15 +22,13 @@ jobs:
       
       - name: Test Frontend (Unit - Vitest)
         working-directory: TaskTrackerFrontend
-        run: |
-          npm ci
-          npx vitest run
+        run: npx vitest run
 
       - name: Install Playwright Browsers
         working-directory: TaskTrackerFrontend
         run: npx playwright install --with-deps
 
-      - name: Run E2E Tests
+      - name: Playwright E2E Tests
         working-directory: TaskTrackerFrontend
         run: npx playwright test
     
