@@ -161,3 +161,8 @@ jobs:
             docker-compose down
             docker-compose up -d
 ```
+
+
+### ⚙️ Testing
+- docker ps
+- check log in frond end: docker-compose logs frontend
