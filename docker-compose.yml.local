@@ -4,14 +4,14 @@ services:
 
   backend:
     build: ./TaskTracker
-    container_name: task-tracker-backend
+    container_name: tasktracker-backend
     ports:
       - "8080:8080"
     restart: always
 
   frontend:
     build: ./TaskTrackerFrontend
-    container_name: task-tracker-frontend
+    container_name: tasktracker-frontend
     ports:
       - "80:80"
     depends_on:
