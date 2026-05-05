@@ -24,7 +24,7 @@ jobs:
         working-directory: TaskTrackerFrontend
         run: |
           npm ci
-          npm run test -- --watch=false --browsers=ChromeHeadless
+          npm run test -- --watch=false
 
       - name: Install Playwright Browsers
         working-directory: TaskTrackerFrontend
