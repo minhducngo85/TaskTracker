@@ -333,9 +333,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: (err) => {
         this.logger.error('Error to get assignee list', err);
-        this.snackBar.open(`Error to get assignee list`, 'Close', {
-          duration: 1000,
-        });
         this.cdr.detectChanges();
       },
     });
@@ -372,9 +369,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       tap({
         error: (err) => {
           this.logger.error('ERROR STATUS:', err);
-          this.snackBar.open(`Error to get task list`, 'Close', {
-            duration: 1000,
-          });
           this.cdr.detectChanges();
         },
       }),
@@ -405,9 +399,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       tap({
         error: (err) => {
           this.logger.error('ERROR STATUS:', err);
-          this.snackBar.open(`Error to get task list`, 'Close', {
-            duration: 1000,
-          });
           this.cdr.detectChanges();
         },
       }),
