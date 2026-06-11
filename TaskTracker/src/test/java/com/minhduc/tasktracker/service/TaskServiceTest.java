@@ -38,6 +38,7 @@ import com.minhduc.tasktracker.entity.TaskHistory;
 import com.minhduc.tasktracker.entity.TaskPriority;
 import com.minhduc.tasktracker.entity.TaskStatus;
 import com.minhduc.tasktracker.entity.User;
+import com.minhduc.tasktracker.kafka.agent.TaskEventProducer;
 import com.minhduc.tasktracker.repository.TaskHistoryRepository;
 import com.minhduc.tasktracker.repository.TaskRepository;
 import com.minhduc.tasktracker.repository.UserRepository;
@@ -53,6 +54,8 @@ public class TaskServiceTest {
     private TaskHistoryRepository taskHistoryRepository;
     @Mock
     private UserRepository userRepo;
+    @Mock
+    private TaskEventProducer producer;
 
     /** Object to be tested */
     @InjectMocks
