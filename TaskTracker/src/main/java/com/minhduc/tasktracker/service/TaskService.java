@@ -2,13 +2,11 @@ package com.minhduc.tasktracker.service;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,15 +17,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.minhduc.tasktracker.controller.exceptionhandling.ResourceNotFoundException;
 import com.minhduc.tasktracker.dto.MyWorkDto;
 import com.minhduc.tasktracker.dto.TagCount;
-import com.minhduc.tasktracker.dto.TaskCommentDto;
 import com.minhduc.tasktracker.dto.TaskFilterRequest;
 import com.minhduc.tasktracker.dto.TaskStatisticsResponse;
 import com.minhduc.tasktracker.entity.Task;
-import com.minhduc.tasktracker.entity.TaskComment;
 import com.minhduc.tasktracker.entity.TaskHistory;
 import com.minhduc.tasktracker.entity.TaskPriority;
 import com.minhduc.tasktracker.entity.TaskStatus;
 import com.minhduc.tasktracker.entity.User;
+import com.minhduc.tasktracker.kafka.TaskCreatedEvent;
+import com.minhduc.tasktracker.kafka.TaskUpdateEvent;
+import com.minhduc.tasktracker.kafka.agent.TaskEventProducer;
 import com.minhduc.tasktracker.repository.TaskHistoryRepository;
 import com.minhduc.tasktracker.repository.TaskRepository;
 import com.minhduc.tasktracker.repository.UserRepository;
@@ -44,6 +43,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final TaskHistoryRepository taskHistoryRepository;
     private final UserRepository userRepo;
+    private final TaskEventProducer producer;
 
     /**
      * @return all task form db
@@ -101,6 +101,9 @@ public class TaskService {
 	task.setStatus(TaskStatus.TODO);
 	Task saved = taskRepository.save(task);
 	saveHistory(saved.getId(), "task", "Null", "Task created");
+	// Send created event to kafka topic
+	producer.sendTaskCreatedEvent(new TaskCreatedEvent(saved.getId(), saved.getTitle(), saved.getStatus().name(),
+		SecurityUtils.getCurrentUser()));
 	return saved;
     }
 
@@ -120,31 +123,63 @@ public class TaskService {
 	// save change history
 	if (!Objects.equals(task.getTitle(), updated.getTitle())) {
 	    saveHistory(task.getId(), "title", task.getTitle(), updated.getTitle());
+
+	    // save activity via Kafka event
+	    TaskUpdateEvent updateEvent = new TaskUpdateEvent(task.getId(), "Title", task.getTitle(),
+		    updated.getTitle(), SecurityUtils.getCurrentUser());
+	    producer.sendTaskUpdateEvent(updateEvent);
 	}
 
 	if (!Objects.equals(task.getDescription(), updated.getDescription())) {
 	    saveHistory(task.getId(), "description", task.getDescription(), updated.getDescription());
+
+	    // save activity via Kafka event
+	    TaskUpdateEvent updateEvent = new TaskUpdateEvent(task.getId(), "Description", task.getDescription(),
+		    updated.getDescription(), SecurityUtils.getCurrentUser());
+	    producer.sendTaskUpdateEvent(updateEvent);
 	}
 
 	if (!Objects.equals(task.getStatus(), updated.getStatus())) {
 	    saveHistory(task.getId(), "status", task.getStatus().name(), updated.getStatus().name());
+	    // save activity via Kafka event
+	    TaskUpdateEvent updateEvent = new TaskUpdateEvent(task.getId(), "Status", task.getStatus().name(),
+		    updated.getStatus().name(), SecurityUtils.getCurrentUser());
+	    producer.sendTaskUpdateEvent(updateEvent);
 	}
 	if (!Objects.equals(task.getPriority(), updated.getPriority())) {
 	    saveHistory(task.getId(), "priority", String.valueOf(task.getPriority()),
 		    String.valueOf(updated.getPriority()));
+	    // save activity via Kafka event
+	    TaskUpdateEvent updateEvent = new TaskUpdateEvent(task.getId(), "Priority",
+		    String.valueOf(task.getPriority()), String.valueOf(updated.getPriority()),
+		    SecurityUtils.getCurrentUser());
+	    producer.sendTaskUpdateEvent(updateEvent);
 	}
 	if (!Objects.equals(task.getDueDate(), updated.getDueDate())) {
 	    saveHistory(task.getId(), "dueDate", String.valueOf(task.getDueDate()),
 		    String.valueOf(updated.getDueDate()));
+	    TaskUpdateEvent updateEvent = new TaskUpdateEvent(task.getId(), "DueDate",
+		    String.valueOf(task.getDueDate()), String.valueOf(updated.getDueDate()),
+		    SecurityUtils.getCurrentUser());
+	    producer.sendTaskUpdateEvent(updateEvent);
 	}
 
 	if (!Objects.equals(task.getAssignedTo(), updated.getAssignedTo())) {
 	    saveHistory(task.getId(), "assignedTo", task.getAssignedTo(), updated.getAssignedTo());
+
+	    TaskUpdateEvent updateEvent = new TaskUpdateEvent(task.getId(), "Assignee", task.getAssignedTo(),
+		    updated.getAssignedTo(), SecurityUtils.getCurrentUser());
+	    producer.sendTaskUpdateEvent(updateEvent);
 	}
+
 	String oldTags = String.join(",", task.getTags());
 	String newTags = updated.getTags() != null ? String.join(",", updated.getTags()) : "";
 	if (!Objects.equals(oldTags, newTags)) {
 	    saveHistory(task.getId(), "tags", oldTags, newTags);
+
+	    TaskUpdateEvent updateEvent = new TaskUpdateEvent(task.getId(), "DueDate", oldTags, newTags,
+		    SecurityUtils.getCurrentUser());
+	    producer.sendTaskUpdateEvent(updateEvent);
 	}
 
 	// update obj

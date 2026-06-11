@@ -16,9 +16,12 @@ import com.minhduc.tasktracker.dto.TaskCommentDto;
 import com.minhduc.tasktracker.entity.Task;
 import com.minhduc.tasktracker.entity.TaskComment;
 import com.minhduc.tasktracker.entity.User;
+import com.minhduc.tasktracker.kafka.TaskCommentAddedEvent;
+import com.minhduc.tasktracker.kafka.agent.TaskEventProducer;
 import com.minhduc.tasktracker.repository.TaskCommentRepository;
 import com.minhduc.tasktracker.repository.TaskRepository;
 import com.minhduc.tasktracker.repository.UserRepository;
+import com.minhduc.tasktracker.security.SecurityUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +36,7 @@ public class TaskCommentService {
 	private final TaskRepository taskRepo;
 	private final UserRepository userRepo;
 	private final TaskCommentRepository commentRepo;
-
+	private final TaskEventProducer producer;
 	/**
 	 * to get list of comments by task id
 	 * 
@@ -60,6 +63,9 @@ public class TaskCommentService {
 		comment.setTask(task);
 		comment.setCreatedByFullName(fullName);
 		TaskComment saved = commentRepo.save(comment);
+		
+		TaskCommentAddedEvent event = new TaskCommentAddedEvent(taskId, SecurityUtils.getCurrentUser());
+		producer.sendTaskCommentAddedEvent(event);
 		return DtoMapper.mapToCommentDto(saved);
 	}
 
