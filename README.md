@@ -41,6 +41,11 @@ Live Demo: https://82.165.51.255/
 - 🧱 Layered architecture (Controller → Service → Repository)
 - 🔄 DTO mapping & validation
 
+### 📨 Event-Driven Architecture with Kafka
+- 📨 Apache Kafka integration for asynchronous event processing
+- ⚡ Event-driven communication between application components
+- 🧾 Publishing domain events for task lifecycle changes (Task Created, Updated, Deleted)
+
 ### 📈 Logging & Observability (Production-Ready)
 - 📈 Structured logging with correlationId for request tracing
 - 🔗 Correlation ID propagation across requests
@@ -90,6 +95,7 @@ Live Demo: https://82.165.51.255/
 - Spring Boot 3
 - Spring Security + JWT
 - Spring Data JPA
+- Apache Kafka
 - PostgreSQL / H2
 - Lombok
 
