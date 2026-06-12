@@ -23,7 +23,7 @@ public class TaskEventProducer {
      */
     public void sendTaskCreatedEvent(TaskCreatedEvent event) {
 	log.info("Publishing event: {}", event);
-	kafkaTemplate.send("task-created", event).whenComplete((result, ex) -> {
+	kafkaTemplate.send(KafkaConstants.TOPIC_TASK_CREATED,event.getTaskId().toString(), event).whenComplete((result, ex) -> {
 	    if (ex != null) {
 		log.error("SEND FAILED", ex);
 	    } else {
@@ -40,7 +40,7 @@ public class TaskEventProducer {
      */
     public void sendTaskUpdateEvent(TaskUpdateEvent event) {
 	log.info("Publishing event: {}", event);
-	kafkaTemplate.send("task-updated", event);
+	kafkaTemplate.send(KafkaConstants.TOPIC_TASK_UPDATED,event.getTaskId().toString(), event);
     }
 
     /**
@@ -49,6 +49,6 @@ public class TaskEventProducer {
      */
     public void sendTaskCommentAddedEvent(TaskCommentAddedEvent event) {
 	log.info("Publishing event: {}", event);
-	kafkaTemplate.send("task-comment-added", event);
+	kafkaTemplate.send(KafkaConstants.TOPIC_TASK_COMMENT_ADDED, event);
     }
 }
