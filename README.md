@@ -3,7 +3,7 @@
 A simple full-stack task management application inspired by Jira.  
 Built with **Spring Boot + Angular**, focusing on clean architecture, JWT authentication, and modern frontend practices.
 
-Live Demo: https://tasktracker.md-consulting.de
+Live Demo: https://tasktracker.md-consulting.dev
 
 <p align="center">
   <img src="./screenshots/dashboard.png" width="800"/>
