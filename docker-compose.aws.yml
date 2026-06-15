@@ -3,6 +3,7 @@ version: '3.8'
 services:
   nginx:
     image: nginx:latest
+    restart: unless-stopped
     ports:
       - "443:443"
       - "80:80"
@@ -15,7 +16,7 @@ services:
 
   backend:
     image: minhducngo85/tasktracker-backend:latest
-    restart: "no"
+    restart: unless-stopped
     depends_on:
       - db
       - kafka
@@ -27,11 +28,11 @@ services:
 
   frontend:
     image: minhducngo85/tasktracker-frontend:latest
-    restart: "no"
+    restart: unless-stopped
 
   db:
     image: postgres:15
-    restart: "no"
+    restart: unless-stopped
     environment:
       POSTGRES_DB: taskdb
       POSTGRES_USER: user
