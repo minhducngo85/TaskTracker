@@ -4,9 +4,11 @@ services:
   nginx:
     image: nginx:latest
     ports:
+      - "443:443"
       - "80:80"
     volumes:
       - ./nginx/aws-config:/etc/nginx/conf.d
+      - ./nginx/certs:/etc/nginx/certs
     depends_on:
       - frontend
       - backend

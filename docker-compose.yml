@@ -10,7 +10,7 @@ services:
       - ./nginx/conf:/etc/nginx/conf.d
       - ./nginx/certs:/etc/nginx/certs
       # mount cv website
-      - /root/cv:/usr/share/nginx/html/cv
+      - /root/MyCV:/usr/share/nginx/html/cv
     depends_on:
       - frontend
       - backend
